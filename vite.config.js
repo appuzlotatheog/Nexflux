@@ -20,10 +20,7 @@ export default defineConfig(({ mode }) => ({
                 pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn']
             },
             mangle: {
-                safari10: true,
-                properties: {
-                    regex: /^_/  // Mangle properties starting with underscore
-                }
+                safari10: true
             },
             format: {
                 comments: false
