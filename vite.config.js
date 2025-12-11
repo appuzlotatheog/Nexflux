@@ -11,21 +11,8 @@ export default defineConfig(({ mode }) => ({
     build: {
         // Disable source maps in production
         sourcemap: false,
-        // Minify with terser for better obfuscation
-        minify: 'terser',
-        terserOptions: {
-            compress: {
-                drop_console: true,
-                drop_debugger: true,
-                pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn']
-            },
-            mangle: {
-                safari10: true
-            },
-            format: {
-                comments: false
-            }
-        },
+        // Use default esbuild minification for safety
+        minify: 'esbuild',
         // Chunk splitting with random names
         rollupOptions: {
             output: {
