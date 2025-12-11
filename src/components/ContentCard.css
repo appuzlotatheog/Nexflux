@@ -169,6 +169,7 @@
         opacity 0.5s ease,
         transform 0.6s var(--ease-out);
     will-change: transform;
+    pointer-events: none;
 }
 
 .content-card__image--loaded {
@@ -205,6 +206,7 @@
             transparent 100%);
     opacity: 0;
     transition: opacity 0.35s ease;
+    pointer-events: none;
 }
 
 .content-card:hover .content-card__overlay,
@@ -254,6 +256,7 @@
     z-index: -1;
     transition: opacity 0.4s var(--ease-out);
     animation: borderGradient 4s ease infinite;
+    pointer-events: none;
 }
 
 @keyframes borderGradient {
@@ -456,12 +459,7 @@
     }
 
     .content-card__actions {
-        opacity: 1;
-        transform: translateX(0);
-        top: auto;
-        bottom: 8px;
-        right: 8px;
-        flex-direction: row;
+        display: none;
     }
 
     .content-card__action-btn {
@@ -525,6 +523,7 @@
     .content-card__overlay {
         background: linear-gradient(to top, rgba(10, 10, 15, 0.8) 0%, transparent 50%);
         opacity: 1;
+        pointer-events: none;
     }
 
     .content-card__play {
@@ -538,5 +537,6 @@
     .content-card__actions {
         opacity: 1;
         transform: translateX(0);
+        pointer-events: auto;
     }
 }

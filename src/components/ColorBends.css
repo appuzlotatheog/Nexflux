@@ -6,8 +6,7 @@
     height: 100vh;
     z-index: -1;
     overflow: hidden;
-    pointer-events: auto;
-    /* Allow mouse interaction */
+    pointer-events: none;
     background: #000000;
 }
 

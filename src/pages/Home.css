@@ -180,8 +180,9 @@
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     padding: var(--space-sm) 0;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: color 0.2s ease, transform 0.2s ease, padding 0.2s ease;
     position: relative;
+    will-change: transform;
 }
 
 .footer__column a::before {
@@ -192,12 +193,12 @@
     width: 0;
     height: 1px;
     background: var(--color-gold);
-    transition: width 0.3s ease;
+    transition: width 0.2s ease;
 }
 
 .footer__column a:hover {
     color: white;
-    transform: translateX(8px);
+    transform: translate3d(8px, 0, 0);
     padding-left: 12px;
 }
 
