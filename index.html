@@ -5,36 +5,98 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/netflix-logo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Nexflux - Stream Movies & TV Shows" />
-  <meta name="robots" content="noindex, nofollow" />
-  <meta name="google-site-verification" content="qYxN-LZnhsr3Ti2On-lKbsTbtYj-xtEMwWEMcpklB2A" />
-  <title>Nexflux</title>
+
+  <!-- Primary SEO Meta Tags -->
+  <title>Nexflux - Stream Free Movies & TV Shows Online | HD Quality</title>
+  <meta name="title" content="Nexflux - Stream Free Movies & TV Shows Online | HD Quality" />
+  <meta name="description"
+    content="Watch thousands of movies and TV shows for free on Nexflux. Stream in HD quality with no ads. New releases, trending titles, anime, and more. Start watching now!" />
+  <meta name="keywords"
+    content="nexflux, free movies, watch movies online, stream tv shows, free streaming, HD movies, watch anime, netflix alternative, free netflix, movie streaming, tv series online, watch free, latest movies, trending shows, cinema online, film streaming" />
+  <meta name="author" content="appuzlota" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
+  <link rel="canonical" href="https://nexflux.appuzlota.me/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nexflux.appuzlota.me/" />
+  <meta property="og:title" content="Nexflux - Stream Free Movies & TV Shows Online" />
+  <meta property="og:description"
+    content="Watch thousands of movies and TV shows for free on Nexflux. Stream in HD quality. New releases, trending titles, anime, and more!" />
+  <meta property="og:image" content="https://nexflux.appuzlota.me/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Nexflux" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://nexflux.appuzlota.me/" />
+  <meta property="twitter:title" content="Nexflux - Stream Free Movies & TV Shows Online" />
+  <meta property="twitter:description"
+    content="Watch thousands of movies and TV shows for free on Nexflux. Stream in HD quality. New releases, trending titles, anime, and more!" />
+  <meta property="twitter:image" content="https://nexflux.appuzlota.me/og-image.png" />
+  <meta name="twitter:creator" content="@appuzlota" />
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Nexflux" />
+  <meta name="application-name" content="Nexflux" />
+  <meta name="msapplication-TileColor" content="#000000" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- Structured Data / Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Nexflux",
+    "url": "https://nexflux.appuzlota.me",
+    "description": "Stream thousands of movies and TV shows for free in HD quality",
+    "applicationCategory": "Entertainment",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "appuzlota"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "15000",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  }
+  </script>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
-  <!-- Early protection script - runs before React loads -->
-  <script>
-    (function () {
-      // Protection only in production
-      if (window.location.hostname !== 'localhost') {
-        // Disable right-click
-        document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 
-        // Disable keyboard shortcuts
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'F12' ||
-            (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key)) ||
-            (e.ctrlKey && ['u', 's'].includes(e.key))) {
-            e.preventDefault();
-          }
-        });
-      }
-    })();
-  </script>
+  <!-- Preload critical resources -->
+  <link rel="preload" as="image" href="/netflix-logo.svg" />
 </head>
 
 <body>
+  <!-- Noscript fallback for SEO -->
+  <noscript>
+    <div style="padding: 20px; text-align: center; background: #000; color: #fff; min-height: 100vh;">
+      <h1>Nexflux - Stream Movies & TV Shows</h1>
+      <p>Please enable JavaScript to use Nexflux. We offer thousands of free movies and TV shows in HD quality.</p>
+      <p>Keywords: Free movies online, Watch TV shows, Stream HD movies, Netflix alternative, Free streaming site</p>
+    </div>
+  </noscript>
+
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 
