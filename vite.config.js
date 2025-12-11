@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => ({
         react()
     ],
     server: {
-        allowedHosts: ['nexflux.appuzlota.me', 'nexflux.hyprwings.tech', 'localhost']
+        allowedHosts: ['nexflux-git-main-appuzlotatheogs-projects.vercel.app', 'nexflux-3mo79dr1s-appuzlotatheogs-projects.vercel.app', 'nexflux.appuzlota.me', 'nexflux.hyprwings.tech', 'localhost']
     },
     build: {
         // Disable source maps in production
