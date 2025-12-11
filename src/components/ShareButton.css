@@ -1,0 +1,106 @@
+/* ===== SHARE BUTTON ===== */
+
+.share-button {
+    position: relative;
+}
+
+.share-button__trigger {
+    position: relative;
+}
+
+.share-button__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 180px;
+    background: rgba(20, 20, 30, 0.98);
+    border: 1px solid rgba(212, 168, 83, 0.2);
+    border-radius: var(--radius-lg);
+    padding: 8px;
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(212, 168, 83, 0.1);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+    animation: dropdownSlide 0.25s var(--ease-spring);
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.share-button__header {
+    padding: 8px 12px 12px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-gold);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 4px;
+}
+
+.share-button__option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-decoration: none;
+}
+
+.share-button__option:hover {
+    background: rgba(212, 168, 83, 0.15);
+}
+
+.share-button__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+}
+
+/* Social brand colors on hover */
+.share-button__option:nth-child(3):hover .share-button__icon {
+    background: #1DA1F2;
+    color: white;
+}
+
+.share-button__option:nth-child(4):hover .share-button__icon {
+    background: #4267B2;
+    color: white;
+}
+
+.share-button__option:nth-child(5):hover .share-button__icon {
+    background: #25D366;
+    color: white;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .share-button__dropdown {
+        position: fixed;
+        bottom: calc(var(--bottom-nav-height) + 16px);
+        left: 16px;
+        right: 16px;
+        top: auto;
+        border-radius: var(--radius-xl);
+    }
+}

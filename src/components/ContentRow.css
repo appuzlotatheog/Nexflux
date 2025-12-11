@@ -1,0 +1,167 @@
+/* ===== CONTENT ROW - MONOCHROME ===== */
+
+.content-row {
+    position: relative;
+    margin-bottom: var(--space-2xl);
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.content-row--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Title */
+.content-row__title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
+    letter-spacing: 0.5px;
+    position: relative;
+    display: inline-block;
+    color: #ffffff;
+}
+
+.content-row__title::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+.content-row:hover .content-row__title::after {
+    transform: scaleX(1);
+}
+
+/* Wrapper */
+.content-row__wrapper {
+    position: relative;
+}
+
+/* Posters */
+.content-row__posters {
+    display: flex;
+    gap: var(--space-md);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: var(--space-lg) 0;
+}
+
+.content-row__posters::-webkit-scrollbar {
+    display: none;
+}
+
+/* Smooth GPU-accelerated fade - no stagger for performance */
+.content-row--visible .content-card {
+    animation: cardFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.content-row__spacer {
+    flex-shrink: 0;
+    width: calc(var(--content-padding) - var(--space-md));
+}
+
+/* Arrows with hover scale */
+.content-row__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 20;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+}
+
+.content-row__arrow--visible {
+    visibility: visible;
+}
+
+.content-row:hover .content-row__arrow--visible {
+    opacity: 1;
+}
+
+.content-row__arrow:hover {
+    color: var(--color-gold);
+}
+
+.content-row__arrow svg {
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.8));
+    transition: all 0.4s var(--ease-spring);
+}
+
+.content-row__arrow:hover svg {
+    transform: scale(1.5);
+    filter: drop-shadow(0 0 15px rgba(212, 168, 83, 0.5));
+}
+
+.content-row__arrow--left {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg-primary) 50%, transparent);
+    padding-left: var(--space-md);
+    justify-content: flex-start;
+}
+
+.content-row__arrow--right {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg-primary) 50%, transparent);
+    padding-right: var(--space-md);
+    justify-content: flex-end;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+    .content-row__arrow {
+        display: none;
+    }
+
+    .content-row__posters {
+        gap: var(--space-sm);
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .content-row__spacer {
+        width: calc(var(--content-padding) - var(--space-sm));
+    }
+
+    .content-row--visible .content-card {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+@media (min-width: 2560px) {
+    .content-row__posters {
+        gap: var(--space-lg);
+    }
+}

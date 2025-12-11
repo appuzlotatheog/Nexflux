@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/netflix-logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Nexflux - Stream Movies & TV Shows" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Nexflux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- Early protection script - runs before React loads -->
+  <script>
+    (function () {
+      // Protection only in production
+      if (window.location.hostname !== 'localhost') {
+        // Disable right-click
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+
+        // Disable keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key)) ||
+            (e.ctrlKey && ['u', 's'].includes(e.key))) {
+            e.preventDefault();
+          }
+        });
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Ads Script -->
+  <script>
+    (function (cdmb) {
+      try {
+        var d = document,
+          s = d.createElement('script'),
+          l = d.scripts[d.scripts.length - 1];
+        s.settings = cdmb || {};
+        s.src = "//jolly-difficulty.com/cdD-9q6.b/2u5IlKSqWFQQ9XNCjOc/yjMnzcYS3RNJim0x2_NVzmIezDNfjHcO3X";
+        s.async = true;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        s.onerror = function () { /* Ads failed to load - silent */ };
+        l.parentNode.insertBefore(s, l);
+      } catch (e) { /* Ads script error - silent */ }
+    })({})
+  </script>
+</body>
+
+</html>
