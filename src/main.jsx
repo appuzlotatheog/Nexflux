@@ -8,7 +8,8 @@ import { LanguageProvider } from './utils/i18n.jsx'
 import { ToastProvider } from './components/Toast'
 
 // Initialize source code protection (production only)
-initializeProtection()
+// Initialize source code protection (production only)
+// initializeProtection()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
