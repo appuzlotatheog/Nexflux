@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Stepper, { Step } from '../components/Stepper';
 import './Auth.css';
+import './AuthSplit.css';
+
+// Lazy load GridMotion for performance
+const GridMotion = lazy(() => import('../components/GridMotion'));
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -72,54 +76,16 @@ const Login = () => {
     };
 
     return (
-        <div className="auth">
-            {/* Cinematic Background */}
-            <div className="auth__bg">
-                <div className="auth__bg-gradient"></div>
-                <div className="auth__bg-pattern"></div>
-                <div className="auth__bg-glow auth__bg-glow--1"></div>
-                <div className="auth__bg-glow auth__bg-glow--2"></div>
-                <div className="auth__bg-particles">
-                    {[...Array(20)].map((_, i) => (
-                        <div key={i} className="auth__particle" style={{
-                            '--delay': `${Math.random() * 5}s`,
-                            '--x': `${Math.random() * 100}%`,
-                            '--duration': `${15 + Math.random() * 10}s`
-                        }} />
-                    ))}
-                </div>
-            </div>
+        <div className="auth auth--split">
+            {/* Left Side - Form */}
+            <div className="auth__form-side">
+                <div className="auth__form-container">
+                    {/* Logo */}
+                    <Link to="/" className="auth__logo">
+                        <span className="auth__logo-text">NEXFLUX</span>
+                    </Link>
 
-            <div className="auth__container">
-                {/* Left Side - Branding */}
-                <div className="auth__branding">
-                    <Link to="/" className="auth__brand-logo">NEXFLUX</Link>
-                    <h2 className="auth__brand-tagline">Your Gateway to<br />Endless Entertainment</h2>
-                    <p className="auth__brand-desc">Stream thousands of movies and TV shows. Anytime, anywhere.</p>
-
-                    <div className="auth__features">
-                        <div className="auth__feature" style={{ '--delay': '0.1s' }}>
-                            <div className="auth__feature-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                                    <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z" />
-                                </svg>
-                            </div>
-                            <span>Watch on any device</span>
-                        </div>
-                        <div className="auth__feature" style={{ '--delay': '0.2s' }}>
-                            <div className="auth__feature-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                                </svg>
-                            </div>
-                            <span>Personalized watchlist</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right Side - Stepper Form */}
-                <div className="auth__card">
-                    <div className="auth__card-inner">
+                    <div className="auth__form-content">
                         <div className="auth__header">
                             <h1 className="auth__title">Welcome Back</h1>
                             <p className="auth__subtitle">Sign in to continue your journey</p>
@@ -140,6 +106,7 @@ const Login = () => {
                                 onBeforeNext={validateStep}
                                 backButtonText="Back"
                                 nextButtonText={loading ? "Signing In..." : "Next"}
+                                disableStepIndicators={false}
                             >
                                 <Step>
                                     <div className="auth__step-content">
@@ -191,6 +158,7 @@ const Login = () => {
                                                 type="button"
                                                 className="auth__toggle-password"
                                                 onClick={() => setShowPassword(!showPassword)}
+                                                aria-label={showPassword ? 'Hide password' : 'Show password'}
                                             >
                                                 {showPassword ? (
                                                     <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
@@ -221,7 +189,7 @@ const Login = () => {
                                 <Step>
                                     <div className="auth__success-step">
                                         <div className="auth__success-icon">
-                                            <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+                                            <svg viewBox="0 0 24 24" fill="currentColor" width="40" height="40">
                                                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                                             </svg>
                                         </div>
@@ -237,8 +205,8 @@ const Login = () => {
                         </div>
 
                         <div className="auth__social">
-                            <button className="auth__social-btn auth__social-btn--google" disabled>
-                                <svg viewBox="0 0 24 24" width="20" height="20">
+                            <button className="auth__social-btn auth__social-btn--google" disabled title="Coming soon">
+                                <svg viewBox="0 0 24 24" width="18" height="18">
                                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -246,8 +214,8 @@ const Login = () => {
                                 </svg>
                                 <span>Google</span>
                             </button>
-                            <button className="auth__social-btn auth__social-btn--github" disabled>
-                                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                            <button className="auth__social-btn auth__social-btn--github" disabled title="Coming soon">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
                                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                                 </svg>
                                 <span>GitHub</span>
@@ -258,7 +226,21 @@ const Login = () => {
                             <p>Don't have an account? <Link to="/register" className="auth__link">Create one</Link></p>
                         </div>
                     </div>
+
+                    {/* Footer */}
+                    <div className="auth__form-footer">
+                        <span>© Nexflux 2024</span>
+                        <span>•</span>
+                        <a href="mailto:support@nexflux.com">support@nexflux.com</a>
+                    </div>
                 </div>
+            </div>
+
+            {/* Right Side - Movie Poster Grid */}
+            <div className="auth__grid-side">
+                <Suspense fallback={<div className="auth__grid-loading" />}>
+                    <GridMotion />
+                </Suspense>
             </div>
         </div>
     );

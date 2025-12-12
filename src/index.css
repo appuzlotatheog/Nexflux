@@ -1432,3 +1432,79 @@ select:focus-visible,
     color-scheme: dark;
   }
 }
+
+/* ===== LOW-END DEVICE OPTIMIZATIONS ===== */
+/* Applied via JavaScript when low-end device is detected */
+
+body.low-end-device *,
+body.low-end-device *::before,
+body.low-end-device *::after {
+  animation-duration: 0.1s !important;
+  transition-duration: 0.1s !important;
+}
+
+body.low-end-device .content-card:hover {
+  transform: none !important;
+}
+
+body.low-end-device .content-card__overlay,
+body.low-end-device .content-card__neon-border {
+  display: none !important;
+}
+
+body.low-end-device .content-card__play {
+  transform: scale(1) !important;
+  opacity: 0.8 !important;
+}
+
+/* No blur for Safari/iOS or low-end devices */
+body.no-blur .glass-panel:not(.discord-popup-overlay):not(.discord-popup),
+body.no-blur .navbar,
+body.no-blur .chatbot__container,
+body.no-blur .content-card__badge {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Mobile touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .content-card:hover,
+  .content-card--hovered {
+    transform: none !important;
+  }
+
+  .content-card__overlay {
+    opacity: 0 !important;
+  }
+
+  .content-card__neon-border {
+    display: none !important;
+  }
+
+  /* Reduce box shadows on mobile */
+  .content-card,
+  .content-card__image-wrapper,
+  .navbar,
+  .chatbot__container {
+    box-shadow: none !important;
+  }
+}
+
+/* GPU acceleration hints for smooth scrolling */
+.content-row__scroll,
+.hero__carousel,
+main {
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize images */
+img {
+  content-visibility: auto;
+}

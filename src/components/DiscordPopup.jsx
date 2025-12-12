@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import './DiscordPopup.css';
 
 const DISCORD_INVITE = 'https://discord.gg/X3GByG2jTv';
@@ -41,7 +42,8 @@ function DiscordPopup() {
 
     if (!isVisible) return null;
 
-    return (
+    // Render to body using portal to ensure fixed positioning works
+    return createPortal(
         <div className={`discord-popup-overlay ${isClosing ? 'discord-popup-overlay--closing' : ''}`}>
             <div className={`discord-popup ${isClosing ? 'discord-popup--closing' : ''}`}>
                 <button className="discord-popup__close" onClick={handleClose} aria-label="Close">
@@ -89,7 +91,8 @@ function DiscordPopup() {
                     This popup only appears once per day
                 </p>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
 

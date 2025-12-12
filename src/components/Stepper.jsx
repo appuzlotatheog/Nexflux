@@ -205,7 +205,8 @@ function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators }
     const status = currentStep === step ? 'active' : currentStep < step ? 'inactive' : 'complete';
 
     const handleClick = () => {
-        if (step !== currentStep && !disableStepIndicators) {
+        // Only allow clicking on COMPLETED steps (going back), not future steps
+        if (status === 'complete' && !disableStepIndicators) {
             onClickStep(step);
         }
     };

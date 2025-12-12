@@ -10,6 +10,7 @@
  * @signature 0x4150505A4C4F5441
  */
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import ChatBot from './components/ChatBot';
@@ -24,20 +25,33 @@ import Stats from './pages/Stats';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import ColorBends from './components/ColorBends';
+import { shouldUseWebGL } from './utils/performance';
 import './App.css';
+
+// Lazy load heavy components
+const ColorBends = lazy(() => import('./components/ColorBends'));
 
 function AppContent() {
     const location = useLocation();
     const isAuthPage = ['/login', '/register', '/forgot-password'].includes(location.pathname);
+    const [useWebGL, setUseWebGL] = useState(false);
+
+    useEffect(() => {
+        // Check device performance after mount
+        setUseWebGL(shouldUseWebGL());
+    }, []);
 
     return (
         <div className="app">
-            <ColorBends
-                colors={["#000000", "#111111", "#222222"]}
-                speed={0.1}
-                noise={0.05}
-            />
+            {useWebGL && (
+                <Suspense fallback={null}>
+                    <ColorBends
+                        colors={["#000000", "#111111", "#222222"]}
+                        speed={0.08}
+                        noise={0.03}
+                    />
+                </Suspense>
+            )}
             {!isAuthPage && <Navbar />}
             <main className={`main-content ${isAuthPage ? 'main-content--auth' : ''}`}>
                 <Routes>
