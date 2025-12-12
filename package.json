@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.68",
-    "@react-three/fiber": "^9.4.2",
+    "@react-three/fiber": "^8.16.8",
     "framer-motion": "^12.23.26",
     "gsap": "^3.14.1",
     "ogl": "^1.0.11",
