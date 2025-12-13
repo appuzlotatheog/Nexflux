@@ -1,34 +1,81 @@
+import { useState, useEffect } from 'react';
 import './Loader.css';
 
-function Loader({ fullPage = false }) {
+// Helper component for fur spans
+const FurSpans = () => (
+    <>
+        {[...Array(31)].map((_, i) => (
+            <span key={i} className={`fur-${31 - i}`}></span>
+        ))}
+    </>
+);
+
+// Helper component for lamp spans
+const LampSpans = () => (
+    <>
+        {[...Array(28)].map((_, i) => (
+            <span key={i} className={`lamp-${i + 1}`}></span>
+        ))}
+    </>
+);
+
+// Splash screen component - shows full animation on first load
+export const SplashScreen = ({ onComplete }) => {
+    const [isAnimating, setIsAnimating] = useState(true);
+
+    useEffect(() => {
+        // Animation duration: 4 seconds total
+        const timer = setTimeout(() => {
+            setIsAnimating(false);
+            if (onComplete) onComplete();
+        }, 4000);
+
+        return () => clearTimeout(timer);
+    }, [onComplete]);
+
+    if (!isAnimating) return null;
+
     return (
-        <div className={`loader ${fullPage ? 'loader--full' : ''}`}>
-            <div className="loader__container">
-                {/* Premium animated logo loader */}
-                <div className="loader__logo">
-                    <span className="loader__letter" style={{ '--i': 0 }}>N</span>
-                    <span className="loader__letter" style={{ '--i': 1 }}>E</span>
-                    <span className="loader__letter" style={{ '--i': 2 }}>X</span>
-                    <span className="loader__letter" style={{ '--i': 3 }}>F</span>
-                    <span className="loader__letter" style={{ '--i': 4 }}>L</span>
-                    <span className="loader__letter" style={{ '--i': 5 }}>U</span>
-                    <span className="loader__letter" style={{ '--i': 6 }}>X</span>
+        <div className="nexflux-splash" id="container">
+            <div className="nexflux-intro" data-letter="N">
+                <div className="helper-1">
+                    <div className="effect-brush">
+                        <FurSpans />
+                    </div>
+                    <div className="effect-lumieres">
+                        <LampSpans />
+                    </div>
                 </div>
-
-                {/* Animated progress bar */}
-                <div className="loader__bar">
-                    <div className="loader__bar-fill"></div>
+                <div className="helper-2">
+                    <div className="effect-brush">
+                        <FurSpans />
+                    </div>
                 </div>
-
-                {/* Pulsing dots */}
-                <div className="loader__dots">
-                    <span className="loader__dot"></span>
-                    <span className="loader__dot"></span>
-                    <span className="loader__dot"></span>
+                <div className="helper-3">
+                    <div className="effect-brush">
+                        <FurSpans />
+                    </div>
+                </div>
+                <div className="helper-4">
+                    <div className="effect-brush">
+                        <FurSpans />
+                    </div>
                 </div>
             </div>
         </div>
     );
-}
+};
+
+// Regular loader for page transitions
+const Loader = ({ fullPage = false }) => {
+    return (
+        <div className={`nexflux-loader ${fullPage ? 'nexflux-loader--fullpage' : ''}`}>
+            <div className="nexflux-loader__simple">
+                <div className="nexflux-loader__ring"></div>
+                <span className="nexflux-loader__text">N</span>
+            </div>
+        </div>
+    );
+};
 
 export default Loader;

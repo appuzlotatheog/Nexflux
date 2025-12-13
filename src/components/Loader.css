@@ -1,163 +1,992 @@
-/* ===== NEXFLUX PREMIUM LOADER ===== */
+/* ===== NEXFLUX PREMIUM INTRO - EXACT NETFLIX STYLE ===== */
+/* Converted from SCSS with white theme */
 
-.loader {
+:root {
+    --loader-bg: #000000;
+    --loader-primary: #ffffff;
+}
+
+/* ===== SPLASH CONTAINER ===== */
+.nexflux-splash {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--loader-bg);
+    overflow: hidden;
+    min-height: 100dvh;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+}
+
+/* ===== INTRO ELEMENT ===== */
+.nexflux-intro {
+    display: block;
+    position: relative;
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    animation-name: zoom-in;
+    animation-delay: 0.5s;
+    animation-duration: 3.5s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+    background-size: 4000px;
+    background-position: -1950px 0;
+}
+
+.nexflux-intro::before {
+    content: "";
+    position: absolute;
+    display: block;
+    background-color: var(--loader-bg);
+    width: 150%;
+    height: 30%;
+    left: -25%;
+    bottom: -27%;
+    border-radius: 50%;
+    z-index: 5;
+    transform-origin: left center;
+    background-size: 4000px;
+    background-position: -1950px 0;
+}
+
+/* ===== LETTER N CONFIGURATION ===== */
+.nexflux-intro[data-letter="N"] {
+    transform-origin: 30% center;
+}
+
+.nexflux-intro[data-letter="N"] .helper-1 {
+    width: 19.5%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    left: 22.4%;
+    top: 0;
+    transform: rotate(180deg);
+    animation-name: fading-lumieres-box;
+    animation-duration: 2s;
+    animation-delay: 0.6s;
+    animation-fill-mode: forwards;
+}
+
+.nexflux-intro[data-letter="N"] .helper-1 .effect-brush {
+    animation-name: brush-moving;
+    animation-duration: 2.5s;
+    animation-fill-mode: forwards;
+    animation-delay: 1.2s;
+}
+
+.nexflux-intro[data-letter="N"] .helper-1 .effect-brush [class*="fur-"] {
+    bottom: 0;
+    height: 40%;
+}
+
+.nexflux-intro[data-letter="N"] .helper-3 {
+    width: 19%;
+    height: 150%;
+    left: 40.5%;
+    top: -25%;
+    transform: rotate(-19.5deg);
+    box-shadow: 0px 0px 35px -12px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.nexflux-intro[data-letter="N"] .helper-3 .effect-brush {
+    animation-name: brush-moving;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-delay: 0.8s;
+}
+
+.nexflux-intro[data-letter="N"] .helper-2 {
+    width: 19.5%;
+    height: 100%;
+    left: 57.8%;
+    top: 0;
+    transform: rotate(180deg);
+    overflow: hidden;
+}
+
+.nexflux-intro[data-letter="N"] .helper-2 .effect-brush {
+    animation-name: brush-moving;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-delay: 0.5s;
+}
+
+/* ===== HELPER ELEMENTS ===== */
+[class*="helper-"] {
+    position: absolute;
+}
+
+/* ===== BRUSH EFFECT ===== */
+.effect-brush {
+    position: absolute;
+    width: 100%;
+    height: 300%;
+    top: 0;
+    overflow: hidden;
+}
+
+.effect-brush::before {
+    display: block;
+    content: "";
+    position: absolute;
+    background-color: var(--loader-primary);
+    width: 100%;
+    height: 70%;
+    box-shadow: 0px 0px 29px 24px var(--loader-primary);
+}
+
+[class*="fur-"] {
+    display: block;
+    position: absolute;
+    bottom: 10%;
+    height: 30%;
+}
+
+/* Fur elements - paint brush stroke effect */
+.fur-1 {
+    left: 0%;
+    width: 3.8%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 15%, transparent 81%, transparent 100%);
+}
+
+.fur-2 {
+    left: 3.8%;
+    width: 2.8%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 10%, transparent 62%, transparent 100%);
+}
+
+.fur-3 {
+    left: 6.6%;
+    width: 4.8%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 37%, transparent 100%);
+}
+
+.fur-4 {
+    left: 11.4%;
+    width: 4%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 23%, transparent 100%);
+}
+
+.fur-5 {
+    left: 15.4%;
+    width: 4%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 15%, transparent 86%, transparent 100%);
+}
+
+.fur-6 {
+    left: 19.4%;
+    width: 2.5%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 27%, transparent 89%, transparent 100%);
+}
+
+.fur-7 {
+    left: 21.9%;
+    width: 4%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 20%, transparent 100%);
+}
+
+.fur-8 {
+    left: 25.9%;
+    width: 2%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 30%, transparent 100%);
+}
+
+.fur-9 {
+    left: 27.9%;
+    width: 4%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 35%, transparent 95%, transparent 100%);
+}
+
+.fur-10 {
+    left: 31.9%;
+    width: 3.5%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 39%, transparent 95%, transparent 100%);
+}
+
+.fur-11 {
+    left: 35.4%;
+    width: 2%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 34%, transparent 95%, transparent 100%);
+}
+
+.fur-12 {
+    left: 37.4%;
+    width: 2.6%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 22%, transparent 95%, transparent 100%);
+}
+
+.fur-13 {
+    left: 40%;
+    width: 6%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 47%, transparent 100%);
+}
+
+.fur-14 {
+    left: 46%;
+    width: 2%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 36%, transparent 100%);
+}
+
+.fur-15 {
+    left: 48%;
+    width: 5.5%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 29%, transparent 100%);
+}
+
+.fur-16 {
+    left: 53.5%;
+    width: 3%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 39%, transparent 95%, transparent 100%);
+}
+
+.fur-17 {
+    left: 56.5%;
+    width: 4.1%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 45%, transparent 100%);
+}
+
+.fur-18 {
+    left: 60.6%;
+    width: 2.4%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 34%, transparent 100%);
+}
+
+.fur-19 {
+    left: 63%;
+    width: 4%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 47%, transparent 100%);
+}
+
+.fur-20 {
+    left: 67%;
+    width: 1.5%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 27%, transparent 95%, transparent 100%);
+}
+
+.fur-21 {
+    left: 68.5%;
+    width: 2.8%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 37%, transparent 100%);
+}
+
+.fur-22 {
+    left: 71.3%;
+    width: 2.3%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 9%, transparent 100%);
+}
+
+.fur-23 {
+    left: 73.6%;
+    width: 2.2%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 28%, transparent 92%, transparent 100%);
+}
+
+.fur-24 {
+    left: 75.8%;
+    width: 1%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 37%, transparent 100%);
+}
+
+.fur-25 {
+    left: 76.8%;
+    width: 2.1%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 28%, transparent 100%);
+}
+
+.fur-26 {
+    left: 78.9%;
+    width: 4.1%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 34%, transparent 100%);
+}
+
+.fur-27 {
+    left: 83%;
+    width: 2.5%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 21%, transparent 100%);
+}
+
+.fur-28 {
+    left: 85.5%;
+    width: 4.5%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 39%, transparent 100%);
+}
+
+.fur-29 {
+    left: 90%;
+    width: 2.8%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 30%, transparent 100%);
+}
+
+.fur-30 {
+    left: 92.8%;
+    width: 3.5%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 19%, transparent 100%);
+}
+
+.fur-31 {
+    left: 96.3%;
+    width: 3.7%;
+    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 37%, transparent 100%);
+}
+
+/* ===== LUMIERES EFFECT ===== */
+.effect-lumieres {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation-name: showing-lumieres;
+    animation-duration: 2s;
+    animation-delay: 1.6s;
+    animation-fill-mode: forwards;
+}
+
+[class*="lamp-"] {
+    position: absolute;
+    display: block;
+    height: 100%;
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.75);
+    background: var(--lamp-color, var(--loader-primary));
+}
+
+[class*="lamp-"]::before {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--lamp-color, var(--loader-primary));
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.75);
+}
+
+/* Lamp positions with white glow */
+.lamp-1 {
+    --lamp-color: #ffffff;
+    left: 0.7%;
+    width: 1%;
+}
+
+.lamp-2 {
+    --lamp-color: #e0e0e0;
+    left: 2.2%;
+    width: 1.4%;
+}
+
+.lamp-3 {
+    --lamp-color: #ffffff;
+    left: 5.8%;
+    width: 2.1%;
+}
+
+.lamp-4 {
+    --lamp-color: #f0f0f0;
+    left: 10.1%;
+    width: 2%;
+}
+
+.lamp-5 {
+    --lamp-color: #ffffff;
+    left: 12.9%;
+    width: 1.4%;
+}
+
+.lamp-6 {
+    --lamp-color: #e8e8e8;
+    left: 15.3%;
+    width: 2.8%;
+}
+
+.lamp-7 {
+    --lamp-color: #ffffff;
+    left: 21.2%;
+    width: 2.5%;
+}
+
+.lamp-8 {
+    --lamp-color: #f5f5f5;
+    left: 25%;
+    width: 2.5%;
+}
+
+.lamp-9 {
+    --lamp-color: #ffffff;
+    left: 30.5%;
+    width: 3%;
+}
+
+.lamp-10 {
+    --lamp-color: #eeeeee;
+    left: 36.3%;
+    width: 3%;
+}
+
+.lamp-11 {
+    --lamp-color: #ffffff;
+    left: 41%;
+    width: 2.2%;
+}
+
+.lamp-12 {
+    --lamp-color: #f8f8f8;
+    left: 44.2%;
+    width: 2.6%;
+}
+
+.lamp-13 {
+    --lamp-color: #ffffff;
+    left: 51.7%;
+    width: 0.5%;
+}
+
+.lamp-14 {
+    --lamp-color: #e5e5e5;
+    left: 52.1%;
+    width: 1.8%;
+}
+
+.lamp-15 {
+    --lamp-color: #ffffff;
+    left: 53.8%;
+    width: 2.3%;
+}
+
+.lamp-16 {
+    --lamp-color: #f0f0f0;
+    left: 57.2%;
+    width: 2%;
+}
+
+.lamp-17 {
+    --lamp-color: #ffffff;
+    left: 62.3%;
+    width: 2.9%;
+}
+
+.lamp-18 {
+    --lamp-color: #e8e8e8;
+    left: 65.8%;
+    width: 1.7%;
+}
+
+.lamp-19 {
+    --lamp-color: #ffffff;
+    left: 72.8%;
+    width: 0.8%;
+}
+
+.lamp-20 {
+    --lamp-color: #f5f5f5;
+    left: 74.3%;
+    width: 2%;
+}
+
+.lamp-21 {
+    --lamp-color: #ffffff;
+    left: 79.8%;
+    width: 2%;
+}
+
+.lamp-22 {
+    --lamp-color: #eeeeee;
+    left: 78.2%;
+    width: 2%;
+}
+
+.lamp-23 {
+    --lamp-color: #ffffff;
+    left: 78.5%;
+    width: 2%;
+}
+
+.lamp-24 {
+    --lamp-color: #f0f0f0;
+    left: 85.3%;
+    width: 1.1%;
+}
+
+.lamp-25 {
+    --lamp-color: #ffffff;
+    left: 86.9%;
+    width: 1.1%;
+}
+
+.lamp-26 {
+    --lamp-color: #e5e5e5;
+    left: 88.8%;
+    width: 2%;
+}
+
+.lamp-27 {
+    --lamp-color: #ffffff;
+    left: 92.4%;
+    width: 2.4%;
+}
+
+.lamp-28 {
+    --lamp-color: #f8f8f8;
+    left: 96.2%;
+    width: 2.1%;
+}
+
+/* Lamp animations - left moving */
+.lamp-1,
+.lamp-3,
+.lamp-5,
+.lamp-7,
+.lamp-9,
+.lamp-11,
+.lamp-13,
+.lamp-15,
+.lamp-17,
+.lamp-19,
+.lamp-21,
+.lamp-23,
+.lamp-25,
+.lamp-27 {
+    animation-name: lumieres-moving-left;
+    animation-duration: 5s;
+    animation-fill-mode: forwards;
+}
+
+.lamp-1::before,
+.lamp-3::before,
+.lamp-5::before,
+.lamp-7::before,
+.lamp-9::before,
+.lamp-11::before,
+.lamp-13::before,
+.lamp-15::before,
+.lamp-17::before,
+.lamp-19::before,
+.lamp-21::before,
+.lamp-23::before,
+.lamp-25::before,
+.lamp-27::before {
+    animation-name: lumieres-moving-left;
+    animation-duration: 5.5s;
+}
+
+/* Lamp animations - right moving */
+.lamp-2,
+.lamp-4,
+.lamp-6,
+.lamp-8,
+.lamp-10,
+.lamp-12,
+.lamp-14,
+.lamp-16,
+.lamp-18,
+.lamp-20,
+.lamp-22,
+.lamp-24,
+.lamp-26,
+.lamp-28 {
+    animation-name: lumieres-moving-right;
+    animation-duration: 5s;
+    animation-fill-mode: forwards;
+}
+
+.lamp-2::before,
+.lamp-4::before,
+.lamp-6::before,
+.lamp-8::before,
+.lamp-10::before,
+.lamp-12::before,
+.lamp-14::before,
+.lamp-16::before,
+.lamp-18::before,
+.lamp-20::before,
+.lamp-22::before,
+.lamp-24::before,
+.lamp-26::before,
+.lamp-28::before {
+    animation-name: lumieres-moving-right;
+    animation-duration: 5.5s;
+}
+
+/* Random animation delays */
+.lamp-1,
+.lamp-1::before {
+    animation-delay: 1.45s;
+}
+
+.lamp-2,
+.lamp-2::before {
+    animation-delay: 0.72s;
+}
+
+.lamp-3,
+.lamp-3::before {
+    animation-delay: 1.89s;
+}
+
+.lamp-4,
+.lamp-4::before {
+    animation-delay: 0.34s;
+}
+
+.lamp-5,
+.lamp-5::before {
+    animation-delay: 1.67s;
+}
+
+.lamp-6,
+.lamp-6::before {
+    animation-delay: 0.91s;
+}
+
+.lamp-7,
+.lamp-7::before {
+    animation-delay: 1.23s;
+}
+
+.lamp-8,
+.lamp-8::before {
+    animation-delay: 0.56s;
+}
+
+.lamp-9,
+.lamp-9::before {
+    animation-delay: 1.78s;
+}
+
+.lamp-10,
+.lamp-10::before {
+    animation-delay: 0.45s;
+}
+
+.lamp-11,
+.lamp-11::before {
+    animation-delay: 1.34s;
+}
+
+.lamp-12,
+.lamp-12::before {
+    animation-delay: 0.89s;
+}
+
+.lamp-13,
+.lamp-13::before {
+    animation-delay: 1.56s;
+}
+
+.lamp-14,
+.lamp-14::before {
+    animation-delay: 0.23s;
+}
+
+.lamp-15,
+.lamp-15::before {
+    animation-delay: 1.12s;
+}
+
+.lamp-16,
+.lamp-16::before {
+    animation-delay: 0.67s;
+}
+
+.lamp-17,
+.lamp-17::before {
+    animation-delay: 1.91s;
+}
+
+.lamp-18,
+.lamp-18::before {
+    animation-delay: 0.78s;
+}
+
+.lamp-19,
+.lamp-19::before {
+    animation-delay: 1.45s;
+}
+
+.lamp-20,
+.lamp-20::before {
+    animation-delay: 0.34s;
+}
+
+.lamp-21,
+.lamp-21::before {
+    animation-delay: 1.67s;
+}
+
+.lamp-22,
+.lamp-22::before {
+    animation-delay: 0.56s;
+}
+
+.lamp-23,
+.lamp-23::before {
+    animation-delay: 1.23s;
+}
+
+.lamp-24,
+.lamp-24::before {
+    animation-delay: 0.89s;
+}
+
+.lamp-25,
+.lamp-25::before {
+    animation-delay: 1.78s;
+}
+
+.lamp-26,
+.lamp-26::before {
+    animation-delay: 0.45s;
+}
+
+.lamp-27,
+.lamp-27::before {
+    animation-delay: 1.34s;
+}
+
+.lamp-28,
+.lamp-28::before {
+    animation-delay: 0.91s;
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes brush-moving {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes fading-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes lumieres-moving-right {
+    0% {
+        transform: translate(0);
+    }
+
+    40% {
+        transform: translate(-10px) scaleX(1);
+    }
+
+    50% {
+        transform: translate(-60px);
+    }
+
+    100% {
+        transform: translate(-120px) scaleX(3);
+    }
+}
+
+@keyframes lumieres-moving-left {
+    0% {
+        transform: translate(0);
+    }
+
+    40% {
+        transform: translate(10px) scaleX(1);
+    }
+
+    50% {
+        transform: translate(60px);
+    }
+
+    100% {
+        transform: translate(120px) scaleX(3);
+    }
+}
+
+@keyframes zoom-in {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(15);
+    }
+}
+
+@keyframes showing-lumieres {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fading-lumieres-box {
+    0% {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    100% {
+        background-color: rgba(255, 255, 255, 0);
+    }
+}
+
+/* ===== SIMPLE LOADER ===== */
+.nexflux-loader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--loader-bg);
+    overflow: hidden;
     min-height: 200px;
 }
 
-.loader--full {
+.nexflux-loader--fullpage {
     position: fixed;
     inset: 0;
-    background: #000000;
     z-index: 9999;
+    min-height: 100dvh;
 }
 
-.loader__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-}
-
-/* ===== ANIMATED LOGO ===== */
-.loader__logo {
-    display: flex;
-    gap: 4px;
-}
-
-.loader__letter {
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(32px, 8vw, 56px);
-    font-weight: 800;
-    color: #ffffff;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-    animation: letterWave 1.2s ease-in-out infinite;
-    animation-delay: calc(var(--i) * 0.1s);
-}
-
-@keyframes letterWave {
-
-    0%,
-    100% {
-        transform: translateY(0);
-        opacity: 0.4;
-    }
-
-    50% {
-        transform: translateY(-15px);
-        opacity: 1;
-        text-shadow:
-            0 0 30px rgba(255, 255, 255, 0.6),
-            0 0 60px rgba(255, 255, 255, 0.3);
-    }
-}
-
-/* ===== PROGRESS BAR ===== */
-.loader__bar {
-    width: clamp(150px, 40vw, 250px);
-    height: 3px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
+.nexflux-loader__simple {
     position: relative;
-}
-
-.loader__bar-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 30%;
-    background: linear-gradient(90deg, transparent, #ffffff, transparent);
-    border-radius: 10px;
-    animation: barSlide 1.5s ease-in-out infinite;
-}
-
-@keyframes barSlide {
-    0% {
-        left: -30%;
-    }
-
-    100% {
-        left: 100%;
-    }
-}
-
-/* ===== PULSING DOTS ===== */
-.loader__dots {
-    display: flex;
-    gap: 8px;
-}
-
-.loader__dot {
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    animation: dotPulse 1.4s ease-in-out infinite;
-}
-
-.loader__dot:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.loader__dot:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.loader__dot:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-@keyframes dotPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        background: rgba(255, 255, 255, 0.3);
-    }
-
-    50% {
-        transform: scale(1.5);
-        background: #ffffff;
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-    }
-}
-
-/* ===== SMALL LOADER VARIANT ===== */
-.loader:not(.loader--full) .loader__logo {
-    display: none;
-}
-
-.loader:not(.loader--full) .loader__bar {
     width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.loader:not(.loader--full) .loader__dots {
-    gap: 6px;
+.nexflux-loader__ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--loader-primary);
+    border-radius: 50%;
+    animation: loader-spin 1s linear infinite;
 }
 
-.loader:not(.loader--full) .loader__dot {
-    width: 6px;
-    height: 6px;
+.nexflux-loader__text {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--loader-primary);
+    letter-spacing: 2px;
+}
+
+@keyframes loader-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== MOBILE OPTIMIZATION ===== */
+@media (max-width: 768px) {
+    .nexflux-intro {
+        width: 220px;
+        height: 220px;
+    }
+
+    @keyframes zoom-in {
+        0% {
+            transform: scale(1);
+        }
+
+        100% {
+            transform: scale(20);
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .nexflux-intro {
+        width: 180px;
+        height: 180px;
+    }
+
+    @keyframes zoom-in {
+        0% {
+            transform: scale(1);
+        }
+
+        100% {
+            transform: scale(25);
+        }
+    }
+
+    .nexflux-loader__simple {
+        width: 60px;
+        height: 60px;
+    }
+
+    .nexflux-loader__text {
+        font-size: 1.5rem;
+    }
 }
 
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
-
-    .loader__letter,
-    .loader__bar-fill,
-    .loader__dot {
-        animation: none;
+    .nexflux-intro {
+        animation: simple-fade 1s ease-out forwards;
     }
 
-    .loader__letter {
+    .effect-brush,
+    .effect-lumieres,
+    [class*="lamp-"],
+    [class*="lamp-"]::before {
+        animation: none !important;
+    }
+
+    .effect-brush {
+        transform: translateY(-100%);
+    }
+
+    .effect-lumieres {
         opacity: 1;
     }
 
-    .loader__dot {
-        background: #ffffff;
+    @keyframes simple-fade {
+        0% {
+            opacity: 0;
+            transform: scale(1);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
+}
+
+/* ===== GPU OPTIMIZATION ===== */
+.nexflux-splash,
+.nexflux-intro,
+.effect-brush,
+.effect-lumieres,
+[class*="lamp-"],
+[class*="fur-"],
+.nexflux-loader__ring {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* ===== HIDE NAVBAR DURING SPLASH ===== */
+body:has(.nexflux-splash) .navbar,
+body:has(.nexflux-splash) .chatbot {
+    display: none !important;
+}
+
+body:has(.nexflux-splash) {
+    overflow: hidden;
 }

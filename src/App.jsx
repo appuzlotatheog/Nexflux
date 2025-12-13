@@ -15,6 +15,7 @@ import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import ChatBot from './components/ChatBot';
 import ProtectedRoute from './components/ProtectedRoute';
+import { SplashScreen } from './components/Loader';
 import Home from './pages/Home';
 import Watch from './pages/Watch';
 import Search from './pages/Search';
@@ -36,15 +37,28 @@ function AppContent() {
     const isAuthPage = ['/login', '/register', '/forgot-password'].includes(location.pathname);
     const isWatchPage = location.pathname.startsWith('/watch');
     const [useWebGL, setUseWebGL] = useState(false);
+    const [showSplash, setShowSplash] = useState(() => {
+        // Show splash on first load (check session storage)
+        const hasShownSplash = sessionStorage.getItem('nexflux_splash_shown');
+        return !hasShownSplash;
+    });
 
     useEffect(() => {
         // Check device performance after mount
         setUseWebGL(shouldUseWebGL());
     }, []);
 
+    const handleSplashComplete = () => {
+        setShowSplash(false);
+        sessionStorage.setItem('nexflux_splash_shown', 'true');
+    };
+
     return (
         <div className="app">
-            {useWebGL && !isWatchPage && (
+            {/* Splash Screen - shows once per session */}
+            {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+
+            {useWebGL && !isWatchPage && !showSplash && (
                 <Suspense fallback={null}>
                     <ColorBends
                         colors={["#000000", "#111111", "#222222"]}
@@ -53,7 +67,7 @@ function AppContent() {
                     />
                 </Suspense>
             )}
-            {!isAuthPage && !isWatchPage && <Navbar />}
+            {!isAuthPage && !isWatchPage && !showSplash && <Navbar />}
             <main className={`main-content ${isAuthPage ? 'main-content--auth' : ''} ${isWatchPage ? 'main-content--watch' : ''}`}>
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -84,7 +98,7 @@ function AppContent() {
                     } />
                 </Routes>
             </main>
-            {!isAuthPage && <ChatBot />}
+            {!isAuthPage && !showSplash && <ChatBot />}
         </div>
     );
 }
