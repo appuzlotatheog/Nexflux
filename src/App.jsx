@@ -34,6 +34,7 @@ const ColorBends = lazy(() => import('./components/ColorBends'));
 function AppContent() {
     const location = useLocation();
     const isAuthPage = ['/login', '/register', '/forgot-password'].includes(location.pathname);
+    const isWatchPage = location.pathname.startsWith('/watch');
     const [useWebGL, setUseWebGL] = useState(false);
 
     useEffect(() => {
@@ -43,7 +44,7 @@ function AppContent() {
 
     return (
         <div className="app">
-            {useWebGL && (
+            {useWebGL && !isWatchPage && (
                 <Suspense fallback={null}>
                     <ColorBends
                         colors={["#000000", "#111111", "#222222"]}
@@ -52,8 +53,8 @@ function AppContent() {
                     />
                 </Suspense>
             )}
-            {!isAuthPage && <Navbar />}
-            <main className={`main-content ${isAuthPage ? 'main-content--auth' : ''}`}>
+            {!isAuthPage && !isWatchPage && <Navbar />}
+            <main className={`main-content ${isAuthPage ? 'main-content--auth' : ''} ${isWatchPage ? 'main-content--watch' : ''}`}>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
