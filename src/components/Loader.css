@@ -948,47 +948,28 @@
 }
 
 @media (max-width: 480px) {
+
+    /* Smaller intro for phones */
     .nexflux-intro {
-        width: 140px;
-        height: 140px;
+        width: 120px;
+        height: 120px;
+        animation: zoom-in-mobile 2.5s ease-in 0.2s forwards;
     }
 
-    /* Even faster on phones */
+    /* Fast fade on phones - starts earlier */
     .nexflux-splash {
-        animation: splash-fade-out 1s ease-out 2.2s forwards;
+        animation: splash-fade-mobile 0.8s ease-out 2s forwards;
+        background: #000 !important;
     }
 
-    .nexflux-intro {
-        animation: zoom-in-mobile 3.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    /* Hide ALL lamps on mobile for performance */
+    .effect-lumieres {
+        display: none !important;
     }
 
-    /* Hide more lamps for performance */
-    .lamp-3,
-    .lamp-5,
-    .lamp-7,
-    .lamp-9,
-    .lamp-11,
-    .lamp-13,
-    .lamp-14,
-    .lamp-15,
-    .lamp-17,
-    .lamp-19,
-    .lamp-21,
-    .lamp-22,
-    .lamp-23,
-    .lamp-24,
-    .lamp-25,
-    .lamp-27 {
-        display: none;
-    }
-
-    /* Simpler glow on mobile */
-    [class*="lamp-"] {
-        box-shadow: 0 0 6px 1px var(--lamp-color);
-    }
-
-    [class*="lamp-"]::before {
-        display: none;
+    /* Simpler brush animation */
+    .effect-brush {
+        animation-duration: 1.5s !important;
     }
 
     .nexflux-loader__simple {
@@ -1001,19 +982,29 @@
     }
 }
 
+/* Mobile zoom - simpler, faster */
 @keyframes zoom-in-mobile {
     0% {
         transform: scale(1);
-        opacity: 1;
-    }
-
-    85% {
-        opacity: 1;
     }
 
     100% {
-        transform: scale(30);
+        transform: scale(25);
         opacity: 0;
+    }
+}
+
+/* Mobile fade - quick and clean */
+@keyframes splash-fade-mobile {
+    0% {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
     }
 }
 
