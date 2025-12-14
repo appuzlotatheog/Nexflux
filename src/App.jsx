@@ -55,10 +55,11 @@ function AppContent() {
 
     return (
         <div className="app">
-            {/* Splash Screen - shows once per session */}
+            {/* Splash Screen - overlays content while it loads in background */}
             {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
 
-            {useWebGL && !isWatchPage && !showSplash && (
+            {/* Content loads in background during splash */}
+            {useWebGL && !isWatchPage && (
                 <Suspense fallback={null}>
                     <ColorBends
                         colors={["#000000", "#111111", "#222222"]}
@@ -67,7 +68,7 @@ function AppContent() {
                     />
                 </Suspense>
             )}
-            {!isAuthPage && !isWatchPage && !showSplash && <Navbar />}
+            {!isAuthPage && !isWatchPage && <Navbar className={showSplash ? 'navbar--hidden' : ''} />}
             <main className={`main-content ${isAuthPage ? 'main-content--auth' : ''} ${isWatchPage ? 'main-content--watch' : ''}`}>
                 <Routes>
                     <Route path="/" element={<Home />} />

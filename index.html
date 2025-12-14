@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/netflix-logo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
 
   <!-- Primary SEO Meta Tags -->
   <title>Nexflux - Stream Free Movies & TV Shows Online | HD Quality</title>
@@ -119,6 +120,23 @@
         l.parentNode.insertBefore(s, l);
       } catch (e) { /* Ads script error - silent */ }
     })({})
+  </script>
+
+  <!-- Monetization Script -->
+  <script>
+      (function (ts) {
+        try {
+          var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+          s.settings = ts || {};
+          s.src = "//grotesquephilosophy.com/bmXgV.s/dtGVlT0uYMWJcK/jeZm_9/uXZ-U/lnkrPXTCYR3kMljYYZ2BMPzfYQtRNajPc/ykN_jRYnzqN/wa";
+          s.async = true;
+          s.referrerPolicy = 'no-referrer-when-downgrade';
+          s.onerror = function () { /* Monetization failed - silent */ };
+          l.parentNode.insertBefore(s, l);
+        } catch (e) { /* Monetization error - silent */ }
+      })({})
   </script>
 </body>
 

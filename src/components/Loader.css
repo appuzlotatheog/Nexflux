@@ -1,12 +1,12 @@
-/* ===== NEXFLUX PREMIUM INTRO - EXACT NETFLIX STYLE ===== */
-/* Converted from SCSS with white theme */
+/* ===== NEXFLUX INTRO - EXACT NETFLIX STYLE ===== */
+/* Converted from original SCSS with gray theme */
 
 :root {
-    --loader-bg: #000000;
-    --loader-primary: #ffffff;
+    --bg-color: #000000;
+    --base-color: #aaaaaa;
 }
 
-/* ===== SPLASH CONTAINER ===== */
+/* ===== CONTAINER ===== */
 .nexflux-splash {
     display: flex;
     flex-direction: column;
@@ -14,26 +14,41 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--loader-bg);
+    background-color: var(--bg-color);
     overflow: hidden;
     min-height: 100dvh;
     position: fixed;
     inset: 0;
     z-index: 99999;
+    animation: splash-fade-out 1.5s ease-out 2.8s forwards;
+    will-change: opacity;
 }
 
-/* ===== INTRO ELEMENT ===== */
+@keyframes splash-fade-out {
+    0% {
+        opacity: 1;
+        background-color: var(--bg-color);
+    }
+
+    50% {
+        background-color: transparent;
+    }
+
+    100% {
+        opacity: 0;
+        background-color: transparent;
+        pointer-events: none;
+    }
+}
+
+/* ===== INTRO ===== */
 .nexflux-intro {
     display: block;
     position: relative;
     width: 300px;
     height: 300px;
     overflow: hidden;
-    animation-name: zoom-in;
-    animation-delay: 0.5s;
-    animation-duration: 3.5s;
-    animation-timing-function: ease-in;
-    animation-fill-mode: forwards;
+    animation: zoom-in 4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
     background-size: 4000px;
     background-position: -1950px 0;
 }
@@ -42,7 +57,7 @@
     content: "";
     position: absolute;
     display: block;
-    background-color: var(--loader-bg);
+    background-color: var(--bg-color);
     width: 150%;
     height: 30%;
     left: -25%;
@@ -54,7 +69,7 @@
     background-position: -1950px 0;
 }
 
-/* ===== LETTER N CONFIGURATION ===== */
+/* ===== LETTER N ===== */
 .nexflux-intro[data-letter="N"] {
     transform-origin: 30% center;
 }
@@ -62,7 +77,7 @@
 .nexflux-intro[data-letter="N"] .helper-1 {
     width: 19.5%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(136, 136, 136, 0.5);
     left: 22.4%;
     top: 0;
     transform: rotate(180deg);
@@ -117,7 +132,7 @@
     animation-delay: 0.5s;
 }
 
-/* ===== HELPER ELEMENTS ===== */
+/* ===== HELPERS ===== */
 [class*="helper-"] {
     position: absolute;
 }
@@ -135,10 +150,10 @@
     display: block;
     content: "";
     position: absolute;
-    background-color: var(--loader-primary);
+    background-color: var(--base-color);
     width: 100%;
     height: 70%;
-    box-shadow: 0px 0px 29px 24px var(--loader-primary);
+    box-shadow: 0px 0px 29px 24px var(--base-color);
 }
 
 [class*="fur-"] {
@@ -148,194 +163,193 @@
     height: 30%;
 }
 
-/* Fur elements - paint brush stroke effect */
 .fur-1 {
     left: 0%;
     width: 3.8%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 15%, transparent 81%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 15%, transparent 81%, transparent 100%);
 }
 
 .fur-2 {
     left: 3.8%;
     width: 2.8%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 10%, transparent 62%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 10%, transparent 62%, transparent 100%);
 }
 
 .fur-3 {
     left: 6.6%;
     width: 4.8%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 37%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 37%, transparent 100%);
 }
 
 .fur-4 {
     left: 11.4%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 23%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 23%, transparent 100%);
 }
 
 .fur-5 {
     left: 15.4%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 15%, transparent 86%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 15%, transparent 86%, transparent 100%);
 }
 
 .fur-6 {
     left: 19.4%;
     width: 2.5%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 27%, transparent 89%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 27%, transparent 89%, transparent 100%);
 }
 
 .fur-7 {
     left: 21.9%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 20%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 20%, transparent 100%);
 }
 
 .fur-8 {
     left: 25.9%;
     width: 2%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 30%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 30%, transparent 100%);
 }
 
 .fur-9 {
     left: 27.9%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 35%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 35%, transparent 95%, transparent 100%);
 }
 
 .fur-10 {
     left: 31.9%;
     width: 3.5%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 39%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 39%, transparent 95%, transparent 100%);
 }
 
 .fur-11 {
     left: 35.4%;
     width: 2%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 34%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 34%, transparent 95%, transparent 100%);
 }
 
 .fur-12 {
     left: 37.4%;
     width: 2.6%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 22%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 22%, transparent 95%, transparent 100%);
 }
 
 .fur-13 {
     left: 40%;
     width: 6%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 47%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 47%, transparent 100%);
 }
 
 .fur-14 {
     left: 46%;
     width: 2%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 36%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 36%, transparent 100%);
 }
 
 .fur-15 {
     left: 48%;
     width: 5.5%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 29%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 29%, transparent 100%);
 }
 
 .fur-16 {
     left: 53.5%;
     width: 3%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 39%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 39%, transparent 95%, transparent 100%);
 }
 
 .fur-17 {
     left: 56.5%;
     width: 4.1%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 45%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 45%, transparent 100%);
 }
 
 .fur-18 {
     left: 60.6%;
     width: 2.4%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 34%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 34%, transparent 100%);
 }
 
 .fur-19 {
     left: 63%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 47%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 47%, transparent 100%);
 }
 
 .fur-20 {
     left: 67%;
     width: 1.5%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 27%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 27%, transparent 95%, transparent 100%);
 }
 
 .fur-21 {
     left: 68.5%;
     width: 2.8%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 37%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 37%, transparent 100%);
 }
 
 .fur-22 {
     left: 71.3%;
     width: 2.3%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 9%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 9%, transparent 100%);
 }
 
 .fur-23 {
     left: 73.6%;
     width: 2.2%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 28%, transparent 92%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 28%, transparent 92%, transparent 100%);
 }
 
 .fur-24 {
     left: 75.8%;
     width: 1%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 37%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 37%, transparent 100%);
 }
 
 .fur-25 {
     left: 76.8%;
     width: 2.1%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 28%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 28%, transparent 100%);
 }
 
 .fur-26 {
     left: 78.9%;
     width: 4.1%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 34%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 34%, transparent 100%);
 }
 
 .fur-27 {
     left: 83%;
     width: 2.5%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 21%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 21%, transparent 100%);
 }
 
 .fur-28 {
     left: 85.5%;
     width: 4.5%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 39%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 39%, transparent 100%);
 }
 
 .fur-29 {
     left: 90%;
     width: 2.8%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 30%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 30%, transparent 100%);
 }
 
 .fur-30 {
     left: 92.8%;
     width: 3.5%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 19%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 19%, transparent 100%);
 }
 
 .fur-31 {
     left: 96.3%;
     width: 3.7%;
-    background: linear-gradient(to bottom, var(--loader-primary) 0%, var(--loader-primary) 37%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 37%, transparent 100%);
 }
 
-/* ===== LUMIERES EFFECT ===== */
+/* ===== LUMIERES ===== */
 .effect-lumieres {
     position: absolute;
     width: 100%;
@@ -345,196 +359,207 @@
     animation-duration: 2s;
     animation-delay: 1.6s;
     animation-fill-mode: forwards;
+    filter: blur(0.3px);
 }
 
 [class*="lamp-"] {
     position: absolute;
     display: block;
     height: 100%;
-    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.75);
-    background: var(--lamp-color, var(--loader-primary));
+    background: linear-gradient(to bottom,
+            transparent 0%,
+            var(--lamp-color) 10%,
+            var(--lamp-color) 90%,
+            transparent 100%);
+    box-shadow:
+        0 0 8px 2px var(--lamp-color),
+        0 0 20px 4px var(--lamp-color);
+    border-radius: 2px;
 }
 
 [class*="lamp-"]::before {
     position: absolute;
     content: "";
     display: block;
-    width: 100%;
+    width: 200%;
+    left: -50%;
     height: 100%;
-    background: var(--lamp-color, var(--loader-primary));
-    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.75);
+    background: radial-gradient(ellipse at center,
+            var(--lamp-color) 0%,
+            transparent 60%);
+    opacity: 0.5;
 }
 
-/* Lamp positions with white glow */
+/* Lamp colors - colorful like original Netflix */
 .lamp-1 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ff0100;
     left: 0.7%;
     width: 1%;
 }
 
 .lamp-2 {
-    --lamp-color: #e0e0e0;
+    --lamp-color: #ffde01;
     left: 2.2%;
     width: 1.4%;
 }
 
 .lamp-3 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ff00cc;
     left: 5.8%;
     width: 2.1%;
 }
 
 .lamp-4 {
-    --lamp-color: #f0f0f0;
+    --lamp-color: #04fd8f;
     left: 10.1%;
     width: 2%;
 }
 
 .lamp-5 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ff0100;
     left: 12.9%;
     width: 1.4%;
 }
 
 .lamp-6 {
-    --lamp-color: #e8e8e8;
+    --lamp-color: #ff9600;
     left: 15.3%;
     width: 2.8%;
 }
 
 .lamp-7 {
-    --lamp-color: #ffffff;
+    --lamp-color: #0084ff;
     left: 21.2%;
     width: 2.5%;
 }
 
 .lamp-8 {
-    --lamp-color: #f5f5f5;
+    --lamp-color: #f84006;
     left: 25%;
     width: 2.5%;
 }
 
 .lamp-9 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ffc601;
     left: 30.5%;
     width: 3%;
 }
 
 .lamp-10 {
-    --lamp-color: #eeeeee;
+    --lamp-color: #ff4800;
     left: 36.3%;
     width: 3%;
 }
 
 .lamp-11 {
-    --lamp-color: #ffffff;
+    --lamp-color: #fd0100;
     left: 41%;
     width: 2.2%;
 }
 
 .lamp-12 {
-    --lamp-color: #f8f8f8;
+    --lamp-color: #01ffff;
     left: 44.2%;
     width: 2.6%;
 }
 
 .lamp-13 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ffc601;
     left: 51.7%;
     width: 0.5%;
 }
 
 .lamp-14 {
-    --lamp-color: #e5e5e5;
+    --lamp-color: #ffc601;
     left: 52.1%;
     width: 1.8%;
 }
 
 .lamp-15 {
-    --lamp-color: #ffffff;
+    --lamp-color: #0078fe;
     left: 53.8%;
     width: 2.3%;
 }
 
 .lamp-16 {
-    --lamp-color: #f0f0f0;
+    --lamp-color: #0080ff;
     left: 57.2%;
     width: 2%;
 }
 
 .lamp-17 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ffae01;
     left: 62.3%;
     width: 2.9%;
 }
 
 .lamp-18 {
-    --lamp-color: #e8e8e8;
+    --lamp-color: #ff00bf;
     left: 65.8%;
     width: 1.7%;
 }
 
 .lamp-19 {
-    --lamp-color: #ffffff;
+    --lamp-color: #a601f4;
     left: 72.8%;
     width: 0.8%;
 }
 
 .lamp-20 {
-    --lamp-color: #f5f5f5;
+    --lamp-color: #f30b34;
     left: 74.3%;
     width: 2%;
 }
 
 .lamp-21 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ff00bf;
     left: 79.8%;
     width: 2%;
 }
 
 .lamp-22 {
-    --lamp-color: #eeeeee;
+    --lamp-color: #04fd8f;
     left: 78.2%;
     width: 2%;
 }
 
 .lamp-23 {
-    --lamp-color: #ffffff;
+    --lamp-color: #01ffff;
     left: 78.5%;
     width: 2%;
 }
 
 .lamp-24 {
-    --lamp-color: #f0f0f0;
+    --lamp-color: #a201ff;
     left: 85.3%;
     width: 1.1%;
 }
 
 .lamp-25 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ec0014;
     left: 86.9%;
     width: 1.1%;
 }
 
 .lamp-26 {
-    --lamp-color: #e5e5e5;
+    --lamp-color: #0078fe;
     left: 88.8%;
     width: 2%;
 }
 
 .lamp-27 {
-    --lamp-color: #ffffff;
+    --lamp-color: #ff0036;
     left: 92.4%;
     width: 2.4%;
 }
 
 .lamp-28 {
-    --lamp-color: #f8f8f8;
+    --lamp-color: #06f98c;
     left: 96.2%;
     width: 2.1%;
 }
 
-/* Lamp animations - left moving */
+/* Lamp animations - left */
 .lamp-1,
 .lamp-3,
 .lamp-5,
@@ -549,9 +574,7 @@
 .lamp-23,
 .lamp-25,
 .lamp-27 {
-    animation-name: lumieres-moving-left;
-    animation-duration: 5s;
-    animation-fill-mode: forwards;
+    animation: lumieres-moving-left 6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 .lamp-1::before,
@@ -568,11 +591,10 @@
 .lamp-23::before,
 .lamp-25::before,
 .lamp-27::before {
-    animation-name: lumieres-moving-left;
-    animation-duration: 5.5s;
+    animation: lumieres-moving-left 6.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
-/* Lamp animations - right moving */
+/* Lamp animations - right */
 .lamp-2,
 .lamp-4,
 .lamp-6,
@@ -587,9 +609,7 @@
 .lamp-24,
 .lamp-26,
 .lamp-28 {
-    animation-name: lumieres-moving-right;
-    animation-duration: 5s;
-    animation-fill-mode: forwards;
+    animation: lumieres-moving-right 6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 .lamp-2::before,
@@ -606,11 +626,10 @@
 .lamp-24::before,
 .lamp-26::before,
 .lamp-28::before {
-    animation-name: lumieres-moving-right;
-    animation-duration: 5.5s;
+    animation: lumieres-moving-right 6.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
-/* Random animation delays */
+/* Animation delays */
 .lamp-1,
 .lamp-1::before {
     animation-delay: 1.45s;
@@ -751,7 +770,7 @@
     animation-delay: 0.91s;
 }
 
-/* ===== KEYFRAMES ===== */
+/* ===== KEYFRAMES - SMOOTH ===== */
 @keyframes brush-moving {
     0% {
         transform: translateY(0);
@@ -774,37 +793,55 @@
 
 @keyframes lumieres-moving-right {
     0% {
-        transform: translate(0);
+        transform: translate(0) scaleX(1);
+        opacity: 1;
     }
 
-    40% {
-        transform: translate(-10px) scaleX(1);
+    20% {
+        transform: translate(-5px) scaleX(1.1);
+        opacity: 1;
     }
 
     50% {
-        transform: translate(-60px);
+        transform: translate(-40px) scaleX(1.5);
+        opacity: 0.8;
+    }
+
+    80% {
+        transform: translate(-100px) scaleX(2.5);
+        opacity: 0.4;
     }
 
     100% {
-        transform: translate(-120px) scaleX(3);
+        transform: translate(-150px) scaleX(4);
+        opacity: 0;
     }
 }
 
 @keyframes lumieres-moving-left {
     0% {
-        transform: translate(0);
+        transform: translate(0) scaleX(1);
+        opacity: 1;
     }
 
-    40% {
-        transform: translate(10px) scaleX(1);
+    20% {
+        transform: translate(5px) scaleX(1.1);
+        opacity: 1;
     }
 
     50% {
-        transform: translate(60px);
+        transform: translate(40px) scaleX(1.5);
+        opacity: 0.8;
+    }
+
+    80% {
+        transform: translate(100px) scaleX(2.5);
+        opacity: 0.4;
     }
 
     100% {
-        transform: translate(120px) scaleX(3);
+        transform: translate(150px) scaleX(4);
+        opacity: 0;
     }
 }
 
@@ -830,24 +867,22 @@
 
 @keyframes fading-lumieres-box {
     0% {
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(136, 136, 136, 0.5);
     }
 
     100% {
-        background-color: rgba(255, 255, 255, 0);
+        background-color: rgba(136, 136, 136, 0);
     }
 }
 
 /* ===== SIMPLE LOADER ===== */
 .nexflux-loader {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--loader-bg);
-    overflow: hidden;
+    background: var(--bg-color);
     min-height: 200px;
 }
 
@@ -860,8 +895,8 @@
 
 .nexflux-loader__simple {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -871,20 +906,19 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    border: 3px solid rgba(255, 255, 255, 0.1);
-    border-top-color: var(--loader-primary);
+    border: 2px solid rgba(136, 136, 136, 0.2);
+    border-top-color: var(--base-color);
     border-radius: 50%;
-    animation: loader-spin 1s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 .nexflux-loader__text {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 900;
-    color: var(--loader-primary);
-    letter-spacing: 2px;
+    color: var(--base-color);
 }
 
-@keyframes loader-spin {
+@keyframes spin {
     to {
         transform: rotate(360deg);
     }
@@ -893,53 +927,100 @@
 /* ===== MOBILE OPTIMIZATION ===== */
 @media (max-width: 768px) {
     .nexflux-intro {
-        width: 220px;
-        height: 220px;
+        width: 200px;
+        height: 200px;
     }
 
-    @keyframes zoom-in {
-        0% {
-            transform: scale(1);
-        }
+    /* Faster animation on tablets */
+    .nexflux-splash {
+        animation: splash-fade-out 1.2s ease-out 2.5s forwards;
+    }
 
-        100% {
-            transform: scale(20);
-        }
+    /* Hide some lamps for performance */
+    .lamp-13,
+    .lamp-14,
+    .lamp-19,
+    .lamp-22,
+    .lamp-23,
+    .lamp-24 {
+        display: none;
     }
 }
 
 @media (max-width: 480px) {
     .nexflux-intro {
-        width: 180px;
-        height: 180px;
+        width: 140px;
+        height: 140px;
     }
 
-    @keyframes zoom-in {
-        0% {
-            transform: scale(1);
-        }
+    /* Even faster on phones */
+    .nexflux-splash {
+        animation: splash-fade-out 1s ease-out 2.2s forwards;
+    }
 
-        100% {
-            transform: scale(25);
-        }
+    .nexflux-intro {
+        animation: zoom-in-mobile 3.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    }
+
+    /* Hide more lamps for performance */
+    .lamp-3,
+    .lamp-5,
+    .lamp-7,
+    .lamp-9,
+    .lamp-11,
+    .lamp-13,
+    .lamp-14,
+    .lamp-15,
+    .lamp-17,
+    .lamp-19,
+    .lamp-21,
+    .lamp-22,
+    .lamp-23,
+    .lamp-24,
+    .lamp-25,
+    .lamp-27 {
+        display: none;
+    }
+
+    /* Simpler glow on mobile */
+    [class*="lamp-"] {
+        box-shadow: 0 0 6px 1px var(--lamp-color);
+    }
+
+    [class*="lamp-"]::before {
+        display: none;
     }
 
     .nexflux-loader__simple {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
     }
 
     .nexflux-loader__text {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+    }
+}
+
+@keyframes zoom-in-mobile {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(30);
+        opacity: 0;
     }
 }
 
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
-    .nexflux-intro {
-        animation: simple-fade 1s ease-out forwards;
-    }
 
+    .nexflux-intro,
     .effect-brush,
     .effect-lumieres,
     [class*="lamp-"],
@@ -947,24 +1028,8 @@
         animation: none !important;
     }
 
-    .effect-brush {
-        transform: translateY(-100%);
-    }
-
-    .effect-lumieres {
-        opacity: 1;
-    }
-
-    @keyframes simple-fade {
-        0% {
-            opacity: 0;
-            transform: scale(1);
-        }
-
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
+    .nexflux-splash {
+        display: none;
     }
 }
 
@@ -972,19 +1037,24 @@
 .nexflux-splash,
 .nexflux-intro,
 .effect-brush,
-.effect-lumieres,
-[class*="lamp-"],
-[class*="fur-"],
-.nexflux-loader__ring {
+[class*="lamp-"] {
     will-change: transform, opacity;
     transform: translateZ(0);
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
-/* ===== HIDE NAVBAR DURING SPLASH ===== */
+/* Smooth font rendering */
+.nexflux-splash * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== HIDE UI DURING SPLASH ===== */
 body:has(.nexflux-splash) .navbar,
 body:has(.nexflux-splash) .chatbot {
-    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 body:has(.nexflux-splash) {
