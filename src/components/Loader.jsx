@@ -19,22 +19,52 @@ const LampSpans = () => (
     </>
 );
 
-// Splash screen component - shows full animation on first load
-export const SplashScreen = ({ onComplete }) => {
-    const [isAnimating, setIsAnimating] = useState(true);
+// Check if mobile device
+const isMobile = () => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 480 || /Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
 
+// Simple mobile splash - just logo fade
+const MobileSplash = ({ onComplete }) => {
     useEffect(() => {
-        // Animation duration: 4 seconds total
         const timer = setTimeout(() => {
-            setIsAnimating(false);
             if (onComplete) onComplete();
-        }, 4000);
-
+        }, 2000);
         return () => clearTimeout(timer);
     }, [onComplete]);
 
+    return (
+        <div className="nexflux-splash nexflux-splash--mobile">
+            <div className="nexflux-mobile-logo">N</div>
+        </div>
+    );
+};
+
+// Splash screen component - shows full animation on first load
+export const SplashScreen = ({ onComplete }) => {
+    const [isAnimating, setIsAnimating] = useState(true);
+    const [mobile] = useState(() => isMobile());
+
+    useEffect(() => {
+        // Shorter duration on mobile
+        const duration = mobile ? 2000 : 4000;
+        const timer = setTimeout(() => {
+            setIsAnimating(false);
+            if (onComplete) onComplete();
+        }, duration);
+
+        return () => clearTimeout(timer);
+    }, [onComplete, mobile]);
+
     if (!isAnimating) return null;
 
+    // Simple animation for mobile
+    if (mobile) {
+        return <MobileSplash onComplete={onComplete} />;
+    }
+
+    // Full animation for desktop
     return (
         <div className="nexflux-splash" id="container">
             <div className="nexflux-intro" data-letter="N">
