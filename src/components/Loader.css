@@ -1,12 +1,11 @@
-/* ===== NEXFLUX INTRO - EXACT NETFLIX STYLE ===== */
-/* Converted from original SCSS with gray theme */
+/* ===== NEXFLUX INTRO - NETFLIX STYLE ===== */
 
 :root {
     --bg-color: #000000;
     --base-color: #aaaaaa;
 }
 
-/* ===== CONTAINER ===== */
+/* ===== SPLASH CONTAINER ===== */
 .nexflux-splash {
     display: flex;
     flex-direction: column;
@@ -20,77 +19,66 @@
     position: fixed;
     inset: 0;
     z-index: 99999;
-    animation: splash-fade-out 1.5s ease-out 2.8s forwards;
-    will-change: opacity;
 }
 
-/* ===== SIMPLE MOBILE SPLASH ===== */
+/* ===== DESKTOP SPLASH ===== */
+.nexflux-splash--desktop {
+    animation: splash-fade-out 1s ease-out 3.2s forwards;
+}
+
+/* ===== MOBILE SPLASH ===== */
 .nexflux-splash--mobile {
-    animation: mobile-fade 0.5s ease-out 1.5s forwards;
+    background: #000 !important;
+    animation: mobile-fade 0.5s ease-out 2s forwards;
 }
 
 .nexflux-mobile-logo {
-    font-size: 120px;
+    font-size: 100px;
     font-weight: 900;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: var(--base-color);
-    animation: mobile-logo 2s ease-out forwards;
-    text-shadow: 0 0 40px rgba(170, 170, 170, 0.5);
+    animation: mobile-logo 2.5s ease-out forwards;
+    text-shadow: 0 0 40px rgba(170, 170, 170, 0.3);
 }
 
 @keyframes mobile-logo {
     0% {
-        transform: scale(0.8);
         opacity: 0;
+        transform: scale(0.7);
     }
 
     20% {
-        transform: scale(1);
         opacity: 1;
+        transform: scale(1);
     }
 
-    80% {
-        transform: scale(1);
+    70% {
         opacity: 1;
+        transform: scale(1);
     }
 
     100% {
-        transform: scale(1.5);
         opacity: 0;
+        transform: scale(1.2);
     }
 }
 
 @keyframes mobile-fade {
     0% {
         opacity: 1;
-        background-color: #000;
+        visibility: visible;
+        background: #000;
     }
 
     100% {
         opacity: 0;
-        background-color: transparent;
-        pointer-events: none;
         visibility: hidden;
-    }
-}
-
-@keyframes splash-fade-out {
-    0% {
-        opacity: 1;
-        background-color: var(--bg-color);
-    }
-
-    50% {
-        background-color: transparent;
-    }
-
-    100% {
-        opacity: 0;
-        background-color: transparent;
         pointer-events: none;
+        background: transparent;
     }
 }
 
-/* ===== INTRO ===== */
+/* ===== DESKTOP INTRO ===== */
 .nexflux-intro {
     display: block;
     position: relative;
@@ -114,8 +102,6 @@
     border-radius: 50%;
     z-index: 5;
     transform-origin: left center;
-    background-size: 4000px;
-    background-position: -1950px 0;
 }
 
 /* ===== LETTER N ===== */
@@ -126,21 +112,15 @@
 .nexflux-intro[data-letter="N"] .helper-1 {
     width: 19.5%;
     height: 100%;
-    background-color: rgba(136, 136, 136, 0.5);
+    background-color: rgba(170, 170, 170, 0.5);
     left: 22.4%;
     top: 0;
     transform: rotate(180deg);
-    animation-name: fading-lumieres-box;
-    animation-duration: 2s;
-    animation-delay: 0.6s;
-    animation-fill-mode: forwards;
+    animation: fading-lumieres-box 2s ease 0.6s forwards;
 }
 
 .nexflux-intro[data-letter="N"] .helper-1 .effect-brush {
-    animation-name: brush-moving;
-    animation-duration: 2.5s;
-    animation-fill-mode: forwards;
-    animation-delay: 1.2s;
+    animation: brush-moving 2.5s ease-out 1.2s forwards;
 }
 
 .nexflux-intro[data-letter="N"] .helper-1 .effect-brush [class*="fur-"] {
@@ -159,10 +139,7 @@
 }
 
 .nexflux-intro[data-letter="N"] .helper-3 .effect-brush {
-    animation-name: brush-moving;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
-    animation-delay: 0.8s;
+    animation: brush-moving 2s ease-out 0.8s forwards;
 }
 
 .nexflux-intro[data-letter="N"] .helper-2 {
@@ -175,10 +152,7 @@
 }
 
 .nexflux-intro[data-letter="N"] .helper-2 .effect-brush {
-    animation-name: brush-moving;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
-    animation-delay: 0.5s;
+    animation: brush-moving 2s ease-out 0.5s forwards;
 }
 
 /* ===== HELPERS ===== */
@@ -215,187 +189,187 @@
 .fur-1 {
     left: 0%;
     width: 3.8%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 15%, transparent 81%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 15%, transparent 81%);
 }
 
 .fur-2 {
     left: 3.8%;
     width: 2.8%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 10%, transparent 62%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 10%, transparent 62%);
 }
 
 .fur-3 {
     left: 6.6%;
     width: 4.8%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 37%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 37%, transparent 100%);
 }
 
 .fur-4 {
     left: 11.4%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 23%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 23%, transparent 100%);
 }
 
 .fur-5 {
     left: 15.4%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 15%, transparent 86%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 15%, transparent 86%);
 }
 
 .fur-6 {
     left: 19.4%;
     width: 2.5%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 27%, transparent 89%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 27%, transparent 89%);
 }
 
 .fur-7 {
     left: 21.9%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 20%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 20%, transparent 100%);
 }
 
 .fur-8 {
     left: 25.9%;
     width: 2%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 30%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 30%, transparent 100%);
 }
 
 .fur-9 {
     left: 27.9%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 35%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 35%, transparent 95%);
 }
 
 .fur-10 {
     left: 31.9%;
     width: 3.5%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 39%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 39%, transparent 95%);
 }
 
 .fur-11 {
     left: 35.4%;
     width: 2%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 34%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 34%, transparent 95%);
 }
 
 .fur-12 {
     left: 37.4%;
     width: 2.6%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 22%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 22%, transparent 95%);
 }
 
 .fur-13 {
     left: 40%;
     width: 6%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 47%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 47%, transparent 100%);
 }
 
 .fur-14 {
     left: 46%;
     width: 2%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 36%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 36%, transparent 100%);
 }
 
 .fur-15 {
     left: 48%;
     width: 5.5%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 29%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 29%, transparent 100%);
 }
 
 .fur-16 {
     left: 53.5%;
     width: 3%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 39%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 39%, transparent 95%);
 }
 
 .fur-17 {
     left: 56.5%;
     width: 4.1%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 45%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 45%, transparent 100%);
 }
 
 .fur-18 {
     left: 60.6%;
     width: 2.4%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 34%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 34%, transparent 100%);
 }
 
 .fur-19 {
     left: 63%;
     width: 4%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 47%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 47%, transparent 100%);
 }
 
 .fur-20 {
     left: 67%;
     width: 1.5%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 27%, transparent 95%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 27%, transparent 95%);
 }
 
 .fur-21 {
     left: 68.5%;
     width: 2.8%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 37%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 37%, transparent 100%);
 }
 
 .fur-22 {
     left: 71.3%;
     width: 2.3%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 9%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 9%, transparent 100%);
 }
 
 .fur-23 {
     left: 73.6%;
     width: 2.2%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 28%, transparent 92%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 28%, transparent 92%);
 }
 
 .fur-24 {
     left: 75.8%;
     width: 1%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 37%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 37%, transparent 100%);
 }
 
 .fur-25 {
     left: 76.8%;
     width: 2.1%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 28%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 28%, transparent 100%);
 }
 
 .fur-26 {
     left: 78.9%;
     width: 4.1%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 34%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 34%, transparent 100%);
 }
 
 .fur-27 {
     left: 83%;
     width: 2.5%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 21%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 21%, transparent 100%);
 }
 
 .fur-28 {
     left: 85.5%;
     width: 4.5%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 39%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 39%, transparent 100%);
 }
 
 .fur-29 {
     left: 90%;
     width: 2.8%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 30%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 30%, transparent 100%);
 }
 
 .fur-30 {
     left: 92.8%;
     width: 3.5%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 19%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 19%, transparent 100%);
 }
 
 .fur-31 {
     left: 96.3%;
     width: 3.7%;
-    background: linear-gradient(to bottom, var(--base-color) 0%, var(--base-color) 37%, transparent 100%);
+    background: linear-gradient(to bottom, var(--base-color) 37%, transparent 100%);
 }
 
 /* ===== LUMIERES ===== */
@@ -404,42 +378,20 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    animation-name: showing-lumieres;
-    animation-duration: 2s;
-    animation-delay: 1.6s;
-    animation-fill-mode: forwards;
-    filter: blur(0.3px);
+    animation: showing-lumieres 1.5s ease 1.6s forwards;
 }
 
 [class*="lamp-"] {
     position: absolute;
     display: block;
     height: 100%;
-    background: linear-gradient(to bottom,
-            transparent 0%,
-            var(--lamp-color) 10%,
-            var(--lamp-color) 90%,
-            transparent 100%);
-    box-shadow:
-        0 0 8px 2px var(--lamp-color),
-        0 0 20px 4px var(--lamp-color);
-    border-radius: 2px;
+    background: var(--lamp-color);
+    box-shadow: 0 0 10px 3px var(--lamp-color);
+    border-radius: 1px;
+    contain: layout style;
 }
 
-[class*="lamp-"]::before {
-    position: absolute;
-    content: "";
-    display: block;
-    width: 200%;
-    left: -50%;
-    height: 100%;
-    background: radial-gradient(ellipse at center,
-            var(--lamp-color) 0%,
-            transparent 60%);
-    opacity: 0.5;
-}
-
-/* Lamp colors - colorful like original Netflix */
+/* Lamp colors - colorful */
 .lamp-1 {
     --lamp-color: #ff0100;
     left: 0.7%;
@@ -608,218 +560,157 @@
     width: 2.1%;
 }
 
-/* Lamp animations - left */
+/* Lamp animations - randomized directions */
+/* Left movers: 1, 4, 5, 8, 9, 12, 14, 17, 18, 21, 23, 26, 28 */
 .lamp-1,
-.lamp-3,
+.lamp-4,
 .lamp-5,
-.lamp-7,
+.lamp-8,
 .lamp-9,
+.lamp-12,
+.lamp-14,
+.lamp-17,
+.lamp-18,
+.lamp-21,
+.lamp-23,
+.lamp-26,
+.lamp-28 {
+    animation: lumieres-moving-left 3s ease-out forwards;
+}
+
+/* Right movers: 2, 3, 6, 7, 10, 11, 13, 15, 16, 19, 20, 22, 24, 25, 27 */
+.lamp-2,
+.lamp-3,
+.lamp-6,
+.lamp-7,
+.lamp-10,
 .lamp-11,
 .lamp-13,
 .lamp-15,
-.lamp-17,
-.lamp-19,
-.lamp-21,
-.lamp-23,
-.lamp-25,
-.lamp-27 {
-    animation: lumieres-moving-left 6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-.lamp-1::before,
-.lamp-3::before,
-.lamp-5::before,
-.lamp-7::before,
-.lamp-9::before,
-.lamp-11::before,
-.lamp-13::before,
-.lamp-15::before,
-.lamp-17::before,
-.lamp-19::before,
-.lamp-21::before,
-.lamp-23::before,
-.lamp-25::before,
-.lamp-27::before {
-    animation: lumieres-moving-left 6.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-/* Lamp animations - right */
-.lamp-2,
-.lamp-4,
-.lamp-6,
-.lamp-8,
-.lamp-10,
-.lamp-12,
-.lamp-14,
 .lamp-16,
-.lamp-18,
+.lamp-19,
 .lamp-20,
 .lamp-22,
 .lamp-24,
-.lamp-26,
-.lamp-28 {
-    animation: lumieres-moving-right 6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+.lamp-25,
+.lamp-27 {
+    animation: lumieres-moving-right 3s ease-out forwards;
 }
 
-.lamp-2::before,
-.lamp-4::before,
-.lamp-6::before,
-.lamp-8::before,
-.lamp-10::before,
-.lamp-12::before,
-.lamp-14::before,
-.lamp-16::before,
-.lamp-18::before,
-.lamp-20::before,
-.lamp-22::before,
-.lamp-24::before,
-.lamp-26::before,
-.lamp-28::before {
-    animation: lumieres-moving-right 6.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-/* Animation delays */
-.lamp-1,
-.lamp-1::before {
+/* Lamp delays */
+.lamp-1 {
     animation-delay: 1.45s;
 }
 
-.lamp-2,
-.lamp-2::before {
+.lamp-2 {
     animation-delay: 0.72s;
 }
 
-.lamp-3,
-.lamp-3::before {
+.lamp-3 {
     animation-delay: 1.89s;
 }
 
-.lamp-4,
-.lamp-4::before {
+.lamp-4 {
     animation-delay: 0.34s;
 }
 
-.lamp-5,
-.lamp-5::before {
+.lamp-5 {
     animation-delay: 1.67s;
 }
 
-.lamp-6,
-.lamp-6::before {
+.lamp-6 {
     animation-delay: 0.91s;
 }
 
-.lamp-7,
-.lamp-7::before {
+.lamp-7 {
     animation-delay: 1.23s;
 }
 
-.lamp-8,
-.lamp-8::before {
+.lamp-8 {
     animation-delay: 0.56s;
 }
 
-.lamp-9,
-.lamp-9::before {
+.lamp-9 {
     animation-delay: 1.78s;
 }
 
-.lamp-10,
-.lamp-10::before {
+.lamp-10 {
     animation-delay: 0.45s;
 }
 
-.lamp-11,
-.lamp-11::before {
+.lamp-11 {
     animation-delay: 1.34s;
 }
 
-.lamp-12,
-.lamp-12::before {
+.lamp-12 {
     animation-delay: 0.89s;
 }
 
-.lamp-13,
-.lamp-13::before {
+.lamp-13 {
     animation-delay: 1.56s;
 }
 
-.lamp-14,
-.lamp-14::before {
+.lamp-14 {
     animation-delay: 0.23s;
 }
 
-.lamp-15,
-.lamp-15::before {
+.lamp-15 {
     animation-delay: 1.12s;
 }
 
-.lamp-16,
-.lamp-16::before {
+.lamp-16 {
     animation-delay: 0.67s;
 }
 
-.lamp-17,
-.lamp-17::before {
+.lamp-17 {
     animation-delay: 1.91s;
 }
 
-.lamp-18,
-.lamp-18::before {
+.lamp-18 {
     animation-delay: 0.78s;
 }
 
-.lamp-19,
-.lamp-19::before {
+.lamp-19 {
     animation-delay: 1.45s;
 }
 
-.lamp-20,
-.lamp-20::before {
+.lamp-20 {
     animation-delay: 0.34s;
 }
 
-.lamp-21,
-.lamp-21::before {
+.lamp-21 {
     animation-delay: 1.67s;
 }
 
-.lamp-22,
-.lamp-22::before {
+.lamp-22 {
     animation-delay: 0.56s;
 }
 
-.lamp-23,
-.lamp-23::before {
+.lamp-23 {
     animation-delay: 1.23s;
 }
 
-.lamp-24,
-.lamp-24::before {
+.lamp-24 {
     animation-delay: 0.89s;
 }
 
-.lamp-25,
-.lamp-25::before {
+.lamp-25 {
     animation-delay: 1.78s;
 }
 
-.lamp-26,
-.lamp-26::before {
+.lamp-26 {
     animation-delay: 0.45s;
 }
 
-.lamp-27,
-.lamp-27::before {
+.lamp-27 {
     animation-delay: 1.34s;
 }
 
-.lamp-28,
-.lamp-28::before {
+.lamp-28 {
     animation-delay: 0.91s;
 }
 
-/* ===== KEYFRAMES - SMOOTH ===== */
+/* ===== KEYFRAMES ===== */
 @keyframes brush-moving {
     0% {
         transform: translateY(0);
@@ -830,66 +721,26 @@
     }
 }
 
-@keyframes fading-out {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
 @keyframes lumieres-moving-right {
     0% {
-        transform: translate(0) scaleX(1);
+        transform: translateX(0);
         opacity: 1;
-    }
-
-    20% {
-        transform: translate(-5px) scaleX(1.1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: translate(-40px) scaleX(1.5);
-        opacity: 0.8;
-    }
-
-    80% {
-        transform: translate(-100px) scaleX(2.5);
-        opacity: 0.4;
     }
 
     100% {
-        transform: translate(-150px) scaleX(4);
+        transform: translateX(-100px) scaleX(2);
         opacity: 0;
     }
 }
 
 @keyframes lumieres-moving-left {
     0% {
-        transform: translate(0) scaleX(1);
+        transform: translateX(0);
         opacity: 1;
-    }
-
-    20% {
-        transform: translate(5px) scaleX(1.1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: translate(40px) scaleX(1.5);
-        opacity: 0.8;
-    }
-
-    80% {
-        transform: translate(100px) scaleX(2.5);
-        opacity: 0.4;
     }
 
     100% {
-        transform: translate(150px) scaleX(4);
+        transform: translateX(100px) scaleX(2);
         opacity: 0;
     }
 }
@@ -916,15 +767,27 @@
 
 @keyframes fading-lumieres-box {
     0% {
-        background-color: rgba(136, 136, 136, 0.5);
+        background-color: rgba(170, 170, 170, 0.5);
     }
 
     100% {
-        background-color: rgba(136, 136, 136, 0);
+        background-color: transparent;
     }
 }
 
-/* ===== SIMPLE LOADER ===== */
+@keyframes splash-fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
+
+/* ===== REGULAR LOADER ===== */
 .nexflux-loader {
     display: flex;
     justify-content: center;
@@ -955,7 +818,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    border: 2px solid rgba(136, 136, 136, 0.2);
+    border: 2px solid rgba(170, 170, 170, 0.2);
     border-top-color: var(--base-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -973,38 +836,11 @@
     }
 }
 
-/* ===== MOBILE OPTIMIZATION ===== */
+/* ===== TABLET ===== */
 @media (max-width: 768px) {
     .nexflux-intro {
         width: 200px;
         height: 200px;
-    }
-
-    /* Faster animation on tablets */
-    .nexflux-splash:not(.nexflux-splash--mobile) {
-        animation: splash-fade-out 1.2s ease-out 2.5s forwards;
-    }
-
-    /* Hide some lamps for performance */
-    .lamp-13,
-    .lamp-14,
-    .lamp-19,
-    .lamp-22,
-    .lamp-23,
-    .lamp-24 {
-        display: none;
-    }
-}
-
-/* Mobile uses simple JS-based animation - hide complex elements */
-@media (max-width: 480px) {
-    .nexflux-loader__simple {
-        width: 50px;
-        height: 50px;
-    }
-
-    .nexflux-loader__text {
-        font-size: 1.4rem;
     }
 }
 
@@ -1014,8 +850,7 @@
     .nexflux-intro,
     .effect-brush,
     .effect-lumieres,
-    [class*="lamp-"],
-    [class*="lamp-"]::before {
+    [class*="lamp-"] {
         animation: none !important;
     }
 
@@ -1032,13 +867,6 @@
     will-change: transform, opacity;
     transform: translateZ(0);
     backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-
-/* Smooth font rendering */
-.nexflux-splash * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ===== HIDE UI DURING SPLASH ===== */
@@ -1050,4 +878,9 @@ body:has(.nexflux-splash) .chatbot {
 
 body:has(.nexflux-splash) {
     overflow: hidden;
+    background: #000 !important;
+}
+
+html:has(.nexflux-splash) {
+    background: #000 !important;
 }

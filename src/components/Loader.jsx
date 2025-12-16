@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Loader.css';
 
-// Helper component for fur spans
+// Helper component for fur spans (desktop only)
 const FurSpans = () => (
     <>
         {[...Array(31)].map((_, i) => (
@@ -10,7 +10,7 @@ const FurSpans = () => (
     </>
 );
 
-// Helper component for lamp spans
+// Helper component for lamp spans (desktop only)
 const LampSpans = () => (
     <>
         {[...Array(28)].map((_, i) => (
@@ -19,81 +19,80 @@ const LampSpans = () => (
     </>
 );
 
-// Check if mobile device
-const isMobile = () => {
+// Detect if actual mobile device (not just screen size)
+const isMobileDevice = () => {
     if (typeof window === 'undefined') return false;
-    return window.innerWidth <= 480 || /Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    // Check for touch device AND mobile user agent
+    const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isMobileUA = /Android|iPhone|iPod|iPad|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(navigator.userAgent);
+    const isSmallScreen = window.innerWidth <= 768;
+    // Must be touch device with mobile UA or very small screen with mobile UA
+    return (hasTouchScreen && isMobileUA) || (isSmallScreen && isMobileUA);
 };
 
-// Simple mobile splash - just logo fade
-const MobileSplash = ({ onComplete }) => {
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (onComplete) onComplete();
-        }, 2000);
-        return () => clearTimeout(timer);
-    }, [onComplete]);
+// Simple mobile splash - just N logo
+const MobileSplash = () => (
+    <div className="nexflux-splash nexflux-splash--mobile">
+        <div className="nexflux-mobile-logo">N</div>
+    </div>
+);
 
-    return (
-        <div className="nexflux-splash nexflux-splash--mobile">
-            <div className="nexflux-mobile-logo">N</div>
+// Full desktop splash - Netflix style animation
+const DesktopSplash = () => (
+    <div className="nexflux-splash nexflux-splash--desktop">
+        <div className="nexflux-intro" data-letter="N">
+            <div className="helper-1">
+                <div className="effect-brush">
+                    <FurSpans />
+                </div>
+                <div className="effect-lumieres">
+                    <LampSpans />
+                </div>
+            </div>
+            <div className="helper-2">
+                <div className="effect-brush">
+                    <FurSpans />
+                </div>
+            </div>
+            <div className="helper-3">
+                <div className="effect-brush">
+                    <FurSpans />
+                </div>
+            </div>
+            <div className="helper-4">
+                <div className="effect-brush">
+                    <FurSpans />
+                </div>
+            </div>
         </div>
-    );
-};
+    </div>
+);
 
-// Splash screen component - shows full animation on first load
+// Splash screen component
 export const SplashScreen = ({ onComplete }) => {
-    const [isAnimating, setIsAnimating] = useState(true);
-    const [mobile] = useState(() => isMobile());
+    const [visible, setVisible] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        // Shorter duration on mobile
-        const duration = mobile ? 2000 : 4000;
+        // Check device type on mount
+        setIsMobile(isMobileDevice());
+    }, []);
+
+    useEffect(() => {
+        // Mobile: 2.5s, Desktop: 4s
+        const duration = isMobile ? 2500 : 4000;
         const timer = setTimeout(() => {
-            setIsAnimating(false);
+            setVisible(false);
             if (onComplete) onComplete();
         }, duration);
 
         return () => clearTimeout(timer);
-    }, [onComplete, mobile]);
+    }, [onComplete, isMobile]);
 
-    if (!isAnimating) return null;
+    if (!visible) return null;
 
-    // Simple animation for mobile
-    if (mobile) {
-        return <MobileSplash onComplete={onComplete} />;
-    }
-
-    // Full animation for desktop
-    return (
-        <div className="nexflux-splash" id="container">
-            <div className="nexflux-intro" data-letter="N">
-                <div className="helper-1">
-                    <div className="effect-brush">
-                        <FurSpans />
-                    </div>
-                    <div className="effect-lumieres">
-                        <LampSpans />
-                    </div>
-                </div>
-                <div className="helper-2">
-                    <div className="effect-brush">
-                        <FurSpans />
-                    </div>
-                </div>
-                <div className="helper-3">
-                    <div className="effect-brush">
-                        <FurSpans />
-                    </div>
-                </div>
-                <div className="helper-4">
-                    <div className="effect-brush">
-                        <FurSpans />
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+    // Return appropriate splash based on device
+    return isMobile ? <MobileSplash /> : <DesktopSplash />;
 };
 
 // Regular loader for page transitions
