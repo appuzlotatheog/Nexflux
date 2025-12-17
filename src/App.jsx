@@ -14,8 +14,11 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import ChatBot from './components/ChatBot';
+import QuickActions from './components/QuickActions';
 import ProtectedRoute from './components/ProtectedRoute';
 import { SplashScreen } from './components/Loader';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { initAds } from './utils/ads';
 import Home from './pages/Home';
 import Watch from './pages/Watch';
 import Search from './pages/Search';
@@ -43,10 +46,17 @@ function AppContent() {
         return !hasShownSplash;
     });
 
+    // Enable keyboard shortcuts
+    useKeyboardShortcuts();
+
     useEffect(() => {
         // Check device performance after mount
         setUseWebGL(shouldUseWebGL());
+
+        // Initialize ads (only runs in production)
+        initAds();
     }, []);
+
 
     const handleSplashComplete = () => {
         setShowSplash(false);
@@ -100,6 +110,7 @@ function AppContent() {
                 </Routes>
             </main>
             {!isAuthPage && !showSplash && <ChatBot />}
+            {!isAuthPage && !isWatchPage && !showSplash && <QuickActions />}
         </div>
     );
 }
@@ -113,4 +124,3 @@ function App() {
 }
 
 export default App;
-

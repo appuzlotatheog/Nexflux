@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getMovieDetails, getTVDetails, getTVSeasonDetails, getBackdropUrl, getImageUrl } from '../api/tmdb';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
+import { addToRecentlyViewed } from '../components/RecentlyViewed';
 import EpisodeSelector from '../components/EpisodeSelector';
 import ContentRow from '../components/ContentRow';
 import ShareButton from '../components/ShareButton';
@@ -30,6 +31,16 @@ function Details() {
                     ? await getMovieDetails(id)
                     : await getTVDetails(id);
                 setDetails(data);
+
+                // Track in recently viewed
+                addToRecentlyViewed({
+                    id: parseInt(id),
+                    title: data.title || data.name,
+                    poster_path: data.poster_path,
+                    backdrop_path: data.backdrop_path,
+                    media_type: type,
+                    vote_average: data.vote_average
+                });
 
                 if (type === 'tv' && data.seasons?.length > 0) {
                     const firstSeason = data.seasons.find(s => s.season_number > 0) || data.seasons[0];
