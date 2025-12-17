@@ -1512,3 +1512,75 @@ main {
 img {
   content-visibility: auto;
 }
+
+/* ===== GLOBAL MOBILE ANIMATION FIX ===== */
+/* Prevent animations from running too fast on mobile devices */
+@media (max-width: 768px) {
+
+  /* Slow down all animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration: inherit !important;
+  }
+
+  /* Standard transition speed for mobile */
+  button,
+  a,
+  .btn,
+  .nav-link,
+  .content-card,
+  .browse__genre,
+  .browse__type-btn,
+  .details__tab,
+  .navbar__link,
+  .bottom-nav__item,
+  .footer__social-link,
+  .chatbot__toggle,
+  [class*="btn"],
+  [class*="button"] {
+    transition-duration: 0.2s !important;
+    transition-timing-function: ease-out !important;
+  }
+
+  /* Disable complex hover animations on touch */
+  .content-card:hover,
+  .content-card--hovered {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Remove neon effects and complex shadows */
+  .content-card__neon-border,
+  .content-card::before {
+    display: none !important;
+  }
+
+  /* Simple tap feedback */
+  button:active,
+  a:active,
+  .btn:active,
+  [class*="btn"]:active {
+    transform: scale(0.97) !important;
+    opacity: 0.9 !important;
+  }
+}
+
+/* Extra slow for very low-end devices */
+@media (max-width: 480px) {
+
+  /* Even simpler animations */
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.15s !important;
+    animation-timing-function: ease-out !important;
+  }
+
+  /* Disable most animations for performance */
+  .content-card__overlay,
+  .content-card__play,
+  .content-card__actions {
+    display: none !important;
+  }
+}
