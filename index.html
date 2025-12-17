@@ -86,6 +86,14 @@
 
   <!-- Preload critical resources -->
   <link rel="preload" as="image" href="/netflix-logo.svg" />
+
+  <!-- Critical inline style to prevent white flash -->
+  <style>
+    html,
+    body {
+      background-color: #000000 !important;
+    }
+  </style>
 </head>
 
 <body>

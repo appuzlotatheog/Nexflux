@@ -217,13 +217,17 @@ html {
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: transparent;
+  background-color: #000000;
   color: var(--color-text-primary);
   line-height: 1.5;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+}
+
+html {
+  background-color: #000000;
 }
 
 /* Subtle grid overlay - monochrome */

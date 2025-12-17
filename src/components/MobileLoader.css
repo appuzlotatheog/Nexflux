@@ -1,370 +1,95 @@
-/* ===== PREMIUM MOBILE LOADER ===== */
-/* A stunning, visually impressive loading experience for mobile */
+/* ===== ULTRA SIMPLE MOBILE LOADER ===== */
+/* No complex animations - guaranteed to work on all devices */
 
-:root {
-    --mobile-bg: #0a0a0a;
-    --mobile-primary: #E50914;
-    --mobile-glow: rgba(229, 9, 20, 0.6);
-    --mobile-white: #ffffff;
-}
-
-/* Main Container */
 .mobile-splash {
     position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--mobile-bg);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #000000 !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 99999;
-    overflow: hidden;
+    z-index: 999999;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
 }
 
-/* Animated Background Gradient */
-.mobile-splash::before {
-    content: '';
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 30% 30%, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(229, 9, 20, 0.1) 0%, transparent 50%);
-    animation: bgPulse 4s ease-in-out infinite;
+.mobile-splash-exit {
+    opacity: 0;
+    pointer-events: none;
 }
 
-@keyframes bgPulse {
-
-    0%,
-    100% {
-        transform: translate(-25%, -25%) scale(1);
-    }
-
-    50% {
-        transform: translate(-25%, -25%) scale(1.1);
-    }
-}
-
-/* Logo Container */
-.mobile-logo-container {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-}
-
-/* Main N Logo */
 .mobile-logo-n {
-    position: relative;
     width: 100px;
     height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.mobile-logo-n::before {
-    content: '';
-    position: absolute;
-    width: 140px;
-    height: 140px;
-    background: radial-gradient(circle, var(--mobile-glow) 0%, transparent 70%);
-    animation: logoGlow 2s ease-in-out infinite;
-}
-
-@keyframes logoGlow {
-
-    0%,
-    100% {
-        opacity: 0.5;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.2);
-    }
+    margin-bottom: 20px;
 }
 
 .mobile-logo-letter {
     font-size: 72px;
     font-weight: 900;
-    color: var(--mobile-primary);
-    font-family: 'Bebas Neue', -apple-system, sans-serif;
-    letter-spacing: 4px;
-    position: relative;
-    z-index: 2;
-    text-shadow: 0 0 30px var(--mobile-glow),
-        0 0 60px var(--mobile-glow),
-        0 4px 8px rgba(0, 0, 0, 0.5);
-    animation: letterPulse 1.5s ease-in-out infinite;
+    color: #E50914;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-@keyframes letterPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.05);
-    }
-}
-
-/* Circular Progress Ring */
-.mobile-progress-ring {
-    position: absolute;
-    width: 130px;
-    height: 130px;
-}
-
-.mobile-progress-ring svg {
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-}
-
-.mobile-progress-ring circle {
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-}
-
-.mobile-progress-bg {
-    stroke: rgba(255, 255, 255, 0.1);
-}
-
-.mobile-progress-fill {
-    stroke: var(--mobile-primary);
-    stroke-dasharray: 408;
-    stroke-dashoffset: 408;
-    animation: progressFill 2s ease-out forwards;
-    filter: drop-shadow(0 0 6px var(--mobile-glow));
-}
-
-@keyframes progressFill {
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
-/* Orbiting Dots */
-.mobile-orbit {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    animation: orbitSpin 3s linear infinite;
-}
-
-@keyframes orbitSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.mobile-orbit-dot {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: var(--mobile-primary);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--mobile-glow);
-}
-
-.mobile-orbit-dot:nth-child(1) {
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.mobile-orbit-dot:nth-child(2) {
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0.5;
-}
-
-.mobile-orbit-dot:nth-child(3) {
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.7;
-}
-
-/* Brand Name */
 .mobile-brand {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
-    letter-spacing: 8px;
-    color: var(--mobile-white);
-    text-transform: uppercase;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease-out 0.3s forwards;
+    color: #ffffff;
+    letter-spacing: 6px;
+    margin-bottom: 30px;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Loading Bar */
 .mobile-loading-bar {
-    width: 150px;
+    width: 120px;
     height: 3px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 3px;
     overflow: hidden;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease-out 0.5s forwards;
 }
 
 .mobile-loading-bar-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--mobile-primary), #ff4d4d);
-    border-radius: 3px;
-    animation: loadingBar 2s ease-out forwards;
-    box-shadow: 0 0 10px var(--mobile-glow);
+    background: #E50914;
+    animation: mobileLoadingBar 2s ease-out forwards;
 }
 
-@keyframes loadingBar {
-    to {
+@keyframes mobileLoadingBar {
+    0% {
+        width: 0%;
+    }
+
+    100% {
         width: 100%;
     }
 }
 
-/* Loading Text */
 .mobile-loading-text {
+    margin-top: 15px;
     font-size: 11px;
-    letter-spacing: 3px;
     color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease-out 0.7s forwards;
+    letter-spacing: 2px;
 }
 
-/* Particle Effects */
-.mobile-particles {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
+/* Hide unused elements */
+.mobile-particles,
+.mobile-progress-ring,
+.mobile-orbit,
+.mobile-logo-container {
+    display: contents;
 }
 
-.mobile-particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--mobile-primary);
-    border-radius: 50%;
-    opacity: 0;
-    animation: particleFloat 3s ease-in-out infinite;
-}
-
-.mobile-particle:nth-child(1) {
-    left: 20%;
-    animation-delay: 0s;
-}
-
-.mobile-particle:nth-child(2) {
-    left: 40%;
-    animation-delay: 0.5s;
-}
-
-.mobile-particle:nth-child(3) {
-    left: 60%;
-    animation-delay: 1s;
-}
-
-.mobile-particle:nth-child(4) {
-    left: 80%;
-    animation-delay: 1.5s;
-}
-
-.mobile-particle:nth-child(5) {
-    left: 30%;
-    animation-delay: 0.3s;
-}
-
-.mobile-particle:nth-child(6) {
-    left: 70%;
-    animation-delay: 0.8s;
-}
-
-@keyframes particleFloat {
-    0% {
-        bottom: -10px;
-        opacity: 0;
-    }
-
-    20% {
-        opacity: 0.8;
-    }
-
-    80% {
-        opacity: 0.8;
-    }
-
-    100% {
-        bottom: 100%;
-        opacity: 0;
-    }
-}
-
-/* Exit Animation */
-.mobile-splash-exit {
-    animation: splashExit 0.6s ease-in forwards;
-}
-
-.mobile-splash-exit .mobile-logo-letter {
-    animation: logoExit 0.4s ease-in forwards;
-}
-
-@keyframes splashExit {
-    to {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-    }
-}
-
-@keyframes logoExit {
-    to {
-        transform: scale(1.5);
-        opacity: 0;
-    }
-}
-
-/* Shimmer Effect on Logo */
-.mobile-logo-letter::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    animation: shimmer 2s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-    0% {
-        left: -100%;
-    }
-
-    50%,
-    100% {
-        left: 100%;
-    }
+.mobile-particle,
+.mobile-orbit-dot {
+    display: none;
 }
