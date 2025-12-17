@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Loader.css';
+import MobileLoader from './MobileLoader';
 
 // Helper component for fur spans (desktop only)
 const FurSpans = () => (
@@ -19,23 +20,23 @@ const LampSpans = () => (
     </>
 );
 
-// Detect if actual mobile device (not just screen size)
+// Robust device detection
 const isMobileDevice = () => {
     if (typeof window === 'undefined') return false;
-    // Check for touch device AND mobile user agent
-    const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    const isMobileUA = /Android|iPhone|iPod|iPad|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(navigator.userAgent);
-    const isSmallScreen = window.innerWidth <= 768;
-    // Must be touch device with mobile UA or very small screen with mobile UA
-    return (hasTouchScreen && isMobileUA) || (isSmallScreen && isMobileUA);
-};
 
-// Simple mobile splash - just N logo
-const MobileSplash = () => (
-    <div className="nexflux-splash nexflux-splash--mobile">
-        <div className="nexflux-mobile-logo">N</div>
-    </div>
-);
+    // 1. Check screen width (most reliable for responsive design)
+    if (window.innerWidth <= 768) return true;
+
+    // 2. Check user agent
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    if (/android/i.test(userAgent)) return true;
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return true;
+
+    // 3. Check touch points
+    if (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024) return true;
+
+    return false;
+};
 
 // Full desktop splash - Netflix style animation
 const DesktopSplash = () => (
@@ -72,27 +73,32 @@ const DesktopSplash = () => (
 export const SplashScreen = ({ onComplete }) => {
     const [visible, setVisible] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const [checked, setChecked] = useState(false);
 
     useEffect(() => {
-        // Check device type on mount
-        setIsMobile(isMobileDevice());
-    }, []);
+        // Check device type immediately
+        const mobile = isMobileDevice();
+        setIsMobile(mobile);
+        setChecked(true);
 
-    useEffect(() => {
-        // Mobile: 2.5s, Desktop: 4s
-        const duration = isMobile ? 2500 : 4000;
-        const timer = setTimeout(() => {
-            setVisible(false);
-            if (onComplete) onComplete();
-        }, duration);
-
-        return () => clearTimeout(timer);
-    }, [onComplete, isMobile]);
+        // Desktop duration: 4s (animation)
+        // Mobile duration is handled inside MobileLoader component
+        if (!mobile) {
+            const timer = setTimeout(() => {
+                setVisible(false);
+                if (onComplete) onComplete();
+            }, 4000);
+            return () => clearTimeout(timer);
+        }
+    }, [onComplete]);
 
     if (!visible) return null;
+    if (!checked) return null; // Prevent flash of wrong loader
 
     // Return appropriate splash based on device
-    return isMobile ? <MobileSplash /> : <DesktopSplash />;
+    return isMobile ?
+        <MobileLoader onComplete={onComplete} /> :
+        <DesktopSplash />;
 };
 
 // Regular loader for page transitions

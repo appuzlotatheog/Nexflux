@@ -7,6 +7,21 @@
 (function () {
     'use strict';
 
+    // ===== LOCALHOST DETECTION =====
+    // Allow devtools for local development
+    const isLocalhost = window.location.hostname === 'localhost'
+        || window.location.hostname === '127.0.0.1'
+        || window.location.hostname === '0.0.0.0'
+        || window.location.hostname.includes('192.168.')
+        || window.location.hostname.includes('.local')
+        || window.location.protocol === 'file:';
+
+    // If localhost, skip all security measures
+    if (isLocalhost) {
+        console.log('%c🔧 Development Mode - Security Bypassed', 'color: #00ff00; font-size: 14px;');
+        return; // Exit immediately for local users
+    }
+
     // ===== CONFIGURATION =====
     const CONFIG = {
         blockDevTools: true,
