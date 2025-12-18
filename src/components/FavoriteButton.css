@@ -1,0 +1,117 @@
+/* ===== FAVORITE BUTTON ===== */
+
+.favorite-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Sizes */
+.favorite-btn--sm {
+    width: 32px;
+    height: 32px;
+}
+
+.favorite-btn--sm .favorite-btn__icon {
+    width: 16px;
+    height: 16px;
+}
+
+.favorite-btn--md {
+    width: 40px;
+    height: 40px;
+}
+
+.favorite-btn--md .favorite-btn__icon {
+    width: 20px;
+    height: 20px;
+}
+
+.favorite-btn--lg {
+    width: 48px;
+    height: 48px;
+}
+
+.favorite-btn--lg .favorite-btn__icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Hover */
+.favorite-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+/* Active (Liked) - Keep pink for liked state */
+.favorite-btn--active {
+    background: rgba(255, 68, 119, 0.25);
+    border-color: rgba(255, 68, 119, 0.5);
+    color: #ff4477;
+}
+
+.favorite-btn--active:hover {
+    background: rgba(255, 68, 119, 0.35);
+}
+
+/* Icon Animation */
+.favorite-btn__icon {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.favorite-btn--animating .favorite-btn__icon {
+    animation: heartBeat 0.3s ease;
+}
+
+@keyframes heartBeat {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Burst Effect */
+.favorite-btn__burst {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 2px solid #ff4477;
+    opacity: 0;
+    animation: burstOut 0.4s ease-out forwards;
+}
+
+@keyframes burstOut {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Disabled State */
+.favorite-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

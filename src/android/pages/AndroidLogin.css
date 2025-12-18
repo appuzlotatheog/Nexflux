@@ -1,0 +1,148 @@
+/* ===== ANDROID LOGIN PAGE ===== */
+
+.android-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--android-space-md);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background */
+.android-login__bg {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at top, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, var(--android-bg) 0%, #0A0A0A 100%);
+    z-index: 0;
+}
+
+/* Container */
+.android-login__container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    z-index: 1;
+}
+
+/* Logo */
+.android-login__logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--android-space-xl);
+}
+
+.android-login__logo-text {
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--android-primary);
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(229, 9, 20, 0.5);
+}
+
+.android-login__logo-name {
+    font-size: var(--android-font-size-lg);
+    font-weight: 600;
+    color: var(--android-text-secondary);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+/* Card */
+.android-login__card {
+    padding: var(--android-space-xl);
+    border-radius: var(--android-radius-xl);
+    border: 1px solid var(--android-card-border);
+}
+
+.android-login__title {
+    font-size: var(--android-font-size-2xl);
+    font-weight: 800;
+    margin: 0 0 var(--android-space-xs);
+    text-align: center;
+}
+
+.android-login__subtitle {
+    font-size: var(--android-font-size-sm);
+    color: var(--android-text-muted);
+    text-align: center;
+    margin: 0 0 var(--android-space-xl);
+}
+
+/* Form */
+.android-login__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--android-space-md);
+}
+
+.android-login__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--android-space-xs);
+}
+
+.android-login__label {
+    font-size: var(--android-font-size-sm);
+    font-weight: 500;
+    color: var(--android-text-secondary);
+}
+
+/* Error */
+.android-login__error {
+    padding: var(--android-space-sm) var(--android-space-md);
+    background: rgba(255, 82, 82, 0.1);
+    border: 1px solid var(--android-error);
+    border-radius: var(--android-radius-sm);
+    color: var(--android-error);
+    font-size: var(--android-font-size-sm);
+    text-align: center;
+}
+
+/* Submit */
+.android-login__submit {
+    width: 100%;
+    margin-top: var(--android-space-sm);
+    padding: var(--android-space-md);
+}
+
+/* Toggle */
+.android-login__toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--android-space-xs);
+    margin-top: var(--android-space-lg);
+    font-size: var(--android-font-size-sm);
+    color: var(--android-text-muted);
+}
+
+.android-login__toggle-btn {
+    background: none;
+    border: none;
+    color: var(--android-primary);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Skip */
+.android-login__skip {
+    display: block;
+    width: 100%;
+    margin-top: var(--android-space-lg);
+    padding: var(--android-space-md);
+    background: none;
+    border: none;
+    color: var(--android-text-muted);
+    font-size: var(--android-font-size-sm);
+    text-align: center;
+    cursor: pointer;
+}
+
+.android-login__skip:active {
+    color: var(--android-text-secondary);
+}

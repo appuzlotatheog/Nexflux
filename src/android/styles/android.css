@@ -1,0 +1,195 @@
+/* ===== ANDROID ADDITIONAL STYLES ===== */
+
+/* Splash Screen */
+.android-splash {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--android-bg);
+    z-index: 99999;
+}
+
+.android-splash__logo {
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--android-primary);
+    animation: android-logo-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes android-logo-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+/* Safe Area Padding */
+.android-safe-top {
+    padding-top: var(--android-safe-top);
+}
+
+.android-safe-bottom {
+    padding-bottom: var(--android-safe-bottom);
+}
+
+/* Fullscreen Mode */
+.android-fullscreen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+}
+
+/* Page Transitions */
+.android-page-enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.android-page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all var(--android-transition-normal);
+}
+
+.android-page-exit {
+    opacity: 1;
+}
+
+.android-page-exit-active {
+    opacity: 0;
+    transition: opacity var(--android-transition-fast);
+}
+
+/* Error State */
+.android-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    padding: var(--android-space-xl);
+    text-align: center;
+}
+
+.android-error__icon {
+    font-size: 64px;
+    margin-bottom: var(--android-space-md);
+}
+
+.android-error__title {
+    font-size: var(--android-font-size-xl);
+    font-weight: 700;
+    color: var(--android-text);
+    margin-bottom: var(--android-space-sm);
+}
+
+.android-error__message {
+    color: var(--android-text-muted);
+    margin-bottom: var(--android-space-lg);
+}
+
+/* Loading Spinner */
+.android-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    gap: var(--android-space-md);
+}
+
+.android-loading__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--android-primary);
+    border-radius: 50%;
+    animation: android-spin 1s linear infinite;
+}
+
+/* Toast Notifications */
+.android-toast {
+    position: fixed;
+    bottom: calc(var(--android-bottom-nav-height) + var(--android-safe-bottom) + 20px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--android-space-md) var(--android-space-lg);
+    background: var(--android-surface-elevated);
+    border: 1px solid var(--android-card-border);
+    border-radius: var(--android-radius-md);
+    color: var(--android-text);
+    font-size: var(--android-font-size-sm);
+    box-shadow: var(--android-shadow-lg);
+    z-index: 9000;
+    animation: android-toast-in 0.3s ease-out;
+}
+
+@keyframes android-toast-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* Modal Overlay */
+.android-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 9500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--android-space-md);
+}
+
+.android-modal {
+    width: 100%;
+    max-width: 400px;
+    max-height: 80vh;
+    background: var(--android-surface);
+    border: 1px solid var(--android-card-border);
+    border-radius: var(--android-radius-lg);
+    overflow: hidden;
+    animation: android-scale-in var(--android-transition-normal) ease-out;
+}
+
+.android-modal__header {
+    padding: var(--android-space-lg);
+    border-bottom: 1px solid var(--android-card-border);
+}
+
+.android-modal__title {
+    font-size: var(--android-font-size-lg);
+    font-weight: 700;
+    margin: 0;
+}
+
+.android-modal__body {
+    padding: var(--android-space-lg);
+    overflow-y: auto;
+}
+
+.android-modal__footer {
+    padding: var(--android-space-md) var(--android-space-lg);
+    border-top: 1px solid var(--android-card-border);
+    display: flex;
+    gap: var(--android-space-sm);
+    justify-content: flex-end;
+}

@@ -1,0 +1,150 @@
+/* ===== ANDROID PROFILE PAGE ===== */
+
+.android-profile {
+    min-height: 100vh;
+    background: var(--android-bg);
+    padding-bottom: var(--android-space-xl);
+}
+
+/* Header */
+.android-profile__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--android-space-xl) var(--android-space-md);
+    padding-top: calc(var(--android-safe-top) + var(--android-space-xl));
+    text-align: center;
+}
+
+.android-profile__avatar {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--android-gradient-primary);
+    border-radius: 50%;
+    margin-bottom: var(--android-space-md);
+    font-size: 40px;
+    font-weight: 700;
+    color: white;
+    overflow: hidden;
+}
+
+.android-profile__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.android-profile__name {
+    font-size: var(--android-font-size-2xl);
+    font-weight: 800;
+    margin: 0 0 var(--android-space-xs);
+}
+
+.android-profile__email {
+    font-size: var(--android-font-size-sm);
+    color: var(--android-text-muted);
+    margin: 0;
+}
+
+/* Stats */
+.android-profile__stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--android-space-xl);
+    padding: var(--android-space-lg) var(--android-space-md);
+    margin: 0 var(--android-space-md);
+    background: var(--android-surface);
+    border-radius: var(--android-radius-lg);
+    border: 1px solid var(--android-card-border);
+}
+
+.android-profile__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.android-profile__stat-value {
+    font-size: var(--android-font-size-2xl);
+    font-weight: 800;
+    color: var(--android-primary);
+}
+
+.android-profile__stat-label {
+    font-size: var(--android-font-size-xs);
+    color: var(--android-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Menu */
+.android-profile__menu {
+    margin: var(--android-space-lg) var(--android-space-md);
+    background: var(--android-surface);
+    border-radius: var(--android-radius-lg);
+    border: 1px solid var(--android-card-border);
+    overflow: hidden;
+}
+
+.android-profile__menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--android-space-md);
+    width: 100%;
+    padding: var(--android-space-md) var(--android-space-lg);
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--android-card-border);
+    color: var(--android-text);
+    font-size: var(--android-font-size-md);
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--android-transition-normal);
+}
+
+.android-profile__menu-item:last-child {
+    border-bottom: none;
+}
+
+.android-profile__menu-item:active {
+    background: var(--android-card-hover);
+}
+
+.android-profile__menu-icon {
+    font-size: 20px;
+}
+
+.android-profile__menu-label {
+    flex: 1;
+}
+
+.android-profile__menu-arrow {
+    width: 20px;
+    height: 20px;
+    color: var(--android-text-muted);
+}
+
+/* Logout */
+.android-profile__logout {
+    padding: var(--android-space-lg) var(--android-space-md);
+}
+
+.android-profile__logout-btn {
+    width: 100%;
+    color: var(--android-error);
+    border-color: var(--android-error);
+}
+
+/* Footer */
+.android-profile__footer {
+    text-align: center;
+    padding: var(--android-space-lg);
+}
+
+.android-profile__version {
+    font-size: var(--android-font-size-xs);
+    color: var(--android-text-muted);
+}

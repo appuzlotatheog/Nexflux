@@ -1,0 +1,128 @@
+/* ===== ANDROID WATCH PAGE ===== */
+
+.android-watch {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+}
+
+/* Video Player */
+.android-watch__player {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #000;
+}
+
+/* Controls Overlay */
+.android-watch__controls {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.7) 0%,
+            transparent 30%,
+            transparent 70%,
+            rgba(0, 0, 0, 0.7) 100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--android-transition-normal);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.android-watch__controls--visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Header */
+.android-watch__header {
+    display: flex;
+    align-items: center;
+    gap: var(--android-space-md);
+    padding: var(--android-space-lg);
+    padding-top: calc(var(--android-safe-top) + var(--android-space-lg));
+}
+
+.android-watch__back {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+}
+
+.android-watch__back svg {
+    width: 24px;
+    height: 24px;
+}
+
+.android-watch__info {
+    flex: 1;
+}
+
+.android-watch__title {
+    font-size: var(--android-font-size-lg);
+    font-weight: 700;
+    margin: 0;
+    color: white;
+}
+
+.android-watch__episode {
+    font-size: var(--android-font-size-sm);
+    color: var(--android-text-secondary);
+}
+
+/* Episode Navigation */
+.android-watch__nav {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--android-space-lg);
+    padding-bottom: calc(var(--android-safe-bottom) + var(--android-space-lg));
+}
+
+.android-watch__nav-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--android-space-sm);
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: none;
+    border-radius: var(--android-radius-md);
+    color: white;
+    font-size: var(--android-font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--android-transition-normal);
+}
+
+.android-watch__nav-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.android-watch__nav-btn:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.android-watch__nav-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Loading State */
+.android-watch.android-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,126 @@
+/* ===== ANDROID SEARCH PAGE ===== */
+
+.android-search {
+    min-height: 100vh;
+    background: var(--android-bg);
+}
+
+/* Header */
+.android-search__header {
+    position: sticky;
+    top: 0;
+    padding: var(--android-space-md);
+    padding-top: calc(var(--android-safe-top) + var(--android-space-md));
+    z-index: 100;
+    border-bottom: 1px solid var(--android-card-border);
+}
+
+.android-search__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--android-space-sm);
+    padding: var(--android-space-sm) var(--android-space-md);
+    background: var(--android-surface);
+    border-radius: var(--android-radius-lg);
+    border: 1px solid var(--android-card-border);
+}
+
+.android-search__icon {
+    width: 20px;
+    height: 20px;
+    color: var(--android-text-muted);
+    flex-shrink: 0;
+}
+
+.android-search__input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--android-text);
+    font-size: var(--android-font-size-lg);
+}
+
+.android-search__input::placeholder {
+    color: var(--android-text-muted);
+}
+
+.android-search__clear,
+.android-search__voice {
+    background: none;
+    border: none;
+    color: var(--android-text-muted);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+/* Filters */
+.android-search__filters {
+    display: flex;
+    gap: var(--android-space-sm);
+    margin-top: var(--android-space-md);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.android-search__filters::-webkit-scrollbar {
+    display: none;
+}
+
+.android-search__filter {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    background: var(--android-surface);
+    border: 1px solid var(--android-card-border);
+    border-radius: var(--android-radius-full);
+    color: var(--android-text-secondary);
+    font-size: var(--android-font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--android-transition-normal);
+}
+
+.android-search__filter--active {
+    background: var(--android-primary);
+    border-color: var(--android-primary);
+    color: white;
+}
+
+/* Content */
+.android-search__content {
+    padding: var(--android-space-md);
+}
+
+.android-search__title {
+    font-size: var(--android-font-size-lg);
+    font-weight: 700;
+    margin: 0 0 var(--android-space-md);
+}
+
+/* Grid */
+.android-search__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--android-space-md);
+}
+
+.android-search__grid .android-content-card {
+    width: 100%;
+}
+
+/* Empty State */
+.android-search__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--android-space-2xl);
+    color: var(--android-text-muted);
+    text-align: center;
+}
+
+.android-search__empty-icon {
+    font-size: 48px;
+    margin-bottom: var(--android-space-md);
+}

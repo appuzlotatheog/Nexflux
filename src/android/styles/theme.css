@@ -1,0 +1,391 @@
+/**
+ * ═══════════════════════════════════════════════════════════════
+ *                    NEXFLUX ANDROID THEME
+ *                   Premium Dark Design System
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ===== CSS VARIABLES ===== */
+:root {
+    /* Primary Colors */
+    --android-primary: #E50914;
+    --android-primary-dark: #B20710;
+    --android-primary-light: #FF3D47;
+
+    /* Background Colors */
+    --android-bg: #0A0A0A;
+    --android-bg-secondary: #0F0F0F;
+    --android-surface: #141414;
+    --android-surface-elevated: #1A1A1A;
+
+    /* Card Colors */
+    --android-card: rgba(255, 255, 255, 0.03);
+    --android-card-hover: rgba(255, 255, 255, 0.06);
+    --android-card-border: rgba(255, 255, 255, 0.08);
+
+    /* Text Colors */
+    --android-text: #FFFFFF;
+    --android-text-secondary: #A0A0A0;
+    --android-text-muted: #666666;
+
+    /* Status Colors */
+    --android-success: #00C853;
+    --android-warning: #FFB300;
+    --android-error: #FF5252;
+    --android-info: #2196F3;
+
+    /* Gradients */
+    --android-gradient-primary: linear-gradient(135deg, #E50914, #B20710);
+    --android-gradient-dark: linear-gradient(180deg, transparent, #0A0A0A);
+    --android-gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+
+    /* Glass Effect */
+    --android-glass: rgba(20, 20, 20, 0.85);
+    --android-glass-blur: blur(20px);
+
+    /* Shadows */
+    --android-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --android-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --android-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --android-shadow-glow: 0 0 20px rgba(229, 9, 20, 0.3);
+
+    /* Spacing */
+    --android-space-xs: 4px;
+    --android-space-sm: 8px;
+    --android-space-md: 16px;
+    --android-space-lg: 24px;
+    --android-space-xl: 32px;
+    --android-space-2xl: 48px;
+
+    /* Border Radius */
+    --android-radius-sm: 8px;
+    --android-radius-md: 12px;
+    --android-radius-lg: 16px;
+    --android-radius-xl: 24px;
+    --android-radius-full: 9999px;
+
+    /* Typography */
+    --android-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --android-font-size-xs: 10px;
+    --android-font-size-sm: 12px;
+    --android-font-size-md: 14px;
+    --android-font-size-lg: 16px;
+    --android-font-size-xl: 20px;
+    --android-font-size-2xl: 24px;
+    --android-font-size-3xl: 32px;
+
+    /* Transitions */
+    --android-transition-fast: 150ms ease;
+    --android-transition-normal: 250ms ease;
+    --android-transition-slow: 350ms ease;
+
+    /* Bottom Nav */
+    --android-bottom-nav-height: 60px;
+
+    /* Safe Areas */
+    --android-safe-top: env(safe-area-inset-top, 0px);
+    --android-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ===== ANDROID APP CONTAINER ===== */
+.android-app {
+    background: var(--android-bg);
+    color: var(--android-text);
+    font-family: var(--android-font-family);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+.android-app * {
+    box-sizing: border-box;
+}
+
+/* ===== MAIN CONTENT ===== */
+.android-main {
+    flex: 1;
+    padding-bottom: calc(var(--android-bottom-nav-height) + var(--android-safe-bottom) + 16px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===== GLASSMORPHISM ===== */
+.android-glass {
+    background: var(--android-glass);
+    backdrop-filter: var(--android-glass-blur);
+    -webkit-backdrop-filter: var(--android-glass-blur);
+}
+
+/* ===== CARDS ===== */
+.android-card {
+    background: var(--android-card);
+    border: 1px solid var(--android-card-border);
+    border-radius: var(--android-radius-md);
+    transition: all var(--android-transition-normal);
+}
+
+.android-card:active {
+    transform: scale(0.98);
+    background: var(--android-card-hover);
+}
+
+/* ===== BUTTONS ===== */
+.android-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--android-space-sm);
+    padding: var(--android-space-md) var(--android-space-lg);
+    border: none;
+    border-radius: var(--android-radius-md);
+    font-size: var(--android-font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--android-transition-normal);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.android-btn-primary {
+    background: var(--android-gradient-primary);
+    color: white;
+    box-shadow: var(--android-shadow-sm), var(--android-shadow-glow);
+}
+
+.android-btn-primary:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+.android-btn-secondary {
+    background: var(--android-surface-elevated);
+    color: var(--android-text);
+    border: 1px solid var(--android-card-border);
+}
+
+.android-btn-ghost {
+    background: transparent;
+    color: var(--android-text-secondary);
+}
+
+/* ===== INPUTS ===== */
+.android-input {
+    width: 100%;
+    padding: var(--android-space-md);
+    background: var(--android-surface);
+    border: 1px solid var(--android-card-border);
+    border-radius: var(--android-radius-md);
+    color: var(--android-text);
+    font-size: var(--android-font-size-lg);
+    transition: all var(--android-transition-normal);
+}
+
+.android-input:focus {
+    outline: none;
+    border-color: var(--android-primary);
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+}
+
+.android-input::placeholder {
+    color: var(--android-text-muted);
+}
+
+/* ===== SCROLLBAR HIDE ===== */
+.android-scroll-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.android-scroll-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* ===== HORIZONTAL SCROLL ===== */
+.android-scroll-x {
+    display: flex;
+    gap: var(--android-space-md);
+    overflow-x: auto;
+    padding: var(--android-space-sm) 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.android-scroll-x>* {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+/* ===== SKELETON LOADER ===== */
+.android-skeleton {
+    background: linear-gradient(90deg, var(--android-surface) 0%, var(--android-surface-elevated) 50%, var(--android-surface) 100%);
+    background-size: 200% 100%;
+    animation: android-skeleton-pulse 1.5s ease-in-out infinite;
+    border-radius: var(--android-radius-sm);
+}
+
+@keyframes android-skeleton-pulse {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+/* ===== RIPPLE EFFECT ===== */
+.android-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.android-ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.android-ripple:active::after {
+    animation: android-ripple-effect 0.6s ease-out;
+}
+
+@keyframes android-ripple-effect {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(4);
+        opacity: 0;
+    }
+}
+
+/* ===== BADGES ===== */
+.android-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: var(--android-radius-sm);
+    font-size: var(--android-font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.android-badge-primary {
+    background: var(--android-primary);
+    color: white;
+}
+
+.android-badge-gold {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #000;
+}
+
+.android-badge-rating {
+    background: rgba(0, 0, 0, 0.7);
+    color: #FFD700;
+}
+
+/* ===== SECTION HEADERS ===== */
+.android-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--android-space-md);
+    padding-top: var(--android-space-lg);
+}
+
+.android-section-title {
+    font-size: var(--android-font-size-xl);
+    font-weight: 700;
+    color: var(--android-text);
+    margin: 0;
+}
+
+.android-section-link {
+    color: var(--android-primary);
+    font-size: var(--android-font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* ===== FADE EDGES ===== */
+.android-fade-left::before,
+.android-fade-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.android-fade-left::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--android-bg), transparent);
+}
+
+.android-fade-right::after {
+    right: 0;
+    background: linear-gradient(-90deg, var(--android-bg), transparent);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes android-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes android-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes android-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.android-animate-fade-in {
+    animation: android-fade-in var(--android-transition-normal) ease-out;
+}
+
+.android-animate-slide-up {
+    animation: android-slide-up var(--android-transition-slow) ease-out;
+}
+
+.android-animate-scale-in {
+    animation: android-scale-in var(--android-transition-normal) ease-out;
+}

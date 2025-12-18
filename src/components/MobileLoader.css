@@ -1,0 +1,95 @@
+/* ===== ULTRA SIMPLE MOBILE LOADER ===== */
+/* No complex animations - guaranteed to work on all devices */
+
+.mobile-splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #000000 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.mobile-splash-exit {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.mobile-logo-n {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mobile-logo-letter {
+    font-size: 72px;
+    font-weight: 900;
+    color: #E50914;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.mobile-brand {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 6px;
+    margin-bottom: 30px;
+}
+
+.mobile-loading-bar {
+    width: 120px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.mobile-loading-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #E50914;
+    animation: mobileLoadingBar 2s ease-out forwards;
+}
+
+@keyframes mobileLoadingBar {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+.mobile-loading-text {
+    margin-top: 15px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 2px;
+}
+
+/* Hide unused elements */
+.mobile-particles,
+.mobile-progress-ring,
+.mobile-orbit,
+.mobile-logo-container {
+    display: contents;
+}
+
+.mobile-particle,
+.mobile-orbit-dot {
+    display: none;
+}

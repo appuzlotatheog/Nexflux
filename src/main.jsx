@@ -1,0 +1,22 @@
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { SpeedInsights } from '@vercel/speed-insights/react'
+import App from './App'
+import './index.css'
+import { LanguageProvider } from './utils/i18n.jsx'
+import { ToastProvider } from './components/Toast'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <LanguageProvider>
+                <ToastProvider>
+                    <App />
+                    <SpeedInsights />
+                </ToastProvider>
+            </LanguageProvider>
+        </BrowserRouter>
+    </React.StrictMode>
+)
+

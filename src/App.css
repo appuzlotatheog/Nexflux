@@ -1,0 +1,60 @@
+/* App-level styles */
+.app {
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* Page Transitions */
+.main-content {
+    animation: pageEnter 0.4s var(--ease-out);
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Auth page main content */
+.main-content--auth {
+    padding: 0;
+}
+
+/* Watch page main content - no navbar, full screen */
+.main-content--watch {
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    animation: none;
+}
+
+/* Protected Route Loading */
+.protected-route-loading {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-primary);
+}
+
+.protected-route-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-gold);
+    border-radius: 50%;
+    animation: protectedSpin 0.8s linear infinite;
+}
+
+@keyframes protectedSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
