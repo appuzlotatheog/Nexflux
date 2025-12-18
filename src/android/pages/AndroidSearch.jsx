@@ -1,10 +1,11 @@
 /**
- * Android Search Page
+ * Android Search Page v3.0
  * Search with voice support and filters
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import AndroidContentCard from '../components/ContentCard';
-import './AndroidSearch.css';
+import ContentCard from '../components/ContentCard';
+import '../styles/theme.css';
+import '../styles/android.css';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE = 'https://api.themoviedb.org/3';
@@ -13,8 +14,8 @@ const AndroidSearch = () => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [trending, setTrending] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [activeFilter, setActiveFilter] = useState('all');
+    const [loading, setLoading] = useState(false);
+    const [filter, setFilter] = useState('all');
 
     const filters = [
         { id: 'all', label: 'All' },
@@ -22,161 +23,144 @@ const AndroidSearch = () => {
         { id: 'tv', label: 'TV Shows' },
     ];
 
-    // Fetch trending on mount
     useEffect(() => {
-        fetchTrending();
+        loadTrending();
     }, []);
 
-    const fetchTrending = async () => {
+    const loadTrending = async () => {
         try {
             const res = await fetch(`${TMDB_BASE}/trending/all/week?api_key=${TMDB_API_KEY}`);
             const data = await res.json();
             setTrending(data.results || []);
-        } catch (error) {
-            console.error('Error fetching trending:', error);
-        }
+        } catch (err) { }
     };
 
-    // Debounced search
-    const searchContent = useCallback(async (searchQuery) => {
-        if (!searchQuery.trim()) {
+    const search = useCallback(async (q) => {
+        if (!q.trim()) {
             setResults([]);
             return;
         }
-
-        setIsLoading(true);
+        setLoading(true);
         try {
-            const endpoint = activeFilter === 'all'
+            const endpoint = filter === 'all'
                 ? `${TMDB_BASE}/search/multi`
-                : `${TMDB_BASE}/search/${activeFilter}`;
-
-            const res = await fetch(`${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(searchQuery)}`);
+                : `${TMDB_BASE}/search/${filter}`;
+            const res = await fetch(`${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(q)}`);
             const data = await res.json();
+            setResults((data.results || []).filter(i => i.media_type !== 'person' && (i.poster_path || i.backdrop_path)));
+        } catch (err) { }
+        setLoading(false);
+    }, [filter]);
 
-            // Filter out people
-            const filtered = (data.results || []).filter(item =>
-                item.media_type !== 'person' && (item.poster_path || item.backdrop_path)
-            );
-
-            setResults(filtered);
-        } catch (error) {
-            console.error('Search error:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [activeFilter]);
-
-    // Debounce
     useEffect(() => {
-        const timer = setTimeout(() => {
-            searchContent(query);
-        }, 400);
-        return () => clearTimeout(timer);
-    }, [query, searchContent]);
+        const t = setTimeout(() => search(query), 400);
+        return () => clearTimeout(t);
+    }, [query, search]);
 
-    const handleVoiceSearch = () => {
+    const handleVoice = () => {
         if ('webkitSpeechRecognition' in window) {
-            const recognition = new window.webkitSpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.onresult = (event) => {
-                setQuery(event.results[0][0].transcript);
-            };
-            recognition.start();
+            const rec = new window.webkitSpeechRecognition();
+            rec.lang = 'en-US';
+            rec.onresult = (e) => setQuery(e.results[0][0].transcript);
+            rec.start();
         }
     };
 
     return (
-        <div className="android-search">
-            {/* Search Header */}
-            <header className="android-search__header android-glass">
-                <div className="android-search__input-wrapper">
-                    <svg className="android-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <div style={{ minHeight: '100vh', background: 'var(--nx-bg-primary)', paddingTop: 'var(--nx-safe-top)' }}>
+            {/* Header */}
+            <header style={{ position: 'sticky', top: 0, padding: 'var(--nx-md)', background: 'var(--nx-glass-bg)', backdropFilter: 'blur(20px)', zIndex: 100 }}>
+                {/* Search Input */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--nx-sm)', padding: '12px 16px', background: 'var(--nx-bg-elevated)', borderRadius: 'var(--nx-radius-md)' }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--nx-text-muted)" strokeWidth="2" style={{ width: 20, height: 20, flexShrink: 0 }}>
                         <circle cx="11" cy="11" r="8" />
                         <path d="m21 21-4.35-4.35" />
                     </svg>
                     <input
                         type="text"
-                        className="android-search__input"
                         placeholder="Search movies, TV shows..."
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         autoFocus
+                        style={{ flex: 1, background: 'none', border: 'none', color: 'var(--nx-text-primary)', fontSize: 'var(--nx-font-md)', outline: 'none' }}
                     />
                     {query && (
-                        <button
-                            className="android-search__clear"
-                            onClick={() => setQuery('')}
-                        >
-                            ✕
-                        </button>
+                        <button onClick={() => setQuery('')} style={{ background: 'none', border: 'none', color: 'var(--nx-text-muted)', cursor: 'pointer' }}>✕</button>
                     )}
-                    <button
-                        className="android-search__voice"
-                        onClick={handleVoiceSearch}
-                        aria-label="Voice search"
-                    >
-                        🎤
-                    </button>
+                    <button onClick={handleVoice} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer' }}>🎤</button>
                 </div>
 
                 {/* Filters */}
-                <div className="android-search__filters">
-                    {filters.map(filter => (
+                <div style={{ display: 'flex', gap: 'var(--nx-sm)', marginTop: 'var(--nx-sm)', overflowX: 'auto' }}>
+                    {filters.map(f => (
                         <button
-                            key={filter.id}
-                            className={`android-search__filter ${activeFilter === filter.id ? 'android-search__filter--active' : ''}`}
-                            onClick={() => setActiveFilter(filter.id)}
+                            key={f.id}
+                            onClick={() => setFilter(f.id)}
+                            style={{
+                                padding: '8px 16px',
+                                background: filter === f.id ? 'var(--nx-primary)' : 'var(--nx-bg-elevated)',
+                                border: 'none',
+                                borderRadius: 'var(--nx-radius-full)',
+                                color: filter === f.id ? 'white' : 'var(--nx-text-secondary)',
+                                fontSize: 'var(--nx-font-sm)',
+                                fontWeight: 500,
+                                cursor: 'pointer',
+                                whiteSpace: 'nowrap'
+                            }}
                         >
-                            {filter.label}
+                            {f.label}
                         </button>
                     ))}
                 </div>
             </header>
 
             {/* Content */}
-            <div className="android-search__content">
-                {isLoading ? (
-                    <div className="android-loading">
-                        <div className="android-loading__spinner" />
+            <div style={{ padding: 'var(--nx-md)' }}>
+                {loading ? (
+                    <div className="nx-loading" style={{ minHeight: '50vh' }}>
+                        <div className="nx-spinner" />
                     </div>
                 ) : query && results.length > 0 ? (
-                    <div className="android-search__results">
-                        <h2 className="android-search__title">Results</h2>
-                        <div className="android-search__grid">
+                    <>
+                        <h2 style={{ fontSize: 'var(--nx-font-lg)', fontWeight: 700, marginBottom: 'var(--nx-md)' }}>Results</h2>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--nx-md)' }}>
                             {results.map(item => (
-                                <AndroidContentCard
+                                <ContentCard
                                     key={item.id}
                                     id={item.id}
-                                    type={item.media_type || activeFilter}
+                                    type={item.media_type || filter}
                                     title={item.title || item.name}
                                     posterPath={item.poster_path}
                                     rating={item.vote_average}
-                                    year={item.release_date?.split('-')[0] || item.first_air_date?.split('-')[0]}
+                                    year={(item.release_date || item.first_air_date)?.split('-')[0]}
+                                    size="sm"
                                 />
                             ))}
                         </div>
-                    </div>
-                ) : query && !isLoading ? (
-                    <div className="android-search__empty">
-                        <span className="android-search__empty-icon">🔍</span>
-                        <p>No results found for "{query}"</p>
+                    </>
+                ) : query ? (
+                    <div className="nx-empty">
+                        <span className="nx-empty-icon">🔍</span>
+                        <h3 className="nx-empty-title">No results found</h3>
+                        <p className="nx-empty-text">Try a different search term</p>
                     </div>
                 ) : (
-                    <div className="android-search__trending">
-                        <h2 className="android-search__title">Trending</h2>
-                        <div className="android-search__grid">
+                    <>
+                        <h2 style={{ fontSize: 'var(--nx-font-lg)', fontWeight: 700, marginBottom: 'var(--nx-md)' }}>Trending</h2>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--nx-md)' }}>
                             {trending.slice(0, 12).map(item => (
-                                <AndroidContentCard
+                                <ContentCard
                                     key={item.id}
                                     id={item.id}
                                     type={item.media_type}
                                     title={item.title || item.name}
                                     posterPath={item.poster_path}
                                     rating={item.vote_average}
+                                    size="sm"
                                 />
                             ))}
                         </div>
-                    </div>
+                    </>
                 )}
             </div>
         </div>

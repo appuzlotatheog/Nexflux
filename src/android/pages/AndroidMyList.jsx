@@ -1,112 +1,114 @@
 /**
- * Android My List Page
- * User's watchlist and favorites
+ * Android My List Page v3.0
  */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AndroidContentCard from '../components/ContentCard';
+import ContentCard from '../components/ContentCard';
 import { getWatchlist, getFavorites, isAuthenticated } from '../services/api';
-import './AndroidMyList.css';
+import '../styles/theme.css';
+import '../styles/android.css';
 
 const AndroidMyList = () => {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('watchlist');
+    const [tab, setTab] = useState('watchlist');
     const [watchlist, setWatchlist] = useState([]);
     const [favorites, setFavorites] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!isAuthenticated()) {
             navigate('/login');
             return;
         }
-        fetchData();
+        loadData();
     }, [navigate]);
 
-    const fetchData = async () => {
-        setIsLoading(true);
+    const loadData = async () => {
+        setLoading(true);
         try {
-            const [watchlistRes, favoritesRes] = await Promise.all([
-                getWatchlist(),
-                getFavorites(),
-            ]);
-
-            if (watchlistRes.success) {
-                setWatchlist(watchlistRes.watchlist || []);
-            }
-            if (favoritesRes.success) {
-                setFavorites(favoritesRes.favorites || []);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } finally {
-            setIsLoading(false);
-        }
+            const [wl, fav] = await Promise.all([getWatchlist(), getFavorites()]);
+            if (wl.success) setWatchlist(wl.watchlist || []);
+            if (fav.success) setFavorites(fav.favorites || []);
+        } catch (err) { }
+        setLoading(false);
     };
 
-    const currentItems = activeTab === 'watchlist' ? watchlist : favorites;
+    const items = tab === 'watchlist' ? watchlist : favorites;
 
-    if (isLoading) {
+    if (loading) {
         return (
-            <div className="android-mylist android-loading">
-                <div className="android-loading__spinner" />
+            <div className="nx-loading">
+                <div className="nx-spinner" />
             </div>
         );
     }
 
     return (
-        <div className="android-mylist">
-            {/* Header */}
-            <header className="android-mylist__header">
-                <h1 className="android-mylist__title">My List</h1>
+        <div style={{ minHeight: '100vh', background: 'var(--nx-bg-primary)', padding: 'var(--nx-md)', paddingTop: 'calc(var(--nx-safe-top) + var(--nx-lg))' }}>
+            <h1 style={{ fontSize: 'var(--nx-font-2xl)', fontWeight: 800, marginBottom: 'var(--nx-lg)' }}>My List</h1>
 
-                {/* Tabs */}
-                <div className="android-mylist__tabs">
-                    <button
-                        className={`android-mylist__tab ${activeTab === 'watchlist' ? 'android-mylist__tab--active' : ''}`}
-                        onClick={() => setActiveTab('watchlist')}
-                    >
-                        Watchlist ({watchlist.length})
-                    </button>
-                    <button
-                        className={`android-mylist__tab ${activeTab === 'favorites' ? 'android-mylist__tab--active' : ''}`}
-                        onClick={() => setActiveTab('favorites')}
-                    >
-                        Favorites ({favorites.length})
-                    </button>
-                </div>
-            </header>
+            {/* Tabs */}
+            <div style={{ display: 'flex', gap: 'var(--nx-sm)', marginBottom: 'var(--nx-lg)' }}>
+                <button
+                    onClick={() => setTab('watchlist')}
+                    style={{
+                        flex: 1,
+                        padding: '12px',
+                        background: tab === 'watchlist' ? 'var(--nx-primary)' : 'var(--nx-bg-elevated)',
+                        border: 'none',
+                        borderRadius: 'var(--nx-radius-md)',
+                        color: tab === 'watchlist' ? 'white' : 'var(--nx-text-secondary)',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                    }}
+                >
+                    Watchlist ({watchlist.length})
+                </button>
+                <button
+                    onClick={() => setTab('favorites')}
+                    style={{
+                        flex: 1,
+                        padding: '12px',
+                        background: tab === 'favorites' ? 'var(--nx-primary)' : 'var(--nx-bg-elevated)',
+                        border: 'none',
+                        borderRadius: 'var(--nx-radius-md)',
+                        color: tab === 'favorites' ? 'white' : 'var(--nx-text-secondary)',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                    }}
+                >
+                    Favorites ({favorites.length})
+                </button>
+            </div>
 
             {/* Content */}
-            <div className="android-mylist__content">
-                {currentItems.length > 0 ? (
-                    <div className="android-mylist__grid">
-                        {currentItems.map((item, index) => (
-                            <AndroidContentCard
-                                key={item.contentId || index}
-                                id={item.contentId}
-                                type={item.contentType}
-                                title={item.title}
-                                posterPath={item.posterPath}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="android-mylist__empty">
-                        <span className="android-mylist__empty-icon">
-                            {activeTab === 'watchlist' ? '📋' : '❤️'}
-                        </span>
-                        <h2>No {activeTab === 'watchlist' ? 'watchlist' : 'favorites'} yet</h2>
-                        <p>Start adding movies and shows to your {activeTab}!</p>
-                        <button
-                            className="android-btn android-btn-primary"
-                            onClick={() => navigate('/search')}
-                        >
-                            Browse Content
-                        </button>
-                    </div>
-                )}
-            </div>
+            {items.length > 0 ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--nx-md)' }}>
+                    {items.map((item, idx) => (
+                        <ContentCard
+                            key={item.contentId || idx}
+                            id={item.contentId}
+                            type={item.contentType}
+                            title={item.title}
+                            posterPath={item.posterPath}
+                            size="sm"
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="nx-empty">
+                    <span className="nx-empty-icon">{tab === 'watchlist' ? '📑' : '❤️'}</span>
+                    <h3 className="nx-empty-title">No {tab} yet</h3>
+                    <p className="nx-empty-text">Start adding movies and shows!</p>
+                    <button
+                        className="nx-btn nx-btn-primary"
+                        onClick={() => navigate('/search')}
+                        style={{ marginTop: 'var(--nx-lg)' }}
+                    >
+                        Browse Content
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

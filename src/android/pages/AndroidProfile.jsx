@@ -1,128 +1,123 @@
 /**
- * Android Profile Page
- * User profile with stats and settings
+ * Android Profile Page v3.0
  */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProfile, logout, isAuthenticated, getStoredUser } from '../services/api';
-import './AndroidProfile.css';
+import { getProfile, logout, isAuthenticated, getWatchlist, getFavorites, getContinueWatching } from '../services/api';
+import '../styles/theme.css';
+import '../styles/android.css';
 
 const AndroidProfile = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState(getStoredUser());
-    const [isLoading, setIsLoading] = useState(false);
+    const [user, setUser] = useState(null);
+    const [stats, setStats] = useState({ watchlist: 0, favorites: 0, watching: 0 });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!isAuthenticated()) {
             navigate('/login');
             return;
         }
-        fetchProfile();
+        loadProfile();
     }, [navigate]);
 
-    const fetchProfile = async () => {
+    const loadProfile = async () => {
         try {
-            const data = await getProfile();
-            if (data.success) {
-                setUser(data.user);
-            }
-        } catch (error) {
-            console.error('Error fetching profile:', error);
-        }
+            const [profileRes, wlRes, favRes, cwRes] = await Promise.all([
+                getProfile(),
+                getWatchlist(),
+                getFavorites(),
+                getContinueWatching()
+            ]);
+            if (profileRes.success) setUser(profileRes.user);
+            setStats({
+                watchlist: wlRes.watchlist?.length || 0,
+                favorites: favRes.favorites?.length || 0,
+                watching: cwRes.continueWatching?.length || 0
+            });
+        } catch (err) { }
+        setLoading(false);
     };
 
-    const handleLogout = async () => {
-        setIsLoading(true);
-        try {
-            await logout();
-            navigate('/login');
-        } catch (error) {
-            console.error('Logout error:', error);
-        } finally {
-            setIsLoading(false);
-        }
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
     };
 
-    if (!user) {
+    if (loading) {
         return (
-            <div className="android-profile android-loading">
-                <div className="android-loading__spinner" />
+            <div className="nx-loading">
+                <div className="nx-spinner" />
             </div>
         );
     }
 
-    const menuItems = [
-        { icon: '📋', label: 'My List', action: () => navigate('/my-list') },
-        { icon: '⏰', label: 'Watch History', action: () => { } },
-        { icon: '⚙️', label: 'Settings', action: () => { } },
-        { icon: '🔔', label: 'Notifications', action: () => { } },
-        { icon: '❓', label: 'Help & Support', action: () => { } },
-        { icon: '📜', label: 'Terms & Privacy', action: () => { } },
-    ];
-
     return (
-        <div className="android-profile">
-            {/* Header */}
-            <header className="android-profile__header">
-                <div className="android-profile__avatar">
-                    {user.avatar ? (
-                        <img src={user.avatar} alt={user.username} />
-                    ) : (
-                        <span>{user.username?.[0]?.toUpperCase() || 'U'}</span>
-                    )}
+        <div style={{ minHeight: '100vh', background: 'var(--nx-bg-primary)', padding: 'var(--nx-md)', paddingTop: 'calc(var(--nx-safe-top) + var(--nx-lg))' }}>
+            {/* Profile Header */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 'var(--nx-xl)' }}>
+                <div style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, var(--nx-primary), var(--nx-primary-dark))',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '48px',
+                    marginBottom: 'var(--nx-md)',
+                    boxShadow: 'var(--nx-shadow-glow)'
+                }}>
+                    👤
                 </div>
-                <h1 className="android-profile__name">{user.username}</h1>
-                <p className="android-profile__email">{user.email}</p>
-            </header>
+                <h1 style={{ fontSize: 'var(--nx-font-2xl)', fontWeight: 800 }}>{user?.username || 'User'}</h1>
+                <p style={{ color: 'var(--nx-text-muted)', fontSize: 'var(--nx-font-sm)' }}>{user?.email}</p>
+            </div>
 
             {/* Stats */}
-            <div className="android-profile__stats">
-                <div className="android-profile__stat">
-                    <span className="android-profile__stat-value">{user.watchlist?.length || 0}</span>
-                    <span className="android-profile__stat-label">Watchlist</span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--nx-md)', marginBottom: 'var(--nx-xl)' }}>
+                <div style={{ background: 'var(--nx-bg-card)', borderRadius: 'var(--nx-radius-md)', padding: 'var(--nx-md)', textAlign: 'center' }}>
+                    <div style={{ fontSize: 'var(--nx-font-xl)', fontWeight: 800, color: 'var(--nx-primary)' }}>{stats.watchlist}</div>
+                    <div style={{ fontSize: 'var(--nx-font-xs)', color: 'var(--nx-text-muted)' }}>Watchlist</div>
                 </div>
-                <div className="android-profile__stat">
-                    <span className="android-profile__stat-value">{user.favorites?.length || 0}</span>
-                    <span className="android-profile__stat-label">Favorites</span>
+                <div style={{ background: 'var(--nx-bg-card)', borderRadius: 'var(--nx-radius-md)', padding: 'var(--nx-md)', textAlign: 'center' }}>
+                    <div style={{ fontSize: 'var(--nx-font-xl)', fontWeight: 800, color: 'var(--nx-primary)' }}>{stats.favorites}</div>
+                    <div style={{ fontSize: 'var(--nx-font-xs)', color: 'var(--nx-text-muted)' }}>Favorites</div>
                 </div>
-                <div className="android-profile__stat">
-                    <span className="android-profile__stat-value">{user.continueWatching?.length || 0}</span>
-                    <span className="android-profile__stat-label">Watching</span>
+                <div style={{ background: 'var(--nx-bg-card)', borderRadius: 'var(--nx-radius-md)', padding: 'var(--nx-md)', textAlign: 'center' }}>
+                    <div style={{ fontSize: 'var(--nx-font-xl)', fontWeight: 800, color: 'var(--nx-primary)' }}>{stats.watching}</div>
+                    <div style={{ fontSize: 'var(--nx-font-xs)', color: 'var(--nx-text-muted)' }}>Watching</div>
                 </div>
             </div>
 
             {/* Menu */}
-            <nav className="android-profile__menu">
-                {menuItems.map((item, index) => (
-                    <button
-                        key={index}
-                        className="android-profile__menu-item"
-                        onClick={item.action}
-                    >
-                        <span className="android-profile__menu-icon">{item.icon}</span>
-                        <span className="android-profile__menu-label">{item.label}</span>
-                        <svg className="android-profile__menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M9 18l6-6-6-6" />
-                        </svg>
-                    </button>
-                ))}
-            </nav>
-
-            {/* Logout */}
-            <div className="android-profile__logout">
+            <div style={{ background: 'var(--nx-bg-card)', borderRadius: 'var(--nx-radius-md)', overflow: 'hidden', marginBottom: 'var(--nx-lg)' }}>
                 <button
-                    className="android-btn android-btn-secondary android-profile__logout-btn"
-                    onClick={handleLogout}
-                    disabled={isLoading}
+                    onClick={() => navigate('/my-list')}
+                    style={{ display: 'flex', alignItems: 'center', gap: 'var(--nx-md)', width: '100%', padding: 'var(--nx-md)', background: 'none', border: 'none', borderBottom: '1px solid var(--nx-glass-border)', color: 'var(--nx-text-primary)', fontSize: 'var(--nx-font-md)', textAlign: 'left', cursor: 'pointer' }}
                 >
-                    {isLoading ? 'Logging out...' : 'Sign Out'}
+                    <span>📑</span>
+                    My List
+                    <span style={{ marginLeft: 'auto', color: 'var(--nx-text-muted)' }}>›</span>
+                </button>
+                <button
+                    onClick={() => navigate('/search')}
+                    style={{ display: 'flex', alignItems: 'center', gap: 'var(--nx-md)', width: '100%', padding: 'var(--nx-md)', background: 'none', border: 'none', color: 'var(--nx-text-primary)', fontSize: 'var(--nx-font-md)', textAlign: 'left', cursor: 'pointer' }}
+                >
+                    <span>🔍</span>
+                    Search
+                    <span style={{ marginLeft: 'auto', color: 'var(--nx-text-muted)' }}>›</span>
                 </button>
             </div>
 
-            {/* App Info */}
-            <footer className="android-profile__footer">
-                <span className="android-profile__version">Nexflux v2.0.0</span>
-            </footer>
+            {/* Logout */}
+            <button
+                onClick={handleLogout}
+                className="nx-btn"
+                style={{ width: '100%', background: 'rgba(255, 82, 82, 0.15)', color: '#FF5252', border: '1px solid rgba(255, 82, 82, 0.3)' }}
+            >
+                Sign Out
+            </button>
         </div>
     );
 };

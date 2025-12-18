@@ -1,12 +1,13 @@
 /**
- * Android Premium Content Card
- * Glassmorphic card with animations for content display
+ * Android Content Card v3.0
+ * Premium glassmorphic content card
  */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ContentCard.css';
+import '../styles/theme.css';
+import '../styles/android.css';
 
-const AndroidContentCard = ({
+const ContentCard = ({
     id,
     type = 'movie',
     title,
@@ -14,13 +15,13 @@ const AndroidContentCard = ({
     rating,
     year,
     progress,
-    size = 'normal' // 'small', 'normal', 'large'
+    size = 'md'
 }) => {
     const navigate = useNavigate();
 
     const imageUrl = posterPath
         ? `https://image.tmdb.org/t/p/w342${posterPath}`
-        : '/placeholder-poster.jpg';
+        : null;
 
     const handleClick = () => {
         if (navigator.vibrate) navigator.vibrate(10);
@@ -29,55 +30,66 @@ const AndroidContentCard = ({
 
     return (
         <article
-            className={`android-content-card android-content-card--${size}`}
+            className={`nx-content-card nx-content-card--${size}`}
             onClick={handleClick}
         >
-            <div className="android-content-card__image-wrapper">
-                <img
-                    src={imageUrl}
-                    alt={title}
-                    loading="lazy"
-                    className="android-content-card__image"
-                />
-
-                {/* Rating Badge */}
-                {rating > 0 && (
-                    <div className="android-content-card__rating">
-                        <span className="android-content-card__star">★</span>
-                        <span>{rating.toFixed(1)}</span>
+            <div className="nx-content-card__poster">
+                {imageUrl ? (
+                    <img
+                        src={imageUrl}
+                        alt={title}
+                        loading="lazy"
+                        className="nx-content-card__img"
+                    />
+                ) : (
+                    <div style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'var(--nx-bg-elevated)',
+                        fontSize: '32px'
+                    }}>
+                        🎬
                     </div>
                 )}
 
-                {/* Play Indicator */}
-                <div className="android-content-card__play">
+                {/* Overlay */}
+                <div className="nx-content-card__overlay" />
+
+                {/* Rating */}
+                {rating > 0 && (
+                    <div className="nx-content-card__rating">
+                        <span className="nx-content-card__star">★</span>
+                        {rating.toFixed(1)}
+                    </div>
+                )}
+
+                {/* Play button */}
+                <div className="nx-content-card__play">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M8 5v14l11-7z" />
                     </svg>
                 </div>
 
-                {/* Progress Bar */}
+                {/* Progress */}
                 {progress > 0 && (
-                    <div className="android-content-card__progress">
+                    <div className="nx-content-card__progress">
                         <div
-                            className="android-content-card__progress-bar"
+                            className="nx-content-card__progress-bar"
                             style={{ width: `${Math.min(100, progress)}%` }}
                         />
                     </div>
                 )}
-
-                {/* Gradient Overlay */}
-                <div className="android-content-card__gradient" />
             </div>
 
-            {/* Title */}
-            <div className="android-content-card__info">
-                <h3 className="android-content-card__title">{title}</h3>
-                {year && (
-                    <span className="android-content-card__year">{year}</span>
-                )}
+            <div className="nx-content-card__info">
+                <h3 className="nx-content-card__title">{title}</h3>
+                {year && <span className="nx-content-card__year">{year}</span>}
             </div>
         </article>
     );
 };
 
-export default AndroidContentCard;
+export default ContentCard;

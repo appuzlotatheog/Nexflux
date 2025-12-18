@@ -1,12 +1,13 @@
 /**
- * Android Home Page
- * Premium home screen with hero carousel and content rows
+ * Android Home Page v3.0
+ * Premium home with hero and content rows
  */
 import React, { useState, useEffect } from 'react';
 import HeroCarousel from '../components/HeroCarousel';
-import AndroidContentCard from '../components/ContentCard';
+import ContentCard from '../components/ContentCard';
 import { getContinueWatching, isAuthenticated } from '../services/api';
-import './AndroidHome.css';
+import '../styles/theme.css';
+import '../styles/android.css';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE = 'https://api.themoviedb.org/3';
@@ -15,71 +16,66 @@ const AndroidHome = () => {
     const [trending, setTrending] = useState([]);
     const [popular, setPopular] = useState([]);
     const [topRated, setTopRated] = useState([]);
-    const [newReleases, setNewReleases] = useState([]);
+    const [tvShows, setTvShows] = useState([]);
     const [continueWatching, setContinueWatching] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchContent();
+        loadContent();
         if (isAuthenticated()) {
-            fetchContinueWatching();
+            loadContinueWatching();
         }
     }, []);
 
-    const fetchContent = async () => {
+    const loadContent = async () => {
         try {
-            const [trendingRes, popularRes, topRatedRes, newReleasesRes] = await Promise.all([
+            const [trendingRes, popularRes, topRatedRes, tvRes] = await Promise.all([
                 fetch(`${TMDB_BASE}/trending/all/day?api_key=${TMDB_API_KEY}`),
                 fetch(`${TMDB_BASE}/movie/popular?api_key=${TMDB_API_KEY}`),
                 fetch(`${TMDB_BASE}/movie/top_rated?api_key=${TMDB_API_KEY}`),
-                fetch(`${TMDB_BASE}/movie/now_playing?api_key=${TMDB_API_KEY}`),
+                fetch(`${TMDB_BASE}/tv/popular?api_key=${TMDB_API_KEY}`),
             ]);
 
-            const [trendingData, popularData, topRatedData, newReleasesData] = await Promise.all([
+            const [trendingData, popularData, topRatedData, tvData] = await Promise.all([
                 trendingRes.json(),
                 popularRes.json(),
                 topRatedRes.json(),
-                newReleasesRes.json(),
+                tvRes.json(),
             ]);
 
             setTrending(trendingData.results?.slice(0, 5) || []);
             setPopular(popularData.results || []);
             setTopRated(topRatedData.results || []);
-            setNewReleases(newReleasesData.results || []);
-        } catch (error) {
-            console.error('Error fetching content:', error);
+            setTvShows(tvData.results || []);
+        } catch (err) {
+            console.error('Failed to load content:', err);
         } finally {
-            setIsLoading(false);
+            setLoading(false);
         }
     };
 
-    const fetchContinueWatching = async () => {
+    const loadContinueWatching = async () => {
         try {
             const data = await getContinueWatching();
             if (data.success) {
                 setContinueWatching(data.continueWatching || []);
             }
-        } catch (error) {
-            console.error('Error fetching continue watching:', error);
+        } catch (err) {
+            console.error('Failed to load continue watching:', err);
         }
     };
 
-    if (isLoading) {
+    if (loading) {
         return (
-            <div className="android-home android-home--loading">
-                <div className="android-home__skeleton-hero" />
-                <div className="android-home__skeleton-row">
-                    {[...Array(5)].map((_, i) => (
-                        <div key={i} className="android-home__skeleton-card android-skeleton" />
-                    ))}
-                </div>
+            <div className="nx-loading">
+                <div className="nx-spinner" />
             </div>
         );
     }
 
     return (
-        <div className="android-home">
-            {/* Hero Carousel */}
+        <div style={{ minHeight: '100vh', background: 'var(--nx-bg-primary)' }}>
+            {/* Hero */}
             <HeroCarousel items={trending} />
 
             {/* Continue Watching */}
@@ -94,11 +90,11 @@ const AndroidHome = () => {
             {/* Popular Movies */}
             <ContentRow title="Popular Movies" items={popular} type="movie" />
 
+            {/* Popular TV */}
+            <ContentRow title="Popular TV Shows" items={tvShows} type="tv" />
+
             {/* Top Rated */}
             <ContentRow title="Top Rated" items={topRated} type="movie" />
-
-            {/* New Releases */}
-            <ContentRow title="New Releases" items={newReleases} type="movie" />
         </div>
     );
 };
@@ -108,21 +104,22 @@ const ContentRow = ({ title, items, type, showProgress }) => {
     if (!items.length) return null;
 
     return (
-        <section className="android-content-row">
-            <header className="android-content-row__header">
-                <h2 className="android-content-row__title">{title}</h2>
+        <section className="nx-content-row">
+            <header className="nx-content-row__header">
+                <h2 className="nx-content-row__title">{title}</h2>
             </header>
-            <div className="android-content-row__scroll android-scroll-hide">
-                {items.map((item, index) => (
-                    <AndroidContentCard
-                        key={item.id || index}
+            <div className="nx-content-row__scroll">
+                {items.slice(0, 20).map((item, idx) => (
+                    <ContentCard
+                        key={item.id || item.contentId || idx}
                         id={item.contentId || item.id}
                         type={item.contentType || item.media_type || type || 'movie'}
                         title={item.title || item.name}
                         posterPath={item.posterPath || item.poster_path}
                         rating={item.vote_average || 0}
                         year={item.release_date?.split('-')[0] || item.first_air_date?.split('-')[0]}
-                        progress={showProgress ? Math.round((item.progress / item.duration) * 100) : 0}
+                        progress={showProgress && item.duration ? Math.round((item.progress / item.duration) * 100) : 0}
+                        size="md"
                     />
                 ))}
             </div>

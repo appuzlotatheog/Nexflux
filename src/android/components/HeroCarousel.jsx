@@ -1,115 +1,110 @@
 /**
- * Android Hero Carousel
- * Full-screen hero banner with swipeable featured content
+ * Android Hero Carousel v3.0
+ * Premium full-screen hero with Ken Burns effect
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './HeroCarousel.css';
+import '../styles/theme.css';
+import '../styles/android.css';
 
 const HeroCarousel = ({ items = [] }) => {
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [current, setCurrent] = useState(0);
     const navigate = useNavigate();
-    const containerRef = useRef(null);
-    const touchStartX = useRef(0);
-    const touchEndX = useRef(0);
+    const touchStart = useRef(0);
+    const touchEnd = useRef(0);
 
-    // Auto-scroll every 6 seconds
+    // Auto-scroll
     useEffect(() => {
         if (items.length <= 1) return;
-
         const timer = setInterval(() => {
-            setCurrentIndex(prev => (prev + 1) % items.length);
-        }, 6000);
-
+            setCurrent(prev => (prev + 1) % items.length);
+        }, 7000);
         return () => clearInterval(timer);
     }, [items.length]);
 
     const handleTouchStart = (e) => {
-        touchStartX.current = e.touches[0].clientX;
+        touchStart.current = e.touches[0].clientX;
     };
 
-    const handleTouchMove = (e) => {
-        touchEndX.current = e.touches[0].clientX;
-    };
-
-    const handleTouchEnd = () => {
-        const diff = touchStartX.current - touchEndX.current;
-        const threshold = 50;
-
-        if (diff > threshold) {
-            // Swipe left - next
-            setCurrentIndex(prev => (prev + 1) % items.length);
-        } else if (diff < -threshold) {
-            // Swipe right - previous
-            setCurrentIndex(prev => (prev - 1 + items.length) % items.length);
+    const handleTouchEnd = (e) => {
+        touchEnd.current = e.changedTouches[0].clientX;
+        const diff = touchStart.current - touchEnd.current;
+        if (diff > 60) {
+            setCurrent(prev => (prev + 1) % items.length);
+        } else if (diff < -60) {
+            setCurrent(prev => (prev - 1 + items.length) % items.length);
         }
     };
 
-    const handleWatch = (item) => {
+    const handlePlay = (item) => {
         if (navigator.vibrate) navigator.vibrate(10);
-        navigate(`/watch/${item.media_type || 'movie'}/${item.id}`);
+        const mediaType = item.media_type || (item.first_air_date ? 'tv' : 'movie');
+        if (mediaType === 'tv') {
+            navigate(`/watch/tv/${item.id}/1/1`);
+        } else {
+            navigate(`/watch/movie/${item.id}`);
+        }
     };
 
-    const handleDetails = (item) => {
+    const handleInfo = (item) => {
         if (navigator.vibrate) navigator.vibrate(10);
-        navigate(`/${item.media_type || 'movie'}/${item.id}`);
+        const mediaType = item.media_type || (item.first_air_date ? 'tv' : 'movie');
+        navigate(`/${mediaType}/${item.id}`);
     };
 
     if (!items.length) return null;
 
-    const current = items[currentIndex];
-    const backdropUrl = current.backdrop_path
-        ? `https://image.tmdb.org/t/p/w1280${current.backdrop_path}`
+    const item = items[current];
+    const backdrop = item.backdrop_path
+        ? `https://image.tmdb.org/t/p/w1280${item.backdrop_path}`
         : '';
 
     return (
         <section
-            className="android-hero"
-            ref={containerRef}
+            className="nx-hero"
             onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
         >
-            {/* Background Image */}
+            {/* Background with Ken Burns */}
             <div
-                className="android-hero__backdrop"
-                style={{ backgroundImage: `url(${backdropUrl})` }}
+                className="nx-hero__bg"
+                style={{ backgroundImage: `url(${backdrop})` }}
+                key={item.id}
             />
 
-            {/* Gradient Overlays */}
-            <div className="android-hero__gradient-top" />
-            <div className="android-hero__gradient-bottom" />
+            {/* Gradients */}
+            <div className="nx-hero__gradient-top" />
+            <div className="nx-hero__gradient-bottom" />
 
             {/* Content */}
-            <div className="android-hero__content">
-                {/* Type Badge */}
-                <div className="android-hero__badges">
-                    {current.vote_average > 0 && (
-                        <span className="android-hero__badge android-hero__badge--rating">
-                            ★ {current.vote_average.toFixed(1)}
+            <div className="nx-hero__content nx-slide-up">
+                {/* Badges */}
+                <div className="nx-hero__badges">
+                    {item.vote_average > 0 && (
+                        <span className="nx-hero__badge nx-hero__badge--rating">
+                            ★ {item.vote_average.toFixed(1)}
                         </span>
                     )}
-                    <span className="android-hero__badge">
-                        {current.media_type === 'tv' ? 'TV Series' : 'Movie'}
+                    <span className="nx-hero__badge">
+                        {item.media_type === 'tv' ? 'TV Series' : 'Movie'}
                     </span>
                 </div>
 
                 {/* Title */}
-                <h1 className="android-hero__title">
-                    {current.title || current.name}
+                <h1 className="nx-hero__title">
+                    {item.title || item.name}
                 </h1>
 
                 {/* Overview */}
-                <p className="android-hero__overview">
-                    {current.overview?.slice(0, 150)}
-                    {current.overview?.length > 150 ? '...' : ''}
+                <p className="nx-hero__overview">
+                    {item.overview?.slice(0, 150)}{item.overview?.length > 150 ? '...' : ''}
                 </p>
 
-                {/* Action Buttons */}
-                <div className="android-hero__actions">
+                {/* Actions */}
+                <div className="nx-hero__actions">
                     <button
-                        className="android-hero__btn android-hero__btn--primary"
-                        onClick={() => handleWatch(current)}
+                        className="nx-hero__btn nx-hero__btn--play"
+                        onClick={() => handlePlay(item)}
                     >
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M8 5v14l11-7z" />
@@ -117,8 +112,8 @@ const HeroCarousel = ({ items = [] }) => {
                         Play
                     </button>
                     <button
-                        className="android-hero__btn android-hero__btn--secondary"
-                        onClick={() => handleDetails(current)}
+                        className="nx-hero__btn nx-hero__btn--info"
+                        onClick={() => handleInfo(item)}
                     >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <circle cx="12" cy="12" r="10" />
@@ -127,21 +122,20 @@ const HeroCarousel = ({ items = [] }) => {
                         Info
                     </button>
                 </div>
-            </div>
 
-            {/* Pagination Dots */}
-            {items.length > 1 && (
-                <div className="android-hero__dots">
-                    {items.map((_, index) => (
-                        <button
-                            key={index}
-                            className={`android-hero__dot ${index === currentIndex ? 'android-hero__dot--active' : ''}`}
-                            onClick={() => setCurrentIndex(index)}
-                            aria-label={`Go to slide ${index + 1}`}
-                        />
-                    ))}
-                </div>
-            )}
+                {/* Dots */}
+                {items.length > 1 && (
+                    <div className="nx-hero__dots">
+                        {items.slice(0, 5).map((_, i) => (
+                            <button
+                                key={i}
+                                className={`nx-hero__dot ${i === current ? 'nx-hero__dot--active' : ''}`}
+                                onClick={() => setCurrent(i)}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
         </section>
     );
 };

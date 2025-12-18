@@ -1,232 +1,276 @@
 /**
- * ═══════════════════════════════════════════════════════════════
- *                    NEXFLUX ANDROID THEME
- *                   Premium Dark Design System
- * ═══════════════════════════════════════════════════════════════
+ * ════════════════════════════════════════════════════════════════════════════
+ *                         NEXFLUX ANDROID PREMIUM THEME
+ *                    Ultra Modern Dark Design System v3.0
+ * ════════════════════════════════════════════════════════════════════════════
+ * 
+ * This is the EXCLUSIVE Android theme - completely separate from web.
+ * Features: Glassmorphism, Neon accents, Smooth 60fps animations
  */
 
-/* ===== CSS VARIABLES ===== */
+/* ═══════════════════════════════════════════════════════════════════════════
+   ROOT VARIABLES - Premium Dark Theme
+   ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-    /* Primary Colors */
-    --android-primary: #E50914;
-    --android-primary-dark: #B20710;
-    --android-primary-light: #FF3D47;
+    /* ─── BRAND COLORS ─── */
+    --nx-primary: #E50914;
+    --nx-primary-glow: rgba(229, 9, 20, 0.4);
+    --nx-primary-dark: #B20710;
+    --nx-primary-light: #FF4D58;
+    --nx-accent: #FFD700;
 
-    /* Background Colors */
-    --android-bg: #0A0A0A;
-    --android-bg-secondary: #0F0F0F;
-    --android-surface: #141414;
-    --android-surface-elevated: #1A1A1A;
+    /* ─── DARK BACKGROUNDS ─── */
+    --nx-bg-pure: #000000;
+    --nx-bg-primary: #0A0A0C;
+    --nx-bg-secondary: #111115;
+    --nx-bg-card: #16161A;
+    --nx-bg-elevated: #1E1E24;
+    --nx-bg-overlay: rgba(0, 0, 0, 0.85);
 
-    /* Card Colors */
-    --android-card: rgba(255, 255, 255, 0.03);
-    --android-card-hover: rgba(255, 255, 255, 0.06);
-    --android-card-border: rgba(255, 255, 255, 0.08);
+    /* ─── GLASS EFFECTS ─── */
+    --nx-glass-bg: rgba(20, 20, 25, 0.75);
+    --nx-glass-border: rgba(255, 255, 255, 0.08);
+    --nx-glass-blur: blur(24px);
 
-    /* Text Colors */
-    --android-text: #FFFFFF;
-    --android-text-secondary: #A0A0A0;
-    --android-text-muted: #666666;
+    /* ─── TEXT ─── */
+    --nx-text-white: #FFFFFF;
+    --nx-text-primary: #F5F5F7;
+    --nx-text-secondary: #A1A1A6;
+    --nx-text-muted: #6E6E73;
 
-    /* Status Colors */
-    --android-success: #00C853;
-    --android-warning: #FFB300;
-    --android-error: #FF5252;
-    --android-info: #2196F3;
+    /* ─── SHADOWS ─── */
+    --nx-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --nx-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+    --nx-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.6);
+    --nx-shadow-glow: 0 0 30px var(--nx-primary-glow);
+    --nx-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 
-    /* Gradients */
-    --android-gradient-primary: linear-gradient(135deg, #E50914, #B20710);
-    --android-gradient-dark: linear-gradient(180deg, transparent, #0A0A0A);
-    --android-gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    /* ─── SPACING ─── */
+    --nx-xs: 4px;
+    --nx-sm: 8px;
+    --nx-md: 16px;
+    --nx-lg: 24px;
+    --nx-xl: 32px;
+    --nx-2xl: 48px;
+    --nx-3xl: 64px;
 
-    /* Glass Effect */
-    --android-glass: rgba(20, 20, 20, 0.85);
-    --android-glass-blur: blur(20px);
+    /* ─── RADIUS ─── */
+    --nx-radius-sm: 8px;
+    --nx-radius-md: 14px;
+    --nx-radius-lg: 20px;
+    --nx-radius-xl: 28px;
+    --nx-radius-full: 100px;
 
-    /* Shadows */
-    --android-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --android-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-    --android-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-    --android-shadow-glow: 0 0 20px rgba(229, 9, 20, 0.3);
+    /* ─── TYPOGRAPHY ─── */
+    --nx-font: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --nx-font-xs: 11px;
+    --nx-font-sm: 13px;
+    --nx-font-md: 15px;
+    --nx-font-lg: 17px;
+    --nx-font-xl: 22px;
+    --nx-font-2xl: 28px;
+    --nx-font-3xl: 36px;
 
-    /* Spacing */
-    --android-space-xs: 4px;
-    --android-space-sm: 8px;
-    --android-space-md: 16px;
-    --android-space-lg: 24px;
-    --android-space-xl: 32px;
-    --android-space-2xl: 48px;
+    /* ─── ANIMATIONS ─── */
+    --nx-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+    --nx-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --nx-duration-fast: 180ms;
+    --nx-duration: 280ms;
+    --nx-duration-slow: 400ms;
 
-    /* Border Radius */
-    --android-radius-sm: 8px;
-    --android-radius-md: 12px;
-    --android-radius-lg: 16px;
-    --android-radius-xl: 24px;
-    --android-radius-full: 9999px;
-
-    /* Typography */
-    --android-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --android-font-size-xs: 10px;
-    --android-font-size-sm: 12px;
-    --android-font-size-md: 14px;
-    --android-font-size-lg: 16px;
-    --android-font-size-xl: 20px;
-    --android-font-size-2xl: 24px;
-    --android-font-size-3xl: 32px;
-
-    /* Transitions */
-    --android-transition-fast: 150ms ease;
-    --android-transition-normal: 250ms ease;
-    --android-transition-slow: 350ms ease;
-
-    /* Bottom Nav */
-    --android-bottom-nav-height: 60px;
-
-    /* Safe Areas */
-    --android-safe-top: env(safe-area-inset-top, 0px);
-    --android-safe-bottom: env(safe-area-inset-bottom, 0px);
+    /* ─── LAYOUT ─── */
+    --nx-nav-height: 64px;
+    --nx-safe-top: env(safe-area-inset-top, 0px);
+    --nx-safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* ===== ANDROID APP CONTAINER ===== */
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANDROID APP ROOT
+   ═══════════════════════════════════════════════════════════════════════════ */
 .android-app {
-    background: var(--android-bg);
-    color: var(--android-text);
-    font-family: var(--android-font-family);
     min-height: 100vh;
     min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
+    background: var(--nx-bg-primary);
+    color: var(--nx-text-primary);
+    font-family: var(--nx-font);
+    font-size: var(--nx-font-md);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
+    overflow-x: hidden;
 }
 
 .android-app * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-/* ===== MAIN CONTENT ===== */
+/* ─── MAIN CONTENT AREA ─── */
 .android-main {
-    flex: 1;
-    padding-bottom: calc(var(--android-bottom-nav-height) + var(--android-safe-bottom) + 16px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    min-height: 100vh;
+    padding-bottom: calc(var(--nx-nav-height) + var(--nx-safe-bottom) + 20px);
 }
 
-/* ===== GLASSMORPHISM ===== */
-.android-glass {
-    background: var(--android-glass);
-    backdrop-filter: var(--android-glass-blur);
-    -webkit-backdrop-filter: var(--android-glass-blur);
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLASSMORPHIC COMPONENTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-glass {
+    background: var(--nx-glass-bg);
+    backdrop-filter: var(--nx-glass-blur);
+    -webkit-backdrop-filter: var(--nx-glass-blur);
+    border: 1px solid var(--nx-glass-border);
 }
 
-/* ===== CARDS ===== */
-.android-card {
-    background: var(--android-card);
-    border: 1px solid var(--android-card-border);
-    border-radius: var(--android-radius-md);
-    transition: all var(--android-transition-normal);
+.nx-card {
+    background: var(--nx-bg-card);
+    border-radius: var(--nx-radius-md);
+    border: 1px solid var(--nx-glass-border);
+    box-shadow: var(--nx-shadow-card);
+    transition: transform var(--nx-duration) var(--nx-ease),
+        box-shadow var(--nx-duration) var(--nx-ease);
 }
 
-.android-card:active {
-    transform: scale(0.98);
-    background: var(--android-card-hover);
+.nx-card:active {
+    transform: scale(0.97);
 }
 
-/* ===== BUTTONS ===== */
-.android-btn {
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--android-space-sm);
-    padding: var(--android-space-md) var(--android-space-lg);
-    border: none;
-    border-radius: var(--android-radius-md);
-    font-size: var(--android-font-size-md);
+    gap: var(--nx-sm);
+    padding: var(--nx-md) var(--nx-lg);
+    font-family: inherit;
+    font-size: var(--nx-font-md);
     font-weight: 600;
+    border: none;
+    border-radius: var(--nx-radius-md);
     cursor: pointer;
-    transition: all var(--android-transition-normal);
+    transition: all var(--nx-duration) var(--nx-ease);
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
-.android-btn-primary {
-    background: var(--android-gradient-primary);
-    color: white;
-    box-shadow: var(--android-shadow-sm), var(--android-shadow-glow);
-}
-
-.android-btn-primary:active {
-    transform: scale(0.95);
-    box-shadow: none;
-}
-
-.android-btn-secondary {
-    background: var(--android-surface-elevated);
-    color: var(--android-text);
-    border: 1px solid var(--android-card-border);
-}
-
-.android-btn-ghost {
-    background: transparent;
-    color: var(--android-text-secondary);
-}
-
-/* ===== INPUTS ===== */
-.android-input {
-    width: 100%;
-    padding: var(--android-space-md);
-    background: var(--android-surface);
-    border: 1px solid var(--android-card-border);
-    border-radius: var(--android-radius-md);
-    color: var(--android-text);
-    font-size: var(--android-font-size-lg);
-    transition: all var(--android-transition-normal);
-}
-
-.android-input:focus {
-    outline: none;
-    border-color: var(--android-primary);
-    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
-}
-
-.android-input::placeholder {
-    color: var(--android-text-muted);
-}
-
-/* ===== SCROLLBAR HIDE ===== */
-.android-scroll-hide {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.android-scroll-hide::-webkit-scrollbar {
-    display: none;
-}
-
-/* ===== HORIZONTAL SCROLL ===== */
-.android-scroll-x {
-    display: flex;
-    gap: var(--android-space-md);
-    overflow-x: auto;
-    padding: var(--android-space-sm) 0;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-}
-
-.android-scroll-x>* {
-    scroll-snap-align: start;
+.nx-btn svg {
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
 }
 
-/* ===== SKELETON LOADER ===== */
-.android-skeleton {
-    background: linear-gradient(90deg, var(--android-surface) 0%, var(--android-surface-elevated) 50%, var(--android-surface) 100%);
-    background-size: 200% 100%;
-    animation: android-skeleton-pulse 1.5s ease-in-out infinite;
-    border-radius: var(--android-radius-sm);
+/* Primary Button - With Glow */
+.nx-btn-primary {
+    background: linear-gradient(135deg, var(--nx-primary) 0%, var(--nx-primary-dark) 100%);
+    color: white;
+    box-shadow: var(--nx-shadow-md), var(--nx-shadow-glow);
 }
 
-@keyframes android-skeleton-pulse {
+.nx-btn-primary:active {
+    transform: scale(0.95);
+    box-shadow: var(--nx-shadow-sm);
+}
+
+/* Secondary Button - Glass */
+.nx-btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--nx-text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+}
+
+.nx-btn-secondary:active {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(0.95);
+}
+
+/* Icon Button */
+.nx-btn-icon {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.nx-btn-icon:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   INPUTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-input {
+    width: 100%;
+    padding: var(--nx-md) var(--nx-lg);
+    background: var(--nx-bg-elevated);
+    border: 2px solid transparent;
+    border-radius: var(--nx-radius-md);
+    color: var(--nx-text-primary);
+    font-family: inherit;
+    font-size: var(--nx-font-lg);
+    transition: all var(--nx-duration) var(--nx-ease);
+}
+
+.nx-input:focus {
+    outline: none;
+    border-color: var(--nx-primary);
+    box-shadow: 0 0 0 4px var(--nx-primary-glow);
+}
+
+.nx-input::placeholder {
+    color: var(--nx-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BADGES
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    font-size: var(--nx-font-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+}
+
+.nx-badge-primary {
+    background: var(--nx-primary);
+    color: white;
+}
+
+.nx-badge-gold {
+    background: linear-gradient(135deg, #FFD700, #FF8C00);
+    color: #000;
+}
+
+.nx-badge-glass {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    backdrop-filter: blur(8px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOADING STATES
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-skeleton {
+    background: linear-gradient(90deg,
+            var(--nx-bg-secondary) 0%,
+            var(--nx-bg-elevated) 50%,
+            var(--nx-bg-secondary) 100%);
+    background-size: 200% 100%;
+    animation: nx-shimmer 1.5s infinite;
+    border-radius: var(--nx-radius-sm);
+}
+
+@keyframes nx-shimmer {
     0% {
         background-position: 100% 0;
     }
@@ -236,115 +280,60 @@
     }
 }
 
-/* ===== RIPPLE EFFECT ===== */
-.android-ripple {
-    position: relative;
-    overflow: hidden;
-}
-
-.android-ripple::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-    pointer-events: none;
-}
-
-.android-ripple:active::after {
-    animation: android-ripple-effect 0.6s ease-out;
-}
-
-@keyframes android-ripple-effect {
-    0% {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translate(-50%, -50%) scale(4);
-        opacity: 0;
-    }
-}
-
-/* ===== BADGES ===== */
-.android-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
-    border-radius: var(--android-radius-sm);
-    font-size: var(--android-font-size-xs);
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.android-badge-primary {
-    background: var(--android-primary);
-    color: white;
-}
-
-.android-badge-gold {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    color: #000;
-}
-
-.android-badge-rating {
-    background: rgba(0, 0, 0, 0.7);
-    color: #FFD700;
-}
-
-/* ===== SECTION HEADERS ===== */
-.android-section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--android-space-md);
-    padding-top: var(--android-space-lg);
-}
-
-.android-section-title {
-    font-size: var(--android-font-size-xl);
-    font-weight: 700;
-    color: var(--android-text);
-    margin: 0;
-}
-
-.android-section-link {
-    color: var(--android-primary);
-    font-size: var(--android-font-size-sm);
-    font-weight: 600;
-    text-decoration: none;
-}
-
-/* ===== FADE EDGES ===== */
-.android-fade-left::before,
-.android-fade-right::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
+.nx-spinner {
     width: 40px;
-    pointer-events: none;
-    z-index: 1;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--nx-primary);
+    border-radius: 50%;
+    animation: nx-spin 0.8s linear infinite;
 }
 
-.android-fade-left::before {
-    left: 0;
-    background: linear-gradient(90deg, var(--android-bg), transparent);
+@keyframes nx-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-.android-fade-right::after {
-    right: 0;
-    background: linear-gradient(-90deg, var(--android-bg), transparent);
+/* Loading Screen */
+.nx-loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--nx-md);
+    background: var(--nx-bg-primary);
+    z-index: 9999;
 }
 
-/* ===== ANIMATIONS ===== */
-@keyframes android-fade-in {
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLL UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-scroll-x {
+    display: flex;
+    gap: var(--nx-md);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.nx-scroll-x::-webkit-scrollbar {
+    display: none;
+}
+
+.nx-scroll-x>* {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+@keyframes nx-fade-in {
     from {
         opacity: 0;
     }
@@ -354,10 +343,10 @@
     }
 }
 
-@keyframes android-slide-up {
+@keyframes nx-slide-up {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(24px);
     }
 
     to {
@@ -366,7 +355,7 @@
     }
 }
 
-@keyframes android-scale-in {
+@keyframes nx-scale-in {
     from {
         opacity: 0;
         transform: scale(0.9);
@@ -378,14 +367,109 @@
     }
 }
 
-.android-animate-fade-in {
-    animation: android-fade-in var(--android-transition-normal) ease-out;
+@keyframes nx-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
 }
 
-.android-animate-slide-up {
-    animation: android-slide-up var(--android-transition-slow) ease-out;
+.nx-fade-in {
+    animation: nx-fade-in var(--nx-duration) var(--nx-ease) forwards;
 }
 
-.android-animate-scale-in {
-    animation: android-scale-in var(--android-transition-normal) ease-out;
+.nx-slide-up {
+    animation: nx-slide-up var(--nx-duration-slow) var(--nx-ease) forwards;
+}
+
+.nx-scale-in {
+    animation: nx-scale-in var(--nx-duration) var(--nx-ease-spring) forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION HEADERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-section {
+    padding: var(--nx-lg) 0;
+}
+
+.nx-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--nx-md) var(--nx-sm);
+}
+
+.nx-section-title {
+    font-size: var(--nx-font-xl);
+    font-weight: 700;
+    color: var(--nx-text-white);
+}
+
+.nx-section-link {
+    font-size: var(--nx-font-sm);
+    font-weight: 600;
+    color: var(--nx-primary);
+    text-decoration: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ERROR STATES
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--nx-3xl) var(--nx-lg);
+    text-align: center;
+}
+
+.nx-error-icon {
+    font-size: 56px;
+    margin-bottom: var(--nx-md);
+}
+
+.nx-error-title {
+    font-size: var(--nx-font-xl);
+    font-weight: 700;
+    margin-bottom: var(--nx-sm);
+}
+
+.nx-error-text {
+    color: var(--nx-text-muted);
+    margin-bottom: var(--nx-lg);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EMPTY STATES
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nx-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--nx-3xl) var(--nx-lg);
+    text-align: center;
+}
+
+.nx-empty-icon {
+    font-size: 64px;
+    margin-bottom: var(--nx-lg);
+    opacity: 0.5;
+}
+
+.nx-empty-title {
+    font-size: var(--nx-font-lg);
+    font-weight: 600;
+    margin-bottom: var(--nx-sm);
+}
+
+.nx-empty-text {
+    color: var(--nx-text-muted);
+    font-size: var(--nx-font-sm);
 }
