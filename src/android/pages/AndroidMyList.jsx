@@ -1,11 +1,11 @@
 /**
- * Android My List Page v3.0
+ * Android My List Page v4.0
+ * Uses a- prefix classes
  */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ContentCard from '../components/ContentCard';
 import { getWatchlist, getFavorites, isAuthenticated } from '../services/api';
-import '../styles/theme.css';
 import '../styles/android.css';
 
 const AndroidMyList = () => {
@@ -16,10 +16,7 @@ const AndroidMyList = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!isAuthenticated()) {
-            navigate('/login');
-            return;
-        }
+        if (!isAuthenticated()) { navigate('/login'); return; }
         loadData();
     }, [navigate]);
 
@@ -29,61 +26,33 @@ const AndroidMyList = () => {
             const [wl, fav] = await Promise.all([getWatchlist(), getFavorites()]);
             if (wl.success) setWatchlist(wl.watchlist || []);
             if (fav.success) setFavorites(fav.favorites || []);
-        } catch (err) { }
+        } catch (e) { }
         setLoading(false);
     };
 
     const items = tab === 'watchlist' ? watchlist : favorites;
 
-    if (loading) {
-        return (
-            <div className="nx-loading">
-                <div className="nx-spinner" />
-            </div>
-        );
-    }
+    if (loading) return <div className="a-loading"><div className="a-spinner" /></div>;
 
     return (
-        <div style={{ minHeight: '100vh', background: 'var(--nx-bg-primary)', padding: 'var(--nx-md)', paddingTop: 'calc(var(--nx-safe-top) + var(--nx-lg))' }}>
-            <h1 style={{ fontSize: 'var(--nx-font-2xl)', fontWeight: 800, marginBottom: 'var(--nx-lg)' }}>My List</h1>
+        <div style={{ minHeight: '100vh', background: 'var(--a-bg-1)', padding: 'var(--a-4)', paddingTop: 'calc(var(--a-safe-t) + var(--a-6))' }}>
+            <h1 style={{ fontSize: 'var(--a-fs-2xl)', fontWeight: 800, marginBottom: 'var(--a-5)' }}>My List</h1>
 
-            {/* Tabs */}
-            <div style={{ display: 'flex', gap: 'var(--nx-sm)', marginBottom: 'var(--nx-lg)' }}>
-                <button
-                    onClick={() => setTab('watchlist')}
-                    style={{
-                        flex: 1,
-                        padding: '12px',
-                        background: tab === 'watchlist' ? 'var(--nx-primary)' : 'var(--nx-bg-elevated)',
-                        border: 'none',
-                        borderRadius: 'var(--nx-radius-md)',
-                        color: tab === 'watchlist' ? 'white' : 'var(--nx-text-secondary)',
-                        fontWeight: 600,
-                        cursor: 'pointer'
-                    }}
-                >
-                    Watchlist ({watchlist.length})
-                </button>
-                <button
-                    onClick={() => setTab('favorites')}
-                    style={{
-                        flex: 1,
-                        padding: '12px',
-                        background: tab === 'favorites' ? 'var(--nx-primary)' : 'var(--nx-bg-elevated)',
-                        border: 'none',
-                        borderRadius: 'var(--nx-radius-md)',
-                        color: tab === 'favorites' ? 'white' : 'var(--nx-text-secondary)',
-                        fontWeight: 600,
-                        cursor: 'pointer'
-                    }}
-                >
-                    Favorites ({favorites.length})
-                </button>
+            <div style={{ display: 'flex', gap: 'var(--a-2)', marginBottom: 'var(--a-5)' }}>
+                {['watchlist', 'favorites'].map(t => (
+                    <button
+                        key={t}
+                        onClick={() => setTab(t)}
+                        className={`a-btn ${tab === t ? 'a-btn--primary' : 'a-btn--secondary'}`}
+                        style={{ flex: 1 }}
+                    >
+                        {t === 'watchlist' ? `Watchlist (${watchlist.length})` : `Favorites (${favorites.length})`}
+                    </button>
+                ))}
             </div>
 
-            {/* Content */}
             {items.length > 0 ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--nx-md)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--a-3)' }}>
                     {items.map((item, idx) => (
                         <ContentCard
                             key={item.contentId || idx}
@@ -96,15 +65,11 @@ const AndroidMyList = () => {
                     ))}
                 </div>
             ) : (
-                <div className="nx-empty">
-                    <span className="nx-empty-icon">{tab === 'watchlist' ? '📑' : '❤️'}</span>
-                    <h3 className="nx-empty-title">No {tab} yet</h3>
-                    <p className="nx-empty-text">Start adding movies and shows!</p>
-                    <button
-                        className="nx-btn nx-btn-primary"
-                        onClick={() => navigate('/search')}
-                        style={{ marginTop: 'var(--nx-lg)' }}
-                    >
+                <div className="a-empty">
+                    <span className="a-empty__icon">{tab === 'watchlist' ? '📑' : '❤️'}</span>
+                    <h3 className="a-empty__title">No {tab} yet</h3>
+                    <p className="a-empty__text">Start adding movies and shows!</p>
+                    <button className="a-btn a-btn--primary" style={{ marginTop: 'var(--a-5)' }} onClick={() => navigate('/search')}>
                         Browse Content
                     </button>
                 </div>

@@ -1,10 +1,10 @@
 /**
- * Android Login Page v3.0
+ * Android Login Page v4.0
+ * Uses a- prefix classes
  */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, register } from '../services/api';
-import '../styles/theme.css';
 import '../styles/android.css';
 
 const AndroidLogin = () => {
@@ -26,11 +26,8 @@ const AndroidLogin = () => {
                 ? await register(username, email, password)
                 : await login(email, password);
 
-            if (res.success) {
-                navigate('/');
-            } else {
-                setError(res.message || 'Authentication failed');
-            }
+            if (res.success) navigate('/');
+            else setError(res.message || 'Authentication failed');
         } catch (err) {
             setError('Something went wrong');
         }
@@ -39,50 +36,32 @@ const AndroidLogin = () => {
 
     return (
         <div style={{
-            minHeight: '100vh',
-            background: 'var(--nx-bg-primary)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 'var(--nx-lg)'
+            minHeight: '100vh', background: 'var(--a-bg-1)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            padding: 'var(--a-6)'
         }}>
             {/* Logo */}
             <div style={{
-                fontSize: '48px',
-                fontWeight: 900,
-                color: 'var(--nx-primary)',
-                marginBottom: 'var(--nx-xl)',
-                textShadow: '0 0 30px var(--nx-primary-glow)'
-            }}>
-                NEXFLUX
-            </div>
+                fontSize: '48px', fontWeight: 900, color: 'var(--a-primary)',
+                marginBottom: 'var(--a-8)', textShadow: '0 0 30px var(--a-primary-glow)'
+            }}>NEXFLUX</div>
 
-            {/* Form Card */}
+            {/* Form */}
             <div style={{
-                width: '100%',
-                maxWidth: '400px',
-                background: 'var(--nx-bg-card)',
-                borderRadius: 'var(--nx-radius-lg)',
-                padding: 'var(--nx-xl)',
-                border: '1px solid var(--nx-glass-border)'
+                width: '100%', maxWidth: '400px',
+                background: 'var(--a-bg-3)', borderRadius: 'var(--a-r-lg)',
+                padding: 'var(--a-6)', border: '1px solid var(--a-border)'
             }}>
-                <h1 style={{ fontSize: 'var(--nx-font-xl)', fontWeight: 700, marginBottom: 'var(--nx-lg)', textAlign: 'center' }}>
+                <h1 style={{ fontSize: 'var(--a-fs-xl)', fontWeight: 700, marginBottom: 'var(--a-5)', textAlign: 'center' }}>
                     {isRegister ? 'Create Account' : 'Welcome Back'}
                 </h1>
 
                 {error && (
                     <div style={{
-                        padding: 'var(--nx-md)',
-                        background: 'rgba(255, 82, 82, 0.15)',
-                        border: '1px solid rgba(255, 82, 82, 0.3)',
-                        borderRadius: 'var(--nx-radius-sm)',
-                        color: '#FF5252',
-                        fontSize: 'var(--nx-font-sm)',
-                        marginBottom: 'var(--nx-md)'
-                    }}>
-                        {error}
-                    </div>
+                        padding: 'var(--a-3)', background: 'rgba(255, 69, 58, 0.15)',
+                        border: '1px solid rgba(255, 69, 58, 0.3)', borderRadius: 'var(--a-r-sm)',
+                        color: '#FF453A', fontSize: 'var(--a-fs-sm)', marginBottom: 'var(--a-4)'
+                    }}>{error}</div>
                 )}
 
                 <form onSubmit={handleSubmit}>
@@ -93,8 +72,8 @@ const AndroidLogin = () => {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
-                            className="nx-input"
-                            style={{ marginBottom: 'var(--nx-md)' }}
+                            className="a-input"
+                            style={{ marginBottom: 'var(--a-3)' }}
                         />
                     )}
                     <input
@@ -103,8 +82,8 @@ const AndroidLogin = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="nx-input"
-                        style={{ marginBottom: 'var(--nx-md)' }}
+                        className="a-input"
+                        style={{ marginBottom: 'var(--a-3)' }}
                     />
                     <input
                         type="password"
@@ -112,35 +91,26 @@ const AndroidLogin = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="nx-input"
-                        style={{ marginBottom: 'var(--nx-lg)' }}
+                        className="a-input"
+                        style={{ marginBottom: 'var(--a-5)' }}
                     />
 
-                    <button
-                        type="submit"
-                        className="nx-btn nx-btn-primary"
-                        style={{ width: '100%' }}
-                        disabled={loading}
-                    >
+                    <button type="submit" className="a-btn a-btn--primary" style={{ width: '100%' }} disabled={loading}>
                         {loading ? 'Loading...' : (isRegister ? 'Sign Up' : 'Sign In')}
                     </button>
                 </form>
 
-                <div style={{ textAlign: 'center', marginTop: 'var(--nx-lg)' }}>
+                <div style={{ textAlign: 'center', marginTop: 'var(--a-5)' }}>
                     <button
                         onClick={() => { setIsRegister(!isRegister); setError(''); }}
-                        style={{ background: 'none', border: 'none', color: 'var(--nx-primary)', cursor: 'pointer', fontSize: 'var(--nx-font-sm)' }}
+                        style={{ background: 'none', border: 'none', color: 'var(--a-primary)', cursor: 'pointer', fontSize: 'var(--a-fs-sm)' }}
                     >
                         {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
                     </button>
                 </div>
             </div>
 
-            {/* Guest */}
-            <button
-                onClick={() => navigate('/')}
-                style={{ marginTop: 'var(--nx-lg)', background: 'none', border: 'none', color: 'var(--nx-text-muted)', cursor: 'pointer' }}
-            >
+            <button onClick={() => navigate('/')} style={{ marginTop: 'var(--a-5)', background: 'none', border: 'none', color: 'var(--a-text-4)', cursor: 'pointer' }}>
                 Browse as Guest
             </button>
         </div>

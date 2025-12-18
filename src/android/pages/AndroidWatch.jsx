@@ -1,50 +1,14 @@
 /**
- * Android Watch Page v3.0
- * Full-screen video player with MULTIPLE working video sources
+ * Android Watch Page v4.0
+ * Uses ONLY VidSrc.cc (same as web)
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { saveWatchProgress, isAuthenticated } from '../services/api';
 import { showVASTAd, canShowAd } from '../services/vastAds';
-import '../styles/theme.css';
-import '../styles/android.css';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE = 'https://api.themoviedb.org/3';
-
-// WORKING VIDEO EMBED SOURCES - Tested and verified
-const VIDEO_SOURCES = [
-    {
-        name: 'VidSrc.pro',
-        getUrl: (type, id, s, e) => type === 'tv'
-            ? `https://vidsrc.pro/embed/tv/${id}/${s}/${e}`
-            : `https://vidsrc.pro/embed/movie/${id}`
-    },
-    {
-        name: 'VidSrc.icu',
-        getUrl: (type, id, s, e) => type === 'tv'
-            ? `https://vidsrc.icu/embed/tv/${id}/${s}/${e}`
-            : `https://vidsrc.icu/embed/movie/${id}`
-    },
-    {
-        name: 'VidSrc.xyz',
-        getUrl: (type, id, s, e) => type === 'tv'
-            ? `https://vidsrc.xyz/embed/tv/${id}/${s}/${e}`
-            : `https://vidsrc.xyz/embed/movie/${id}`
-    },
-    {
-        name: 'SuperEmbed',
-        getUrl: (type, id, s, e) => type === 'tv'
-            ? `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
-            : `https://multiembed.mov/?video_id=${id}&tmdb=1`
-    },
-    {
-        name: '2Embed',
-        getUrl: (type, id, s, e) => type === 'tv'
-            ? `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
-            : `https://www.2embed.cc/embed/${id}`
-    }
-];
 
 const AndroidWatch = () => {
     const { type, id, season, episode } = useParams();
@@ -54,23 +18,20 @@ const AndroidWatch = () => {
     const [episodes, setEpisodes] = useState([]);
     const [currentEpisode, setCurrentEpisode] = useState(parseInt(episode) || 1);
     const [currentSeason, setCurrentSeason] = useState(parseInt(season) || 1);
-    const [currentSource, setCurrentSource] = useState(0);
     const [showControls, setShowControls] = useState(true);
-    const [showSourceMenu, setShowSourceMenu] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const iframeRef = useRef(null);
     const controlsTimer = useRef(null);
 
     useEffect(() => {
         loadDetails();
 
-        // Show ad if allowed
+        // Show VAST ad if allowed
         if (canShowAd()) {
             showVASTAd();
         }
 
-        // Try to lock landscape
+        // Try landscape lock
         try {
             screen.orientation?.lock?.('landscape').catch(() => { });
         } catch (e) { }
@@ -110,9 +71,12 @@ const AndroidWatch = () => {
         }
     };
 
+    // USING VIDSRC.CC ONLY - Same as web!
     const getVideoUrl = () => {
-        const source = VIDEO_SOURCES[currentSource];
-        return source.getUrl(type, id, currentSeason, currentEpisode);
+        if (type === 'tv') {
+            return `https://vidsrc.cc/v2/embed/tv/${id}/${currentSeason}/${currentEpisode}?autoPlay=true`;
+        }
+        return `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=true`;
     };
 
     const handleBack = () => {
@@ -148,14 +112,8 @@ const AndroidWatch = () => {
         }
     };
 
-    const handleSourceChange = (index) => {
-        setCurrentSource(index);
-        setShowSourceMenu(false);
-    };
-
     const handleTap = () => {
         setShowControls(true);
-        setShowSourceMenu(false);
         clearTimeout(controlsTimer.current);
         controlsTimer.current = setTimeout(() => {
             setShowControls(false);
@@ -164,120 +122,66 @@ const AndroidWatch = () => {
 
     if (isLoading) {
         return (
-            <div className="nx-watch nx-loading">
-                <div className="nx-spinner" />
+            <div style={styles.loading}>
+                <div style={styles.spinner} />
             </div>
         );
     }
 
     return (
-        <div className="nx-watch" onClick={handleTap}>
-            {/* Video Player */}
+        <div style={styles.container} onClick={handleTap}>
+            {/* Video Player - VidSrc.cc */}
             <iframe
-                ref={iframeRef}
-                key={`${currentSource}-${currentSeason}-${currentEpisode}`}
+                key={`${currentSeason}-${currentEpisode}`}
                 src={getVideoUrl()}
-                className="nx-watch__player"
+                style={styles.player}
                 allowFullScreen
                 allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
             />
 
             {/* Controls Overlay */}
-            <div className={`nx-watch__controls ${showControls ? 'nx-watch__controls--visible' : ''}`}>
+            <div style={{
+                ...styles.controls,
+                opacity: showControls ? 1 : 0,
+                pointerEvents: showControls ? 'auto' : 'none'
+            }}>
                 {/* Header */}
-                <header className="nx-watch__header">
-                    <button className="nx-watch__back" onClick={handleBack}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div style={styles.header}>
+                    <button style={styles.backBtn} onClick={handleBack}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="24" height="24">
                             <path d="M19 12H5M12 19l-7-7 7-7" />
                         </svg>
                     </button>
-                    <div className="nx-watch__info">
-                        <h1 className="nx-watch__title">{details?.title || details?.name}</h1>
+                    <div style={styles.info}>
+                        <h1 style={styles.title}>{details?.title || details?.name}</h1>
                         {type === 'tv' && (
-                            <span className="nx-watch__episode">S{currentSeason} E{currentEpisode}</span>
+                            <span style={styles.episode}>S{currentSeason} E{currentEpisode}</span>
                         )}
                     </div>
-
-                    {/* Source Selector */}
-                    <button
-                        className="nx-watch__back"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setShowSourceMenu(!showSourceMenu);
-                        }}
-                        style={{ background: showSourceMenu ? 'var(--nx-primary)' : undefined }}
-                    >
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                        </svg>
-                    </button>
-                </header>
-
-                {/* Source Menu */}
-                {showSourceMenu && (
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: 'calc(var(--nx-safe-top) + 70px)',
-                            right: '16px',
-                            minWidth: '180px',
-                            background: 'rgba(20, 20, 25, 0.95)',
-                            backdropFilter: 'blur(20px)',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            borderRadius: 'var(--nx-radius-md)',
-                            padding: '8px',
-                            zIndex: 100
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div style={{ padding: '8px 12px', fontSize: '12px', color: 'var(--nx-text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>
-                            Video Source
-                        </div>
-                        {VIDEO_SOURCES.map((source, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => handleSourceChange(idx)}
-                                style={{
-                                    display: 'flex',
-                                    width: '100%',
-                                    padding: '12px 16px',
-                                    background: idx === currentSource ? 'rgba(229, 9, 20, 0.2)' : 'transparent',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    color: idx === currentSource ? 'var(--nx-primary)' : 'white',
-                                    fontSize: '14px',
-                                    fontWeight: idx === currentSource ? 600 : 400,
-                                    textAlign: 'left',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                {source.name}
-                                {idx === currentSource && <span style={{ marginLeft: 'auto' }}>✓</span>}
-                            </button>
-                        ))}
-                    </div>
-                )}
+                </div>
 
                 {/* Episode Navigation */}
                 {type === 'tv' && episodes.length > 0 && (
-                    <div className="nx-watch__nav">
+                    <div style={styles.nav}>
                         <button
-                            className="nx-watch__nav-btn"
+                            style={{
+                                ...styles.navBtn,
+                                opacity: currentEpisode === 1 && currentSeason === 1 ? 0.4 : 1
+                            }}
                             onClick={(e) => { e.stopPropagation(); handlePrevEp(); }}
                             disabled={currentEpisode === 1 && currentSeason === 1}
                         >
-                            <svg viewBox="0 0 24 24" fill="currentColor">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                 <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                             </svg>
                             Previous
                         </button>
                         <button
-                            className="nx-watch__nav-btn"
+                            style={styles.navBtn}
                             onClick={(e) => { e.stopPropagation(); handleNextEp(); }}
                         >
                             Next
-                            <svg viewBox="0 0 24 24" fill="currentColor">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                 <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
                             </svg>
                         </button>
@@ -286,6 +190,108 @@ const AndroidWatch = () => {
             </div>
         </div>
     );
+};
+
+// Inline styles - completely separate from web
+const styles = {
+    container: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: '#000',
+        zIndex: 9999
+    },
+    player: {
+        width: '100%',
+        height: '100%',
+        border: 'none'
+    },
+    controls: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.8) 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        transition: 'opacity 0.3s ease'
+    },
+    header: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '24px',
+        paddingTop: 'max(24px, env(safe-area-inset-top))'
+    },
+    backBtn: {
+        width: '48px',
+        height: '48px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(255,255,255,0.15)',
+        backdropFilter: 'blur(12px)',
+        border: 'none',
+        borderRadius: '50%',
+        color: 'white',
+        cursor: 'pointer'
+    },
+    info: {
+        flex: 1
+    },
+    title: {
+        fontSize: '18px',
+        fontWeight: 700,
+        color: 'white',
+        margin: 0
+    },
+    episode: {
+        fontSize: '14px',
+        color: 'rgba(255,255,255,0.7)'
+    },
+    nav: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '24px',
+        paddingBottom: 'max(24px, env(safe-area-inset-bottom))'
+    },
+    navBtn: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '14px 24px',
+        background: 'rgba(255,255,255,0.15)',
+        backdropFilter: 'blur(12px)',
+        border: 'none',
+        borderRadius: '12px',
+        color: 'white',
+        fontSize: '15px',
+        fontWeight: 600,
+        cursor: 'pointer'
+    },
+    loading: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#000'
+    },
+    spinner: {
+        width: '40px',
+        height: '40px',
+        border: '3px solid rgba(255,255,255,0.1)',
+        borderTopColor: '#E50914',
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite'
+    }
 };
 
 export default AndroidWatch;

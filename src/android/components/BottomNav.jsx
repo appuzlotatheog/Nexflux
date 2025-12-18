@@ -1,10 +1,9 @@
 /**
- * Android Bottom Navigation v3.0
- * Premium animated bottom nav
+ * Android Bottom Navigation v4.0
+ * Uses a- prefix classes
  */
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import '../styles/theme.css';
 import '../styles/android.css';
 
 const navItems = [
@@ -29,26 +28,21 @@ const BottomNav = () => {
     };
 
     // Hide on watch page
-    if (location.pathname.startsWith('/watch')) {
-        return null;
-    }
+    if (location.pathname.startsWith('/watch')) return null;
 
     return (
-        <nav className="nx-bottom-nav">
-            <div className="nx-bottom-nav__inner">
-                {navItems.map((item) => {
-                    const active = isActive(item.path);
-                    return (
-                        <button
-                            key={item.id}
-                            className={`nx-bottom-nav__item ${active ? 'nx-bottom-nav__item--active' : ''}`}
-                            onClick={() => handleClick(item.path)}
-                        >
-                            <span className="nx-bottom-nav__icon">{item.icon}</span>
-                            <span className="nx-bottom-nav__label">{item.label}</span>
-                        </button>
-                    );
-                })}
+        <nav className="a-nav">
+            <div className="a-nav__inner">
+                {navItems.map((item) => (
+                    <button
+                        key={item.id}
+                        className={`a-nav__item ${isActive(item.path) ? 'a-nav__item--active' : ''}`}
+                        onClick={() => handleClick(item.path)}
+                    >
+                        <span className="a-nav__icon">{item.icon}</span>
+                        <span>{item.label}</span>
+                    </button>
+                ))}
             </div>
         </nav>
     );

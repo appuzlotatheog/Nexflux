@@ -1,14 +1,12 @@
 /**
- * Android App Root v3.0
+ * Android App Root v4.0
  */
 import React, { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import BottomNav from './components/BottomNav';
 import { initVASTOnAppOpen } from './services/vastAds';
-import './styles/theme.css';
 import './styles/android.css';
 
-// Lazy load pages
 const AndroidHome = lazy(() => import('./pages/AndroidHome'));
 const AndroidSearch = lazy(() => import('./pages/AndroidSearch'));
 const AndroidDetails = lazy(() => import('./pages/AndroidDetails'));
@@ -17,21 +15,17 @@ const AndroidMyList = lazy(() => import('./pages/AndroidMyList'));
 const AndroidProfile = lazy(() => import('./pages/AndroidProfile'));
 const AndroidLogin = lazy(() => import('./pages/AndroidLogin'));
 
-// Loading fallback
 const PageLoader = () => (
-    <div className="nx-loading">
-        <div className="nx-spinner" />
+    <div className="a-loading">
+        <div className="a-spinner" />
     </div>
 );
 
 const AndroidApp = () => {
     useEffect(() => {
-        // Initialize VAST ads on app open
         initVASTOnAppOpen();
-
-        // Set status bar color
         const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.content = '#0A0A0C';
+        if (meta) meta.content = '#000000';
     }, []);
 
     return (
