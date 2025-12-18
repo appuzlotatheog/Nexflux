@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# env & editor
+.env
+.vscode/
+
+# archives & backups
+*.zip
+*.apk
+backup-theme/
+android-build/
+
+# misc
+server/
