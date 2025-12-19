@@ -1,8 +1,8 @@
 /**
- * Android Watch Page v4.0
- * Uses ONLY VidSrc.cc (same as web)
+ * Android Watch Page v5.0
+ * Full-screen video with auto-landscape orientation
  */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { saveWatchProgress, isAuthenticated } from '../services/api';
 import { showVASTAd, canShowAd } from '../services/vastAds';
@@ -20,42 +20,90 @@ const AndroidWatch = () => {
     const [currentSeason, setCurrentSeason] = useState(parseInt(season) || 1);
     const [showControls, setShowControls] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLandscape, setIsLandscape] = useState(false);
+    const [error, setError] = useState(null);
 
     const controlsTimer = useRef(null);
+    const containerRef = useRef(null);
 
+    // Handle orientation
     useEffect(() => {
-        loadDetails();
+        const checkOrientation = () => {
+            const landscape = window.innerWidth > window.innerHeight;
+            setIsLandscape(landscape);
+        };
 
-        // Show VAST ad if allowed
-        if (canShowAd()) {
-            showVASTAd();
-        }
+        checkOrientation();
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
 
-        // Try landscape lock
-        try {
-            screen.orientation?.lock?.('landscape').catch(() => { });
-        } catch (e) { }
+        // Try to lock to landscape
+        const lockLandscape = async () => {
+            try {
+                if (screen.orientation?.lock) {
+                    await screen.orientation.lock('landscape');
+                }
+            } catch (e) {
+                // Some browsers don't support this
+                console.log('Orientation lock not supported');
+            }
+        };
+
+        lockLandscape();
+
+        // Request fullscreen for immersive experience
+        const requestFullscreen = async () => {
+            try {
+                if (containerRef.current?.requestFullscreen) {
+                    await containerRef.current.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    await document.documentElement.webkitRequestFullscreen();
+                }
+            } catch (e) {
+                console.log('Fullscreen not supported');
+            }
+        };
+
+        // Small delay to let page render
+        setTimeout(requestFullscreen, 500);
 
         return () => {
+            window.removeEventListener('resize', checkOrientation);
+            window.removeEventListener('orientationchange', checkOrientation);
+
+            // Unlock orientation on exit
             try {
                 screen.orientation?.unlock?.();
             } catch (e) { }
+
+            // Exit fullscreen on exit
+            try {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen?.();
+                }
+            } catch (e) { }
         };
+    }, []);
+
+    useEffect(() => {
+        loadDetails();
+        if (canShowAd()) showVASTAd();
     }, [id, type]);
 
     useEffect(() => {
-        if (type === 'tv' && currentSeason) {
-            loadEpisodes();
-        }
+        if (type === 'tv' && currentSeason) loadEpisodes();
     }, [currentSeason, id, type]);
 
     const loadDetails = async () => {
+        setIsLoading(true);
+        setError(null);
         try {
             const res = await fetch(`${TMDB_BASE}/${type}/${id}?api_key=${TMDB_API_KEY}`);
+            if (!res.ok) throw new Error('Failed to load');
             const data = await res.json();
             setDetails(data);
         } catch (err) {
-            console.error('Failed to load details:', err);
+            setError('Failed to load content');
         } finally {
             setIsLoading(false);
         }
@@ -66,20 +114,21 @@ const AndroidWatch = () => {
             const res = await fetch(`${TMDB_BASE}/tv/${id}/season/${currentSeason}?api_key=${TMDB_API_KEY}`);
             const data = await res.json();
             setEpisodes(data.episodes || []);
-        } catch (err) {
-            console.error('Failed to load episodes:', err);
-        }
+        } catch (err) { }
     };
 
-    // USING VIDSRC.CC ONLY - Same as web!
-    const getVideoUrl = () => {
+    // VidSrc.cc URL - same as web
+    const getVideoUrl = useCallback(() => {
         if (type === 'tv') {
             return `https://vidsrc.cc/v2/embed/tv/${id}/${currentSeason}/${currentEpisode}?autoPlay=true`;
         }
         return `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=true`;
-    };
+    }, [type, id, currentSeason, currentEpisode]);
 
     const handleBack = () => {
+        // Haptic feedback
+        if (navigator.vibrate) navigator.vibrate(10);
+
         // Save progress
         if (isAuthenticated() && details) {
             saveWatchProgress(
@@ -95,6 +144,7 @@ const AndroidWatch = () => {
     };
 
     const handleNextEp = () => {
+        if (navigator.vibrate) navigator.vibrate(10);
         if (currentEpisode < episodes.length) {
             setCurrentEpisode(prev => prev + 1);
         } else if (details?.number_of_seasons > currentSeason) {
@@ -104,6 +154,7 @@ const AndroidWatch = () => {
     };
 
     const handlePrevEp = () => {
+        if (navigator.vibrate) navigator.vibrate(10);
         if (currentEpisode > 1) {
             setCurrentEpisode(prev => prev - 1);
         } else if (currentSeason > 1) {
@@ -113,30 +164,57 @@ const AndroidWatch = () => {
     };
 
     const handleTap = () => {
-        setShowControls(true);
+        setShowControls(prev => !prev);
         clearTimeout(controlsTimer.current);
-        controlsTimer.current = setTimeout(() => {
-            setShowControls(false);
-        }, 4000);
+        if (!showControls) {
+            controlsTimer.current = setTimeout(() => setShowControls(false), 5000);
+        }
+    };
+
+    const handleRotate = () => {
+        if (navigator.vibrate) navigator.vibrate(10);
+        try {
+            if (isLandscape) {
+                screen.orientation.lock('portrait').catch(() => { });
+            } else {
+                screen.orientation.lock('landscape').catch(() => { });
+            }
+        } catch (e) { }
     };
 
     if (isLoading) {
         return (
-            <div style={styles.loading}>
-                <div style={styles.spinner} />
+            <div style={styles.container}>
+                <div style={styles.loadingWrapper}>
+                    <div style={styles.spinner} />
+                    <p style={{ color: '#888', marginTop: 16 }}>Loading player...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div style={styles.container}>
+                <div style={styles.errorWrapper}>
+                    <span style={{ fontSize: 48, marginBottom: 16 }}>😕</span>
+                    <h2 style={{ color: '#fff', marginBottom: 8 }}>{error}</h2>
+                    <button style={styles.retryBtn} onClick={loadDetails}>Retry</button>
+                    <button style={{ ...styles.retryBtn, background: 'transparent', marginTop: 8 }} onClick={handleBack}>Go Back</button>
+                </div>
             </div>
         );
     }
 
     return (
-        <div style={styles.container} onClick={handleTap}>
-            {/* Video Player - VidSrc.cc */}
+        <div ref={containerRef} style={styles.container} onClick={handleTap}>
+            {/* Video Player */}
             <iframe
                 key={`${currentSeason}-${currentEpisode}`}
                 src={getVideoUrl()}
                 style={styles.player}
                 allowFullScreen
-                allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                allow="autoplay; fullscreen; picture-in-picture; encrypted-media; accelerometer; gyroscope"
             />
 
             {/* Controls Overlay */}
@@ -145,24 +223,36 @@ const AndroidWatch = () => {
                 opacity: showControls ? 1 : 0,
                 pointerEvents: showControls ? 'auto' : 'none'
             }}>
-                {/* Header */}
-                <div style={styles.header}>
-                    <button style={styles.backBtn} onClick={handleBack}>
+                {/* Top Bar */}
+                <div style={styles.topBar}>
+                    <button style={styles.iconBtn} onClick={(e) => { e.stopPropagation(); handleBack(); }}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="24" height="24">
                             <path d="M19 12H5M12 19l-7-7 7-7" />
                         </svg>
                     </button>
-                    <div style={styles.info}>
+
+                    <div style={styles.titleArea}>
                         <h1 style={styles.title}>{details?.title || details?.name}</h1>
                         {type === 'tv' && (
-                            <span style={styles.episode}>S{currentSeason} E{currentEpisode}</span>
+                            <span style={styles.subtitle}>Season {currentSeason} • Episode {currentEpisode}</span>
                         )}
                     </div>
+
+                    <button style={styles.iconBtn} onClick={(e) => { e.stopPropagation(); handleRotate(); }}>
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                            <path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zm-6.25-.77c-.59-.59-1.57-.59-2.16 0s-.59 1.57 0 2.16l7.07 7.07c.59.59 1.57.59 2.16 0s.59-1.57 0-2.16l-7.07-7.07zM7.52 21.48c-3.27-1.55-5.61-4.72-5.97-8.48h-1.5C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z" />
+                        </svg>
+                    </button>
                 </div>
 
-                {/* Episode Navigation */}
+                {/* Center Play Button */}
+                <div style={styles.centerArea}>
+                    {/* Optional: Add center controls here */}
+                </div>
+
+                {/* Bottom Bar - Episode Navigation */}
                 {type === 'tv' && episodes.length > 0 && (
-                    <div style={styles.nav}>
+                    <div style={styles.bottomBar}>
                         <button
                             style={{
                                 ...styles.navBtn,
@@ -174,13 +264,21 @@ const AndroidWatch = () => {
                             <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                 <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                             </svg>
-                            Previous
+                            <span>Previous</span>
                         </button>
+
+                        <div style={styles.episodeInfo}>
+                            Ep {currentEpisode} of {episodes.length}
+                        </div>
+
                         <button
-                            style={styles.navBtn}
+                            style={{
+                                ...styles.navBtn,
+                                opacity: currentEpisode >= episodes.length && currentSeason >= (details?.number_of_seasons || 1) ? 0.4 : 1
+                            }}
                             onClick={(e) => { e.stopPropagation(); handleNextEp(); }}
                         >
-                            Next
+                            <span>Next</span>
                             <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                 <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
                             </svg>
@@ -188,11 +286,17 @@ const AndroidWatch = () => {
                     </div>
                 )}
             </div>
+
+            {/* Hidden tip for first-time users */}
+            {showControls && (
+                <div style={styles.tip}>
+                    Tap anywhere to {showControls ? 'hide' : 'show'} controls • Rotate phone for landscape
+                </div>
+            )}
         </div>
     );
 };
 
-// Inline styles - completely separate from web
 const styles = {
     container: {
         position: 'fixed',
@@ -201,97 +305,166 @@ const styles = {
         right: 0,
         bottom: 0,
         background: '#000',
-        zIndex: 9999
+        zIndex: 9999,
+        overflow: 'hidden'
     },
     player: {
-        width: '100%',
-        height: '100%',
-        border: 'none'
-    },
-    controls: {
         position: 'absolute',
         top: 0,
         left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.8) 100%)',
+        width: '100%',
+        height: '100%',
+        border: 'none',
+        background: '#000'
+    },
+    controls: {
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(180deg, rgba(0,0,0,0.85) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.85) 100%)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        transition: 'opacity 0.3s ease'
+        transition: 'opacity 0.3s ease',
+        zIndex: 10
     },
-    header: {
+    topBar: {
         display: 'flex',
         alignItems: 'center',
-        gap: '16px',
-        padding: '24px',
-        paddingTop: 'max(24px, env(safe-area-inset-top))'
+        gap: 12,
+        padding: 16,
+        paddingTop: 'max(16px, env(safe-area-inset-top))',
+        paddingLeft: 'max(16px, env(safe-area-inset-left))',
+        paddingRight: 'max(16px, env(safe-area-inset-right))'
     },
-    backBtn: {
-        width: '48px',
-        height: '48px',
+    iconBtn: {
+        width: 48,
+        height: 48,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'rgba(255,255,255,0.15)',
+        background: 'rgba(255,255,255,0.1)',
         backdropFilter: 'blur(12px)',
         border: 'none',
         borderRadius: '50%',
         color: 'white',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease, background 0.2s ease'
     },
-    info: {
-        flex: 1
+    titleArea: {
+        flex: 1,
+        minWidth: 0
     },
     title: {
-        fontSize: '18px',
+        fontSize: 17,
         fontWeight: 700,
         color: 'white',
-        margin: 0
+        margin: 0,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
     },
-    episode: {
-        fontSize: '14px',
+    subtitle: {
+        fontSize: 13,
         color: 'rgba(255,255,255,0.7)'
     },
-    nav: {
+    centerArea: {
+        flex: 1,
         display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    bottomBar: {
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '24px',
-        paddingBottom: 'max(24px, env(safe-area-inset-bottom))'
+        gap: 16,
+        padding: 16,
+        paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
+        paddingLeft: 'max(16px, env(safe-area-inset-left))',
+        paddingRight: 'max(16px, env(safe-area-inset-right))'
     },
     navBtn: {
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
-        padding: '14px 24px',
+        gap: 8,
+        padding: '12px 20px',
         background: 'rgba(255,255,255,0.15)',
         backdropFilter: 'blur(12px)',
         border: 'none',
-        borderRadius: '12px',
+        borderRadius: 12,
         color: 'white',
-        fontSize: '15px',
+        fontSize: 14,
         fontWeight: 600,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
     },
-    loading: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+    episodeInfo: {
+        fontSize: 14,
+        color: 'rgba(255,255,255,0.7)',
+        fontWeight: 500
+    },
+    loadingWrapper: {
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#000'
+        height: '100%'
     },
     spinner: {
-        width: '40px',
-        height: '40px',
+        width: 48,
+        height: 48,
         border: '3px solid rgba(255,255,255,0.1)',
         borderTopColor: '#E50914',
         borderRadius: '50%',
         animation: 'spin 0.8s linear infinite'
+    },
+    errorWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        padding: 24,
+        textAlign: 'center'
+    },
+    retryBtn: {
+        padding: '12px 32px',
+        background: '#E50914',
+        border: 'none',
+        borderRadius: 8,
+        color: 'white',
+        fontSize: 15,
+        fontWeight: 600,
+        cursor: 'pointer'
+    },
+    tip: {
+        position: 'absolute',
+        bottom: 'max(80px, calc(env(safe-area-inset-bottom) + 80px))',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        padding: '8px 16px',
+        background: 'rgba(0,0,0,0.8)',
+        borderRadius: 20,
+        fontSize: 12,
+        color: 'rgba(255,255,255,0.6)',
+        whiteSpace: 'nowrap',
+        pointerEvents: 'none'
     }
 };
+
+// Add keyframe animation via style tag
+if (typeof document !== 'undefined') {
+    const styleId = 'android-watch-styles';
+    if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = `
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
 
 export default AndroidWatch;

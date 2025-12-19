@@ -69,17 +69,28 @@
     --a-fs-2xl: 28px;
     --a-fs-3xl: 34px;
 
-    /* Animation */
-    --a-fast: 150ms;
-    --a-normal: 250ms;
-    --a-slow: 400ms;
-    --a-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
-    --a-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Animation - SLOWER for smooth feel */
+    --a-fast: 200ms;
+    --a-normal: 400ms;
+    --a-slow: 600ms;
+    --a-xslow: 1000ms;
+    --a-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --a-bounce: cubic-bezier(0.34, 1.2, 0.64, 1);
 
     /* Safe areas */
     --a-safe-t: env(safe-area-inset-top, 0px);
     --a-safe-b: env(safe-area-inset-bottom, 0px);
     --a-nav-h: 60px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --a-fast: 0ms;
+        --a-normal: 0ms;
+        --a-slow: 0ms;
+        --a-xslow: 0ms;
+    }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -190,7 +201,7 @@
     inset: 0;
     background-size: cover;
     background-position: center top;
-    animation: a-zoom 20s ease-in-out infinite alternate;
+    animation: a-zoom 35s ease-in-out infinite alternate;
 }
 
 @keyframes a-zoom {
@@ -199,7 +210,7 @@
     }
 
     to {
-        transform: scale(1.06);
+        transform: scale(1.04);
     }
 }
 
