@@ -1,7 +1,6 @@
 /**
  * Platform Detection Utility
  * Detects if running in Android/Capacitor or Web browser
- * Works without Capacitor being installed (for web builds)
  */
 
 /**
@@ -9,7 +8,6 @@
  */
 const getCapacitor = () => {
     try {
-        // Check if Capacitor is defined globally (set by Capacitor native runtime)
         if (typeof window !== 'undefined' && window.Capacitor) {
             return window.Capacitor;
         }
@@ -24,7 +22,18 @@ const getCapacitor = () => {
  */
 export const isAndroid = () => {
     const cap = getCapacitor();
-    return cap?.isNativePlatform?.() && cap?.getPlatform?.() === 'android';
+    if (cap?.isNativePlatform?.() && cap?.getPlatform?.() === 'android') {
+        return true;
+    }
+    // Fallback: Check user agent for Capacitor Android WebView
+    if (typeof navigator !== 'undefined') {
+        const ua = navigator.userAgent.toLowerCase();
+        // Capacitor sets specific user agent markers
+        if (ua.includes('capacitor') && ua.includes('android')) {
+            return true;
+        }
+    }
+    return false;
 };
 
 /**
@@ -40,7 +49,12 @@ export const isIOS = () => {
  */
 export const isNative = () => {
     const cap = getCapacitor();
-    return cap?.isNativePlatform?.() ?? false;
+    if (cap?.isNativePlatform?.()) return true;
+    // Fallback check
+    if (typeof navigator !== 'undefined') {
+        return navigator.userAgent.toLowerCase().includes('capacitor');
+    }
+    return false;
 };
 
 /**
@@ -55,8 +69,6 @@ export const isWeb = () => {
  */
 export const isMobile = () => {
     if (isNative()) return true;
-
-    // Check for mobile browser
     if (typeof navigator === 'undefined') return false;
     const ua = navigator.userAgent.toLowerCase();
     return /android|iphone|ipad|ipod|mobile/i.test(ua);
@@ -73,7 +85,6 @@ export const getPlatform = () => {
 
 /**
  * Check if should use Android-specific UI
- * Returns true only when running as Android native app
  */
 export const useAndroidUI = () => {
     return isAndroid();
