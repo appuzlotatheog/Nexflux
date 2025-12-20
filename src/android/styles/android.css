@@ -201,17 +201,7 @@
     inset: 0;
     background-size: cover;
     background-position: center top;
-    animation: a-zoom 35s ease-in-out infinite alternate;
-}
-
-@keyframes a-zoom {
-    from {
-        transform: scale(1);
-    }
-
-    to {
-        transform: scale(1.04);
-    }
+    /* Animation disabled - causes glitches */
 }
 
 .a-hero__gradient-top {

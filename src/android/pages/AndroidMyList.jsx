@@ -1,22 +1,25 @@
 /**
- * Android My List Page v4.0
- * Uses a- prefix classes
+ * Android My List Page v7.0
+ * Premium tabs for watchlist and favorites
  */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ContentCard from '../components/ContentCard';
 import { getWatchlist, getFavorites, isAuthenticated } from '../services/api';
-import '../styles/android.css';
+import { colors, space, typography, shadows, radius, commonStyles } from '../styles/designSystem';
 
 const AndroidMyList = () => {
     const navigate = useNavigate();
-    const [tab, setTab] = useState('watchlist');
+    const [activeTab, setActiveTab] = useState('watchlist');
     const [watchlist, setWatchlist] = useState([]);
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!isAuthenticated()) { navigate('/login'); return; }
+        if (!isAuthenticated()) {
+            navigate('/login');
+            return;
+        }
         loadData();
     }, [navigate]);
 
@@ -30,52 +33,140 @@ const AndroidMyList = () => {
         setLoading(false);
     };
 
-    const items = tab === 'watchlist' ? watchlist : favorites;
+    const items = activeTab === 'watchlist' ? watchlist : favorites;
 
-    if (loading) return <div className="a-loading"><div className="a-spinner" /></div>;
+    if (loading) {
+        return (
+            <div style={commonStyles.centerContainer}>
+                <div style={commonStyles.spinner} />
+            </div>
+        );
+    }
 
     return (
-        <div style={{ minHeight: '100vh', background: 'var(--a-bg-1)', padding: 'var(--a-4)', paddingTop: 'calc(var(--a-safe-t) + var(--a-6))' }}>
-            <h1 style={{ fontSize: 'var(--a-fs-2xl)', fontWeight: 800, marginBottom: 'var(--a-5)' }}>My List</h1>
+        <div style={styles.page}>
+            {/* Header */}
+            <header style={styles.header}>
+                <h1 style={styles.title}>My List</h1>
+            </header>
 
-            <div style={{ display: 'flex', gap: 'var(--a-2)', marginBottom: 'var(--a-5)' }}>
-                {['watchlist', 'favorites'].map(t => (
+            {/* Tabs */}
+            <div style={styles.tabs}>
+                {[
+                    { key: 'watchlist', label: 'Watchlist', count: watchlist.length },
+                    { key: 'favorites', label: 'Favorites', count: favorites.length }
+                ].map(tab => (
                     <button
-                        key={t}
-                        onClick={() => setTab(t)}
-                        className={`a-btn ${tab === t ? 'a-btn--primary' : 'a-btn--secondary'}`}
-                        style={{ flex: 1 }}
+                        key={tab.key}
+                        onClick={() => { if (navigator.vibrate) navigator.vibrate(8); setActiveTab(tab.key); }}
+                        style={{
+                            ...styles.tab,
+                            background: activeTab === tab.key ? colors.primary : colors.bg4,
+                            boxShadow: activeTab === tab.key ? shadows.glow : 'none'
+                        }}
                     >
-                        {t === 'watchlist' ? `Watchlist (${watchlist.length})` : `Favorites (${favorites.length})`}
+                        {tab.label} ({tab.count})
                     </button>
                 ))}
             </div>
 
-            {items.length > 0 ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--a-3)' }}>
-                    {items.map((item, idx) => (
-                        <ContentCard
-                            key={item.contentId || idx}
-                            id={item.contentId}
-                            type={item.contentType}
-                            title={item.title}
-                            posterPath={item.posterPath}
-                            size="sm"
-                        />
-                    ))}
-                </div>
-            ) : (
-                <div className="a-empty">
-                    <span className="a-empty__icon">{tab === 'watchlist' ? '📑' : '❤️'}</span>
-                    <h3 className="a-empty__title">No {tab} yet</h3>
-                    <p className="a-empty__text">Start adding movies and shows!</p>
-                    <button className="a-btn a-btn--primary" style={{ marginTop: 'var(--a-5)' }} onClick={() => navigate('/search')}>
-                        Browse Content
-                    </button>
-                </div>
-            )}
+            {/* Content */}
+            <div style={styles.content}>
+                {items.length > 0 ? (
+                    <div style={styles.grid}>
+                        {items.map((item, idx) => (
+                            <ContentCard
+                                key={item.contentId || idx}
+                                id={item.contentId}
+                                type={item.contentType}
+                                title={item.title}
+                                posterPath={item.posterPath}
+                                size="md"
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div style={styles.empty}>
+                        <span style={styles.emptyIcon}>{activeTab === 'watchlist' ? '📑' : '❤️'}</span>
+                        <h3 style={styles.emptyTitle}>No {activeTab} yet</h3>
+                        <p style={styles.emptyText}>Start adding movies and series!</p>
+                        <button
+                            style={commonStyles.primaryButton}
+                            onClick={() => navigate('/search')}
+                        >
+                            Browse Content
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
+};
+
+const styles = {
+    page: {
+        minHeight: '100vh',
+        background: colors.bg1,
+        paddingTop: 'max(16px, env(safe-area-inset-top))',
+        paddingBottom: 120
+    },
+    header: {
+        padding: `${space.lg}px ${space.lg}px ${space.md}px`
+    },
+    title: {
+        fontSize: typography.sizes.xxl,
+        fontWeight: typography.weights.black,
+        color: colors.text1,
+        margin: 0
+    },
+    tabs: {
+        display: 'flex',
+        gap: space.sm,
+        padding: `0 ${space.lg}px ${space.lg}px`
+    },
+    tab: {
+        flex: 1,
+        padding: `${space.md}px ${space.lg}px`,
+        border: 'none',
+        borderRadius: radius.md,
+        color: colors.text1,
+        fontSize: typography.sizes.sm,
+        fontWeight: typography.weights.semibold,
+        fontFamily: typography.fontFamily,
+        cursor: 'pointer',
+        transition: 'all 200ms ease'
+    },
+    content: {
+        padding: `0 ${space.lg}px`
+    },
+    grid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: space.md
+    },
+    empty: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: `${space.xxxl}px ${space.lg}px`,
+        textAlign: 'center'
+    },
+    emptyIcon: {
+        fontSize: 56,
+        marginBottom: space.lg,
+        opacity: 0.7
+    },
+    emptyTitle: {
+        fontSize: typography.sizes.lg,
+        fontWeight: typography.weights.semibold,
+        color: colors.text1,
+        marginBottom: space.sm
+    },
+    emptyText: {
+        fontSize: typography.sizes.sm,
+        color: colors.text4,
+        marginBottom: space.xl
+    }
 };
 
 export default AndroidMyList;
