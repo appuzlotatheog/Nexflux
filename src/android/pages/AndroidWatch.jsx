@@ -32,8 +32,9 @@ const AndroidWatch = () => {
     const [showControls, setShowControls] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isLandscape, setIsLandscape] = useState(false);
-    const [forceRotate, setForceRotate] = useState(false);
+    const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
+    // AUTO force landscape if device is portrait on load
+    const [forceRotate, setForceRotate] = useState(window.innerWidth <= window.innerHeight);
     const [lockOrientation, setLockOrientation] = useState(false);
 
     // Gesture state
@@ -53,8 +54,12 @@ const AndroidWatch = () => {
     // Orientation detection
     useEffect(() => {
         const checkOrientation = () => {
-            if (!lockOrientation) {
-                setIsLandscape(window.innerWidth > window.innerHeight);
+            const landscape = window.innerWidth > window.innerHeight;
+            setIsLandscape(landscape);
+
+            // If device rotated to landscape naturally, disable force rotate
+            if (landscape && forceRotate) {
+                setForceRotate(false);
             }
         };
         checkOrientation();
@@ -64,9 +69,9 @@ const AndroidWatch = () => {
             window.removeEventListener('resize', checkOrientation);
             window.removeEventListener('orientationchange', checkOrientation);
         };
-    }, [lockOrientation]);
+    }, [forceRotate]);
 
-    // Lock to landscape on mount
+    // Try native orientation lock on mount
     useEffect(() => {
         try {
             screen.orientation?.lock?.('landscape').catch(() => { });
