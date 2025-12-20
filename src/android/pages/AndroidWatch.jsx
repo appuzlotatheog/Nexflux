@@ -269,29 +269,41 @@ const AndroidWatch = () => {
         setPlaybackSpeed(speeds[(idx + 1) % speeds.length]);
     };
 
-    // Container styles with CSS rotation
+    // Container styles with CSS rotation - ROTATES ENTIRE PLAYER TO LANDSCAPE
     const getContainerStyles = () => {
-        const base = {
+        // When forceRotate is ON and device is portrait, rotate the whole thing
+        if (forceRotate && !isLandscape) {
+            return {
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                // Swap width and height
+                width: window.innerHeight,
+                height: window.innerWidth,
+                // Rotate 90 degrees clockwise
+                transform: 'rotate(90deg)',
+                transformOrigin: 'top left',
+                // Move it into view after rotation
+                marginLeft: window.innerWidth,
+                background: '#000',
+                zIndex: 9999,
+                overflow: 'hidden'
+            };
+        }
+
+        // Normal fullscreen
+        return {
             position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            height: '100%',
             background: '#000',
             zIndex: 9999,
             overflow: 'hidden'
         };
-
-        if (forceRotate && !isLandscape) {
-            return {
-                ...base,
-                top: 0,
-                left: 0,
-                width: '100vh',
-                height: '100vw',
-                transform: 'rotate(90deg)',
-                transformOrigin: 'top left',
-                marginLeft: '100vw'
-            };
-        }
-
-        return { ...base, top: 0, left: 0, right: 0, bottom: 0 };
     };
 
     // ====== RENDER ======
