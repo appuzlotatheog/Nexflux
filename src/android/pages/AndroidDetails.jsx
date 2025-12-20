@@ -1,11 +1,17 @@
 /**
- * Android Details Page v7.0
- * Cinematic detail view with premium design
+ * Android Details Page v9.0 - PREMIUM
+ * Features:
+ * - Cinematic backdrop with parallax
+ * - Animated content reveal
+ * - Quick action buttons
+ * - Improved cast carousel
+ * - Better episode selector
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ContentCard from '../components/ContentCard';
 import { addToWatchlist, removeFromWatchlist, addToFavorites, removeFromFavorites, getWatchlist, getFavorites, isAuthenticated } from '../services/api';
-import { colors, space, typography, shadows, radius, commonStyles } from '../styles/designSystem';
+import { colors, space, typography, shadows, radius } from '../styles/designSystem';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE = 'https://api.themoviedb.org/3';
@@ -22,11 +28,30 @@ const AndroidDetails = ({ type: propType }) => {
     const [isFavorite, setIsFavorite] = useState(false);
     const [loading, setLoading] = useState(true);
     const [selectedSeason, setSelectedSeason] = useState(1);
+    const [episodes, setEpisodes] = useState([]);
+    const [scrollY, setScrollY] = useState(0);
+
+    const containerRef = useRef(null);
 
     useEffect(() => {
         loadDetails();
         if (isAuthenticated()) checkUserLists();
     }, [id, type]);
+
+    useEffect(() => {
+        if (type === 'tv' && details) loadEpisodes();
+    }, [selectedSeason, details]);
+
+    // Parallax scroll effect
+    useEffect(() => {
+        const handleScroll = () => {
+            if (containerRef.current) {
+                setScrollY(containerRef.current.scrollTop);
+            }
+        };
+        containerRef.current?.addEventListener('scroll', handleScroll);
+        return () => containerRef.current?.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const loadDetails = async () => {
         setLoading(true);
@@ -37,12 +62,18 @@ const AndroidDetails = ({ type: propType }) => {
                 fetch(`${TMDB_BASE}/${type}/${id}/similar?api_key=${TMDB_API_KEY}`).then(r => r.json())
             ]);
             setDetails(d);
-            setCast(credits.cast?.slice(0, 12) || []);
+            setCast(credits.cast?.slice(0, 15) || []);
             setSimilar(sim.results?.slice(0, 10) || []);
-        } catch (e) {
-            console.error('Failed to load details:', e);
-        }
+        } catch (e) { }
         setLoading(false);
+    };
+
+    const loadEpisodes = async () => {
+        try {
+            const res = await fetch(`${TMDB_BASE}/tv/${id}/season/${selectedSeason}?api_key=${TMDB_API_KEY}`);
+            const data = await res.json();
+            setEpisodes(data.episodes || []);
+        } catch (e) { }
     };
 
     const checkUserLists = async () => {
@@ -79,32 +110,46 @@ const AndroidDetails = ({ type: propType }) => {
         } catch (e) { }
     };
 
+    const handleShare = () => {
+        if (navigator.vibrate) navigator.vibrate(10);
+        if (navigator.share) {
+            navigator.share({
+                title: details.title || details.name,
+                url: `https://nexflux.app/${type}/${id}`
+            }).catch(() => { });
+        }
+    };
+
     if (loading) {
         return (
-            <div style={commonStyles.centerContainer}>
-                <div style={commonStyles.spinner} />
+            <div style={styles.loadingContainer}>
+                <div style={styles.spinner} />
             </div>
         );
     }
 
     if (!details) {
         return (
-            <div style={commonStyles.centerContainer}>
-                <span style={{ fontSize: 48, marginBottom: space.lg }}>😕</span>
-                <h2 style={{ color: colors.text1, marginBottom: space.sm }}>Not Found</h2>
-                <button style={commonStyles.primaryButton} onClick={() => navigate(-1)}>Go Back</button>
+            <div style={styles.errorContainer}>
+                <span style={{ fontSize: 56 }}>😕</span>
+                <h2 style={{ color: colors.text1, margin: '16px 0 8px' }}>Not Found</h2>
+                <button style={styles.primaryBtn} onClick={() => navigate(-1)}>Go Back</button>
             </div>
         );
     }
 
     const backdrop = details.backdrop_path ? `https://image.tmdb.org/t/p/w1280${details.backdrop_path}` : '';
-    const poster = details.poster_path ? `https://image.tmdb.org/t/p/w342${details.poster_path}` : '';
+    const poster = details.poster_path ? `https://image.tmdb.org/t/p/w500${details.poster_path}` : '';
     const seasons = details.seasons?.filter(s => s.season_number > 0) || [];
 
     return (
-        <div style={styles.page}>
-            {/* Backdrop */}
-            <div style={{ ...styles.backdrop, backgroundImage: `url(${backdrop})` }} />
+        <div ref={containerRef} style={styles.page}>
+            {/* Backdrop with parallax */}
+            <div style={{
+                ...styles.backdrop,
+                backgroundImage: `url(${backdrop})`,
+                transform: `translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.001})`
+            }} />
             <div style={styles.gradientOverlay} />
 
             {/* Back button */}
@@ -118,19 +163,25 @@ const AndroidDetails = ({ type: propType }) => {
             <div style={styles.content}>
                 {/* Header with poster */}
                 <div style={styles.header}>
-                    <img src={poster} alt={details.title || details.name} style={styles.poster} />
+                    <img src={poster} alt="" style={styles.poster} loading="lazy" />
                     <div style={styles.info}>
                         <h1 style={styles.title}>{details.title || details.name}</h1>
-                        <div style={styles.meta}>
+
+                        {/* Meta badges */}
+                        <div style={styles.metaBadges}>
                             {details.vote_average > 0 && (
-                                <span style={styles.rating}>★ {details.vote_average.toFixed(1)}</span>
+                                <span style={styles.ratingBadge}>
+                                    <span style={{ color: colors.gold }}>★</span> {details.vote_average.toFixed(1)}
+                                </span>
                             )}
-                            <span>{(details.release_date || details.first_air_date)?.split('-')[0]}</span>
-                            {details.runtime && <span>{details.runtime}m</span>}
+                            <span style={styles.metaBadge}>{(details.release_date || details.first_air_date)?.split('-')[0]}</span>
+                            {details.runtime && <span style={styles.metaBadge}>{details.runtime}m</span>}
                             {type === 'tv' && details.number_of_seasons && (
-                                <span>{details.number_of_seasons} Season{details.number_of_seasons > 1 ? 's' : ''}</span>
+                                <span style={styles.metaBadge}>{details.number_of_seasons} Seasons</span>
                             )}
                         </div>
+
+                        {/* Genres */}
                         <div style={styles.genres}>
                             {details.genres?.slice(0, 3).map(g => (
                                 <span key={g.id} style={styles.genre}>{g.name}</span>
@@ -142,33 +193,45 @@ const AndroidDetails = ({ type: propType }) => {
                 {/* Action buttons */}
                 <div style={styles.actions}>
                     <button style={styles.playButton} onClick={handlePlay}>
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                             <path d="M8 5v14l11-7z" />
                         </svg>
                         Play
                     </button>
-                    <button
-                        style={{ ...styles.iconBtn, background: inWatchlist ? colors.primary : colors.bg4 }}
-                        onClick={toggleWatchlist}
-                    >
-                        {inWatchlist ? '✓' : '+'}
-                    </button>
-                    <button
-                        style={{ ...styles.iconBtn, background: isFavorite ? colors.primary : colors.bg4 }}
-                        onClick={toggleFavorite}
-                    >
-                        {isFavorite ? '❤️' : '🤍'}
-                    </button>
+                    <div style={styles.actionIcons}>
+                        <button
+                            style={{
+                                ...styles.iconBtn,
+                                background: inWatchlist ? colors.primary : colors.bg4
+                            }}
+                            onClick={toggleWatchlist}
+                        >
+                            {inWatchlist ? '✓' : '+'}
+                        </button>
+                        <button
+                            style={{
+                                ...styles.iconBtn,
+                                background: isFavorite ? colors.primary : colors.bg4
+                            }}
+                            onClick={toggleFavorite}
+                        >
+                            {isFavorite ? '❤️' : '🤍'}
+                        </button>
+                        <button style={styles.iconBtn} onClick={handleShare}>
+                            📤
+                        </button>
+                    </div>
                 </div>
 
                 {/* Overview */}
-                <Section title="Overview">
-                    <p style={styles.overview}>{details.overview}</p>
+                <Section title="Synopsis">
+                    <p style={styles.overview}>{details.overview || 'No overview available.'}</p>
                 </Section>
 
-                {/* Seasons for TV */}
+                {/* Seasons & Episodes for TV */}
                 {type === 'tv' && seasons.length > 0 && (
-                    <Section title="Seasons">
+                    <Section title="Seasons & Episodes">
+                        {/* Season selector */}
                         <div style={styles.seasonScroll} className="hide-scrollbar">
                             {seasons.map(s => (
                                 <button
@@ -180,7 +243,32 @@ const AndroidDetails = ({ type: propType }) => {
                                         boxShadow: selectedSeason === s.season_number ? shadows.glow : 'none'
                                     }}
                                 >
-                                    S{s.season_number}
+                                    Season {s.season_number}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Episodes list */}
+                        <div style={styles.episodesList}>
+                            {episodes.slice(0, 10).map(ep => (
+                                <button
+                                    key={ep.id}
+                                    style={styles.episodeCard}
+                                    onClick={() => {
+                                        if (navigator.vibrate) navigator.vibrate(10);
+                                        navigate(`/watch/tv/${id}/${selectedSeason}/${ep.episode_number}`);
+                                    }}
+                                >
+                                    <div style={{
+                                        ...styles.episodeThumb,
+                                        backgroundImage: ep.still_path ? `url(https://image.tmdb.org/t/p/w300${ep.still_path})` : 'none'
+                                    }}>
+                                        <div style={styles.episodePlay}>▶</div>
+                                    </div>
+                                    <div style={styles.episodeInfo}>
+                                        <span style={styles.episodeNumber}>E{ep.episode_number}</span>
+                                        <span style={styles.episodeName}>{ep.name}</span>
+                                    </div>
                                 </button>
                             ))}
                         </div>
@@ -200,7 +288,28 @@ const AndroidDetails = ({ type: propType }) => {
                                         {!p.profile_path && <span>👤</span>}
                                     </div>
                                     <span style={styles.castName}>{p.name?.split(' ')[0]}</span>
+                                    <span style={styles.castChar}>{p.character?.split(' ')[0]}</span>
                                 </div>
+                            ))}
+                        </div>
+                    </Section>
+                )}
+
+                {/* Similar */}
+                {similar.length > 0 && (
+                    <Section title="More Like This">
+                        <div style={styles.similarScroll} className="hide-scrollbar">
+                            {similar.map(item => (
+                                <ContentCard
+                                    key={item.id}
+                                    id={item.id}
+                                    type={type}
+                                    title={item.title || item.name}
+                                    posterPath={item.poster_path}
+                                    rating={item.vote_average}
+                                    year={(item.release_date || item.first_air_date)?.split('-')[0]}
+                                    size="md"
+                                />
                             ))}
                         </div>
                     </Section>
@@ -220,24 +329,62 @@ const Section = ({ title, children }) => (
 const styles = {
     page: {
         minHeight: '100vh',
+        background: colors.bg1,
+        overflowY: 'auto',
+        position: 'relative'
+    },
+    loadingContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
         background: colors.bg1
+    },
+    spinner: {
+        width: 48,
+        height: 48,
+        border: `3px solid ${colors.bg4}`,
+        borderTopColor: colors.primary,
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite'
+    },
+    errorContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        background: colors.bg1,
+        padding: space.xl,
+        textAlign: 'center'
+    },
+    primaryBtn: {
+        padding: `${space.lg}px ${space.xxl}px`,
+        background: colors.primary,
+        border: 'none',
+        borderRadius: radius.md,
+        color: colors.text1,
+        fontSize: typography.sizes.md,
+        fontWeight: typography.weights.bold,
+        cursor: 'pointer'
     },
     backdrop: {
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        height: '50vh',
+        height: '55vh',
         backgroundSize: 'cover',
-        backgroundPosition: 'center top'
+        backgroundPosition: 'center top',
+        willChange: 'transform'
     },
     gradientOverlay: {
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        height: '55vh',
-        background: `linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 50%, ${colors.bg1} 100%)`
+        height: '60vh',
+        background: `linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 50%, ${colors.bg1} 100%)`
     },
     backButton: {
         position: 'fixed',
@@ -250,6 +397,7 @@ const styles = {
         justifyContent: 'center',
         background: 'rgba(0,0,0,0.5)',
         backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
         border: 'none',
         borderRadius: '50%',
         color: colors.text1,
@@ -259,7 +407,8 @@ const styles = {
     content: {
         position: 'relative',
         padding: space.lg,
-        paddingTop: '36vh',
+        paddingTop: '40vh',
+        paddingBottom: 100,
         zIndex: 10
     },
     header: {
@@ -268,9 +417,9 @@ const styles = {
         marginBottom: space.xl
     },
     poster: {
-        width: 120,
+        width: 130,
         aspectRatio: '2/3',
-        borderRadius: radius.md,
+        borderRadius: radius.lg,
         boxShadow: shadows.lg,
         objectFit: 'cover'
     },
@@ -284,20 +433,33 @@ const styles = {
         fontSize: typography.sizes.xxl,
         fontWeight: typography.weights.black,
         color: colors.text1,
-        lineHeight: 1.1,
+        lineHeight: 1.15,
         marginBottom: space.sm
     },
-    meta: {
+    metaBadges: {
         display: 'flex',
         flexWrap: 'wrap',
-        gap: space.sm,
-        fontSize: typography.sizes.sm,
-        color: colors.text3,
+        gap: 6,
         marginBottom: space.sm
     },
-    rating: {
-        color: colors.gold,
-        fontWeight: typography.weights.bold
+    ratingBadge: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 4,
+        padding: `4px ${space.sm}px`,
+        background: 'rgba(0,0,0,0.6)',
+        backdropFilter: 'blur(8px)',
+        borderRadius: 6,
+        fontSize: typography.sizes.xs,
+        fontWeight: typography.weights.bold,
+        color: colors.text1
+    },
+    metaBadge: {
+        padding: `4px ${space.sm}px`,
+        background: colors.bg4,
+        borderRadius: 6,
+        fontSize: typography.sizes.xs,
+        color: colors.text3
     },
     genres: {
         display: 'flex',
@@ -306,10 +468,10 @@ const styles = {
     },
     genre: {
         padding: `4px ${space.md}px`,
-        background: colors.bg4,
+        background: 'rgba(255,255,255,0.1)',
         borderRadius: 6,
         fontSize: typography.sizes.xs,
-        color: colors.text3
+        color: colors.text2
     },
     actions: {
         display: 'flex',
@@ -327,11 +489,15 @@ const styles = {
         border: 'none',
         borderRadius: radius.md,
         color: colors.text1,
-        fontSize: typography.sizes.md,
+        fontSize: typography.sizes.lg,
         fontWeight: typography.weights.bold,
         fontFamily: typography.fontFamily,
         boxShadow: shadows.glow,
         cursor: 'pointer'
+    },
+    actionIcons: {
+        display: 'flex',
+        gap: space.sm
     },
     iconBtn: {
         width: 52,
@@ -342,7 +508,8 @@ const styles = {
         border: 'none',
         borderRadius: '50%',
         fontSize: 18,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
     },
     section: {
         marginBottom: space.xxl
@@ -356,13 +523,14 @@ const styles = {
     overview: {
         fontSize: typography.sizes.md,
         color: colors.text3,
-        lineHeight: 1.7
+        lineHeight: 1.75
     },
     seasonScroll: {
         display: 'flex',
         gap: space.sm,
         overflowX: 'auto',
-        paddingBottom: space.xs
+        paddingBottom: space.md,
+        scrollbarWidth: 'none'
     },
     seasonBtn: {
         padding: `${space.sm}px ${space.lg}px`,
@@ -373,23 +541,83 @@ const styles = {
         fontWeight: typography.weights.semibold,
         cursor: 'pointer',
         whiteSpace: 'nowrap',
-        transition: 'all 200ms ease'
+        transition: 'all 0.2s ease'
+    },
+    episodesList: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: space.md
+    },
+    episodeCard: {
+        display: 'flex',
+        gap: space.md,
+        padding: 0,
+        background: colors.bg3,
+        border: 'none',
+        borderRadius: radius.md,
+        overflow: 'hidden',
+        cursor: 'pointer',
+        textAlign: 'left'
+    },
+    episodeThumb: {
+        width: 120,
+        height: 70,
+        background: colors.bg4,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0
+    },
+    episodePlay: {
+        width: 32,
+        height: 32,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(0,0,0,0.7)',
+        borderRadius: '50%',
+        color: colors.text1,
+        fontSize: 12
+    },
+    episodeInfo: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: space.md
+    },
+    episodeNumber: {
+        fontSize: typography.sizes.xs,
+        color: colors.text4,
+        marginBottom: 4
+    },
+    episodeName: {
+        fontSize: typography.sizes.sm,
+        fontWeight: typography.weights.medium,
+        color: colors.text1,
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden'
     },
     castScroll: {
         display: 'flex',
         gap: space.lg,
-        overflowX: 'auto'
+        overflowX: 'auto',
+        scrollbarWidth: 'none'
     },
     castItem: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 6,
+        gap: 4,
         flexShrink: 0
     },
     castPhoto: {
-        width: 64,
-        height: 64,
+        width: 70,
+        height: 70,
         borderRadius: '50%',
         background: colors.bg4,
         backgroundSize: 'cover',
@@ -397,16 +625,33 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 24
+        fontSize: 24,
+        border: `2px solid ${colors.bg5}`
     },
     castName: {
         fontSize: typography.sizes.xs,
-        color: colors.text3,
-        maxWidth: 64,
+        fontWeight: typography.weights.medium,
+        color: colors.text2,
+        maxWidth: 70,
         textAlign: 'center',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap'
+    },
+    castChar: {
+        fontSize: 10,
+        color: colors.text4,
+        maxWidth: 70,
+        textAlign: 'center',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'
+    },
+    similarScroll: {
+        display: 'flex',
+        gap: space.md,
+        overflowX: 'auto',
+        scrollbarWidth: 'none'
     }
 };
 

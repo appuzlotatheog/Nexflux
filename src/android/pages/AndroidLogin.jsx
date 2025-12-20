@@ -1,119 +1,187 @@
 /**
- * Android Login Page v7.0
- * Premium authentication with glassmorphism
+ * Android Login Page v9.0 - PREMIUM
+ * Features:
+ * - Animated gradient background
+ * - Glassmorphic card
+ * - Smooth input focus states
+ * - Password visibility toggle
+ * - Loading states
  */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, register } from '../services/api';
-import { colors, space, typography, shadows, radius, commonStyles } from '../styles/designSystem';
+import { colors, space, typography, shadows, radius } from '../styles/designSystem';
 
 const AndroidLogin = () => {
     const navigate = useNavigate();
-    const [isRegister, setIsRegister] = useState(false);
+    const [isLogin, setIsLogin] = useState(true);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [focusedField, setFocusedField] = useState(null);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e?.preventDefault();
+        if (!username || !password || (!isLogin && !email)) {
+            setError('Please fill in all fields');
+            return;
+        }
+
+        if (navigator.vibrate) navigator.vibrate(10);
         setError('');
         setLoading(true);
 
         try {
-            const res = isRegister
-                ? await register(username, email, password)
-                : await login(email, password);
+            const action = isLogin
+                ? await login(username, password)
+                : await register(username, email, password);
 
-            if (res.success) {
-                if (navigator.vibrate) navigator.vibrate(10);
-                navigate('/');
-            } else {
-                setError(res.message || 'Authentication failed');
-            }
-        } catch (err) {
-            setError('Something went wrong. Please try again.');
+            if (action.success) navigate('/');
+            else setError(action.message || 'Something went wrong');
+        } catch (e) {
+            setError('Connection error. Please try again.');
         }
+
         setLoading(false);
     };
 
-    const toggleMode = () => {
+    const handleGuestBrowse = () => {
         if (navigator.vibrate) navigator.vibrate(8);
-        setIsRegister(!isRegister);
-        setError('');
+        navigate('/');
     };
 
     return (
         <div style={styles.page}>
+            {/* Animated background */}
+            <div style={styles.bgPattern} />
+            <div style={styles.bgGradient} />
+
             {/* Logo */}
-            <div style={styles.logoSection}>
-                <div style={styles.logo}>N</div>
-                <h1 style={styles.brandName}>NEXFLUX</h1>
+            <div style={styles.logo}>
+                <span style={styles.logoText}>N</span>
             </div>
 
-            {/* Form card */}
+            {/* Card */}
             <div style={styles.card}>
-                <h2 style={styles.title}>
-                    {isRegister ? 'Create Account' : 'Welcome Back'}
-                </h2>
+                <h1 style={styles.title}>{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
                 <p style={styles.subtitle}>
-                    {isRegister ? 'Start your streaming journey' : 'Sign in to continue'}
+                    {isLogin ? 'Sign in to continue watching' : 'Join us for unlimited entertainment'}
                 </p>
 
-                {/* Error message */}
-                {error && (
-                    <div style={styles.error}>{error}</div>
-                )}
-
-                <form onSubmit={handleSubmit} style={styles.form}>
-                    {isRegister && (
+                {/* Form */}
+                <form style={styles.form} onSubmit={handleSubmit}>
+                    {/* Username */}
+                    <div style={{
+                        ...styles.inputWrap,
+                        borderColor: focusedField === 'username' ? colors.primary : colors.bg5
+                    }}>
+                        <span style={styles.inputIcon}>👤</span>
                         <input
                             type="text"
                             placeholder="Username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            required
+                            onFocus={() => setFocusedField('username')}
+                            onBlur={() => setFocusedField(null)}
+                            style={styles.input}
+                            autoCapitalize="none"
+                        />
+                    </div>
+
+                    {/* Email (only for register) */}
+                    {!isLogin && (
+                        <div style={{
+                            ...styles.inputWrap,
+                            borderColor: focusedField === 'email' ? colors.primary : colors.bg5
+                        }}>
+                            <span style={styles.inputIcon}>✉️</span>
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                onFocus={() => setFocusedField('email')}
+                                onBlur={() => setFocusedField(null)}
+                                style={styles.input}
+                                autoCapitalize="none"
+                            />
+                        </div>
+                    )}
+
+                    {/* Password */}
+                    <div style={{
+                        ...styles.inputWrap,
+                        borderColor: focusedField === 'password' ? colors.primary : colors.bg5
+                    }}>
+                        <span style={styles.inputIcon}>🔒</span>
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            onFocus={() => setFocusedField('password')}
+                            onBlur={() => setFocusedField(null)}
                             style={styles.input}
                         />
-                    )}
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        style={styles.input}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        style={styles.input}
-                    />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={styles.eyeBtn}
+                        >
+                            {showPassword ? '👁️' : '👁️‍🗨️'}
+                        </button>
+                    </div>
 
-                    <button type="submit" style={styles.submitBtn} disabled={loading}>
-                        {loading ? 'Please wait...' : (isRegister ? 'Create Account' : 'Sign In')}
+                    {/* Error */}
+                    {error && <p style={styles.error}>{error}</p>}
+
+                    {/* Submit button */}
+                    <button
+                        type="submit"
+                        style={styles.submitBtn}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <div style={styles.spinner} />
+                        ) : (
+                            isLogin ? 'Sign In' : 'Create Account'
+                        )}
                     </button>
                 </form>
 
-                {/* Toggle mode */}
-                <div style={styles.toggleSection}>
-                    <span style={styles.toggleText}>
-                        {isRegister ? 'Already have an account?' : "Don't have an account?"}
-                    </span>
-                    <button style={styles.toggleBtn} onClick={toggleMode}>
-                        {isRegister ? 'Sign In' : 'Sign Up'}
+                {/* Toggle */}
+                <p style={styles.toggleText}>
+                    {isLogin ? "Don't have an account? " : 'Already have an account? '}
+                    <button
+                        style={styles.toggleBtn}
+                        onClick={() => {
+                            if (navigator.vibrate) navigator.vibrate(8);
+                            setIsLogin(!isLogin);
+                            setError('');
+                        }}
+                    >
+                        {isLogin ? 'Sign Up' : 'Sign In'}
                     </button>
+                </p>
+
+                {/* Divider */}
+                <div style={styles.divider}>
+                    <span style={styles.dividerText}>or</span>
                 </div>
+
+                {/* Guest button */}
+                <button style={styles.guestBtn} onClick={handleGuestBrowse}>
+                    Browse as Guest
+                </button>
             </div>
 
-            {/* Guest option */}
-            <button style={styles.guestBtn} onClick={() => navigate('/')}>
-                Browse as Guest
-            </button>
+            {/* Terms */}
+            <p style={styles.terms}>
+                By continuing, you agree to our Terms of Service and Privacy Policy
+            </p>
         </div>
     );
 };
@@ -125,111 +193,145 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: space.xl,
-        background: colors.bg1
+        padding: space.lg,
+        paddingTop: 'max(32px, env(safe-area-inset-top))',
+        paddingBottom: 'max(32px, env(safe-area-inset-bottom))',
+        background: colors.bg1,
+        position: 'relative',
+        overflow: 'hidden'
     },
-    logoSection: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginBottom: space.xxxl
+    bgPattern: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: `radial-gradient(circle at 20% 30%, ${colors.primaryGlow} 0%, transparent 50%),
+                     radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 50%)`,
+        opacity: 0.7
+    },
+    bgGradient: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: `linear-gradient(180deg, transparent 0%, ${colors.bg1} 100%)`
     },
     logo: {
-        width: 70,
-        height: 70,
-        borderRadius: radius.lg,
-        background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
+        width: 80,
+        height: 80,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 40,
-        fontWeight: typography.weights.black,
-        color: colors.text1,
-        marginBottom: space.md,
-        boxShadow: shadows.glow
+        background: colors.primary,
+        borderRadius: radius.lg,
+        marginBottom: space.xxl,
+        boxShadow: shadows.glow,
+        position: 'relative',
+        zIndex: 10
     },
-    brandName: {
-        fontSize: typography.sizes.xxl,
+    logoText: {
+        fontSize: 48,
         fontWeight: typography.weights.black,
-        color: colors.text1,
-        letterSpacing: 3,
-        margin: 0
+        color: colors.text1
     },
     card: {
         width: '100%',
         maxWidth: 380,
-        padding: space.xxl,
-        background: colors.bg3,
-        border: `1px solid ${colors.glassBorder}`,
-        borderRadius: radius.xl
+        padding: space.xl,
+        background: 'rgba(20, 20, 25, 0.9)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        border: `1px solid ${colors.bg4}`,
+        borderRadius: radius.xl,
+        position: 'relative',
+        zIndex: 10
     },
     title: {
-        fontSize: typography.sizes.xl,
-        fontWeight: typography.weights.bold,
+        fontSize: typography.sizes.xxl,
+        fontWeight: typography.weights.black,
         color: colors.text1,
-        margin: 0,
-        marginBottom: space.xs,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginBottom: space.sm
     },
     subtitle: {
         fontSize: typography.sizes.sm,
         color: colors.text4,
-        margin: 0,
-        marginBottom: space.xl,
-        textAlign: 'center'
-    },
-    error: {
-        padding: space.md,
-        background: 'rgba(255, 59, 48, 0.15)',
-        border: `1px solid rgba(255, 59, 48, 0.3)`,
-        borderRadius: radius.sm,
-        color: colors.error,
-        fontSize: typography.sizes.sm,
-        marginBottom: space.lg,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginBottom: space.xl
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
         gap: space.md
     },
-    input: {
-        width: '100%',
-        padding: space.lg,
-        background: colors.bg4,
-        border: `2px solid transparent`,
+    inputWrap: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: space.sm,
+        padding: `${space.md}px ${space.lg}px`,
+        background: colors.bg3,
+        border: '2px solid',
         borderRadius: radius.md,
+        transition: 'border-color 0.2s ease'
+    },
+    inputIcon: {
+        fontSize: 16,
+        opacity: 0.7
+    },
+    input: {
+        flex: 1,
+        background: 'none',
+        border: 'none',
         color: colors.text1,
         fontSize: typography.sizes.md,
         fontFamily: typography.fontFamily,
-        outline: 'none',
-        boxSizing: 'border-box',
-        transition: 'border-color 200ms ease'
+        outline: 'none'
+    },
+    eyeBtn: {
+        background: 'none',
+        border: 'none',
+        fontSize: 16,
+        cursor: 'pointer',
+        padding: 0
+    },
+    error: {
+        color: '#EF4444',
+        fontSize: typography.sizes.sm,
+        textAlign: 'center',
+        marginTop: space.sm
     },
     submitBtn: {
-        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         padding: `${space.lg}px`,
-        marginTop: space.sm,
         background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
         border: 'none',
         borderRadius: radius.md,
         color: colors.text1,
-        fontSize: typography.sizes.md,
+        fontSize: typography.sizes.lg,
         fontWeight: typography.weights.bold,
         fontFamily: typography.fontFamily,
         cursor: 'pointer',
-        boxShadow: shadows.glow
+        boxShadow: shadows.glow,
+        minHeight: 56,
+        marginTop: space.sm
     },
-    toggleSection: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: space.sm,
-        marginTop: space.xl
+    spinner: {
+        width: 24,
+        height: 24,
+        border: '2px solid rgba(255,255,255,0.2)',
+        borderTopColor: colors.text1,
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite'
     },
     toggleText: {
         fontSize: typography.sizes.sm,
-        color: colors.text4
+        color: colors.text4,
+        textAlign: 'center',
+        marginTop: space.lg
     },
     toggleBtn: {
         background: 'none',
@@ -237,15 +339,42 @@ const styles = {
         color: colors.primary,
         fontSize: typography.sizes.sm,
         fontWeight: typography.weights.semibold,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        padding: 0
+    },
+    divider: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: space.md,
+        margin: `${space.lg}px 0`
+    },
+    dividerText: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: typography.sizes.sm,
+        color: colors.text4
     },
     guestBtn: {
-        marginTop: space.xl,
-        background: 'none',
-        border: 'none',
-        color: colors.text4,
-        fontSize: typography.sizes.sm,
+        width: '100%',
+        padding: `${space.lg}px`,
+        background: 'transparent',
+        border: `1px solid ${colors.bg5}`,
+        borderRadius: radius.md,
+        color: colors.text2,
+        fontSize: typography.sizes.md,
+        fontWeight: typography.weights.semibold,
+        fontFamily: typography.fontFamily,
         cursor: 'pointer'
+    },
+    terms: {
+        fontSize: 11,
+        color: colors.text4,
+        textAlign: 'center',
+        maxWidth: 280,
+        marginTop: space.xl,
+        lineHeight: 1.5,
+        position: 'relative',
+        zIndex: 10
     }
 };
 
