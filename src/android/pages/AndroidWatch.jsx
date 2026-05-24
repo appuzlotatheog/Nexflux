@@ -12,7 +12,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { saveWatchProgress, isAuthenticated } from '../services/api';
-import { showVASTAd, canShowAd } from '../services/vastAds';
 import { colors, space, typography, radius, shadows } from '../styles/designSystem';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -95,7 +94,6 @@ const AndroidWatch = () => {
     // Load content
     useEffect(() => {
         loadDetails();
-        if (canShowAd()) showVASTAd();
     }, [id, type]);
 
     useEffect(() => {

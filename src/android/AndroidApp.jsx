@@ -4,7 +4,6 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import BottomNav from './components/BottomNav';
-import { initVASTOnAppOpen } from './services/vastAds';
 import './styles/android.css';
 
 const AndroidHome = lazy(() => import('./pages/AndroidHome'));
@@ -23,7 +22,6 @@ const PageLoader = () => (
 
 const AndroidApp = () => {
     useEffect(() => {
-        initVASTOnAppOpen();
         const meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.content = '#000000';
     }, []);
