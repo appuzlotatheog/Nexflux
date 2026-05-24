@@ -1514,14 +1514,30 @@ img {
 }
 
 /* ===== GLOBAL MOBILE ANIMATION FIX ===== */
-/* Prevent animations from running too fast on mobile devices */
+/* Prevent animations from running too fast/glitchy on mobile devices */
 @media (max-width: 768px) {
 
-  /* Slow down all animations */
+  /* Slow down all animations to sane defaults — NEVER use `inherit` here,
+     because `inherit` pulls from the parent element which often has no
+     explicit animation-duration, yielding 0s / instant / glitchy behavior. */
   *,
   *::before,
   *::after {
-    animation-duration: inherit !important;
+    animation-duration: 0.4s !important;
+    animation-timing-function: ease-out !important;
+  }
+
+  /* Keyframes that are meant to loop infinitely should still loop,
+     but at a calmer speed on mobile */
+  .spinner::before,
+  .spinner::after,
+  .skeleton,
+  .hero__indicator-progress,
+  .player__loading-spinner,
+  .cinebot-fab__ring,
+  .cinebot__orb,
+  [class*="shimmer"] {
+    animation-duration: 1.2s !important;
   }
 
   /* Standard transition speed for mobile */
@@ -1564,9 +1580,17 @@ img {
     transform: scale(0.97) !important;
     opacity: 0.9 !important;
   }
+
+  /* Kill ambient decorative pseudo-elements that cause repaints */
+  body::before,
+  body::after,
+  .app::before,
+  .app::after {
+    display: none !important;
+  }
 }
 
-/* Extra slow for very low-end devices */
+/* Extra slow / minimal for very low-end devices */
 @media (max-width: 480px) {
 
   /* Even simpler animations */
@@ -1574,10 +1598,23 @@ img {
   *::before,
   *::after {
     transition-duration: 0.15s !important;
+    animation-duration: 0.3s !important;
     animation-timing-function: ease-out !important;
   }
 
-  /* Disable most animations for performance */
+  /* Keep infinite loops slow, not instant */
+  .spinner::before,
+  .spinner::after,
+  .skeleton,
+  .hero__indicator-progress,
+  .player__loading-spinner,
+  .cinebot-fab__ring,
+  .cinebot__orb,
+  [class*="shimmer"] {
+    animation-duration: 1.5s !important;
+  }
+
+  /* Disable most overlay animations for performance */
   .content-card__overlay,
   .content-card__play,
   .content-card__actions {

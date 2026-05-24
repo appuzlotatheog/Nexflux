@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import './ColorBends.css';
 
@@ -111,6 +111,26 @@ export default function ColorBends({
     parallax = 0.2,
     noise = 0.05
 }) {
+    // Reduce speed on mobile/iPad to avoid GPU jitter and battery drain
+    const [isMobile, setIsMobile] = useState(
+        typeof window !== 'undefined' && (window.innerWidth <= 768 || 'ontouchstart' in window)
+    );
+    useEffect(() => {
+        let raf;
+        const check = () => {
+            if (raf) cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(() => {
+                setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
+            });
+        };
+        window.addEventListener('resize', check);
+        return () => {
+            window.removeEventListener('resize', check);
+            if (raf) cancelAnimationFrame(raf);
+        };
+    }, []);
+    const effectiveSpeed = isMobile ? speed * 0.3 : speed;
+    const effectiveAutoRotate = isMobile ? autoRotate * 0.3 : autoRotate;
     const containerRef = useRef(null);
     const rendererRef = useRef(null);
     const rafRef = useRef(null);
@@ -135,7 +155,7 @@ export default function ColorBends({
             uniforms: {
                 uCanvas: { value: new THREE.Vector2(1, 1) },
                 uTime: { value: 0 },
-                uSpeed: { value: speed },
+                uSpeed: { value: effectiveSpeed },
                 uRot: { value: new THREE.Vector2(1, 0) },
                 uColorCount: { value: 0 },
                 uColors: { value: uColorsArray },
@@ -229,8 +249,8 @@ export default function ColorBends({
         if (!material) return;
 
         rotationRef.current = rotation;
-        autoRotateRef.current = autoRotate;
-        material.uniforms.uSpeed.value = speed;
+        autoRotateRef.current = effectiveAutoRotate;
+        material.uniforms.uSpeed.value = effectiveSpeed;
         material.uniforms.uScale.value = scale;
         material.uniforms.uFrequency.value = frequency;
         material.uniforms.uWarpStrength.value = warpStrength;
@@ -261,6 +281,8 @@ export default function ColorBends({
         rotation,
         autoRotate,
         speed,
+        effectiveSpeed,
+        effectiveAutoRotate,
         scale,
         frequency,
         warpStrength,
@@ -271,10 +293,17 @@ export default function ColorBends({
         transparent
     ]);
 
+    // Disable pointer-driven parallax on mobile — it fights with scroll and causes jitter
     useEffect(() => {
         const material = materialRef.current;
         const container = containerRef.current;
         if (!material || !container) return;
+
+        if (isMobile) {
+            // On mobile, freeze pointer at center so the shader stays calm
+            pointerTargetRef.current.set(0, 0);
+            return;
+        }
 
         const handlePointerMove = e => {
             const rect = container.getBoundingClientRect();
@@ -287,7 +316,7 @@ export default function ColorBends({
         return () => {
             container.removeEventListener('pointermove', handlePointerMove);
         };
-    }, []);
+    }, [isMobile]);
 
     return <div ref={containerRef} className={`color-bends-container ${className || ''}`} style={style} />;
 }

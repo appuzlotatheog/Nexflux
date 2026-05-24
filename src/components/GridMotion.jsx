@@ -37,6 +37,15 @@ const GridMotion = ({ gradientColor = 'black' }) => {
     useEffect(() => {
         if (items.length === 0) return;
 
+        // Skip heavy GSAP motion on touch/mobile devices — it causes jitter
+        // and burns battery with constant ticker updates.
+        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const isMobile = window.innerWidth <= 768 || isTouch;
+        if (isMobile) {
+            // On mobile: render static grid without continuous ticker animation
+            return;
+        }
+
         gsap.ticker.lagSmoothing(0);
 
         const handleMouseMove = e => {

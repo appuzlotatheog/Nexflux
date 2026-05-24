@@ -55,6 +55,11 @@ function Hero() {
     useEffect(() => {
         if (items.length === 0 || isPaused) return;
 
+        // Use a slower tick interval on mobile to avoid jank and battery drain
+        const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+        const tickMs = isMobile ? 250 : 100;
+        const step = isMobile ? 3.125 : 1.25; // same 8s total cycle, fewer updates
+
         const progressInterval = setInterval(() => {
             setProgress(prev => {
                 if (prev >= 100) {
@@ -70,9 +75,9 @@ function Hero() {
                     }, 400);
                     return 0;
                 }
-                return prev + 1.25; // 8 seconds = (100 / 8000ms * 100ms)
+                return prev + step;
             });
-        }, 100);
+        }, tickMs);
 
         return () => clearInterval(progressInterval);
     }, [items, isPaused]);
